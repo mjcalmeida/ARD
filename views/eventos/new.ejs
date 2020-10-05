@@ -1,0 +1,68 @@
+<%- include ('../partials/header.ejs') %>
+<%- include ('../partials/navbar.ejs') %>
+
+<body>
+    <hr>
+    <div class="container">
+        <div class="card">
+            <div class="card-header"><h3>Novo Evento</h3></div>
+            <div class="card-body">
+                <form method="POST" action="salvarEvento">
+                    <div class="row">
+                        <div class="col"><label>Nome do Evento</label></div>
+                        <div class="col-10">
+                            <input type="text" placeholder="Digite o nome do Evento" name="nomeEvento" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col"><label>Periodicidade</label></div>
+                        <div class="col-10">
+                            <input type="text" placeholder="Periodicidade" name="periodicidade" class="form-control">
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col"><label>Próximo Evento</label></div>
+                        <div class="col-10">
+                            <input type="text" placeholder="__/__/____" name="dataStart" class="form-control">
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col"><label>Mínimo</label></div>
+                        <div class="col-10">
+                                <input type="text" placeholder="0" name="numMinimo" class="form-control">
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col"><label>Máximo</label></div>
+                        <div class="col-10">
+                            <input type="text" placeholder="0" name="numMaximo" class="form-control">
+                        </div>
+                    </div>
+                                        
+                    <div class="row">
+                        <div class="col"><label>Valor Convidado</label></div>
+                        <div class="col-10">
+                            <input type="text" placeholder="0,00" name="valorConvidado" class="form-control">
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col"><label>Valor Xamã</label></div>
+                        <div class="col-10">
+                            <input type="text" placeholder="0,00" name="valorXama" class="form-control">
+                        </div>
+                    </div>
+
+                    <br>
+                    <button class="btn btn-success">Salvar</button>
+                </form>
+            </div>
+        </div>  
+    </div>
+</body>
+
+<%- include ('../partials/footer.ejs') %>
