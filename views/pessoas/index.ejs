@@ -1,42 +1,10 @@
 <%- include('../partials/header.ejs') %>
-<%- include('../partials/navbar.ejs') %>
 
 <body>
+    <%- include ('../partials/navbar.ejs') %>
     <div class="container">
-        <hr>
-        <h2>Pessoas</h2>
-        <a href="../pessoas/new" class="btn btn-primary">Nova Pessoa</a>
-        <hr>
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>Nome</th>                    
-                    <th>Telefone</th>
-                    <th>Email</th>
-                    <th>Entrou em</th>
-                    <th>Últ. Part.</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% pessoas.forEach(pessoa => { %>
-                    <tr>                        
-                        <td> <%= pessoa.nmPessoa             %> </td>                        
-                        <td> <%= pessoa.fonePessoa           %> </td>                        
-                        <td> <%= pessoa.emailPessoa          %> </td>
-                        <td> <%= pessoa.dtEntrada            %> </td>
-                        <td> <%= pessoa.dtUltimaParticipacao %> </td>
-                        <td><a href="./pessoas/edit/<%= pessoa.id %>" class="btn btn-warning">Editar</a>
-                            <form action="POST" action="/pessoas/delete" style="display: inline; padding-left: 5px;">
-                                <input type="hidden" name="id" value="<%= pessoa.id %>">
-                                <button class="btn btn-danger">Excluir</button>
-                            </form>
-                        </td>
-                    </tr>
-                <% }) %>
-            </tbody>
-        </table>
+        <h1> página de lista de pessoas</h1>
     </div>
 </body>
 
-<%- include ('../partials/footer.ejs') %>       
+<%- include ('../partials/footer.ejs') %>

@@ -15,15 +15,15 @@ const Pessoas = conn.define(
         },
         dtNascimento:{
             type:Sequelize.DATE,
-            allowNull: true
+            allowNull: false
         },
         endPessoa:{
             type:Sequelize.TEXT,
-            allowNull: true
+            allowNull: false
         },
         endComplemento:{
             type:Sequelize.TEXT,
-            allowNull: true
+            allowNull: false
         },
         cepPessoa:{
             type:Sequelize.TEXT,
@@ -31,7 +31,11 @@ const Pessoas = conn.define(
         },
         fonePessoa:{
             type:Sequelize.TEXT,
-            allowNull: true
+            allowNull: false
+        },
+        nmPessoa:{
+            type:Sequelize.TEXT,
+            allowNull: false
         },
         Ativo:{
             type:Sequelize.BOOLEAN,
@@ -51,7 +55,7 @@ const Pessoas = conn.define(
         },
         cidadePessoa:{
             type:Sequelize.TEXT,
-            allowNull: true
+            allowNull: false
         },
         dtEntrada:{
             type:Sequelize.DATE,

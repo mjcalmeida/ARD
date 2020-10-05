@@ -1,11 +1,11 @@
 const Sequelize = require('sequelize');
 const conn = require('./database/database');
 
-console.log("Tabela de Eventos em Criação");
+console.log("Tabela de Rituais em Criação");
 
-const Eventos = conn.define(
-    'eventos', {
-        nomeEvento : {
+const Rituais = conn.define(
+    'rituais', {
+        nomeRitual : {
             type: Sequelize.TEXT,
             allowNulls: false
         },
@@ -37,10 +37,10 @@ const Eventos = conn.define(
     }
 );
 
-Eventos
+Rituais
     .sync({force: false})
     .then(() => {
-        console.log("Tabela Eventos criada com sucesso!!!");
+        console.log("Tabela Rituais criada com sucesso!!!");
     });
 
-module.exports = Eventos;
+module.exports = Rituais;

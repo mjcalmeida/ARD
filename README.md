@@ -1,2 +1,0 @@
-# ARD
- Programas da Aldeia

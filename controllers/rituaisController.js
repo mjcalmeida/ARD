@@ -1,41 +1,47 @@
 const express = require("express");
 const sequelize = require('sequelize');
+const fns = require("date-fns");
+const eoLocale = require('date-fns/locale/pt-BR')
 const router = express.Router();
-const Eventos = require("../models/Eventos");
+const Rituais = require("../models/Rituais");
 
-router.get("/eventos", (req, res) => {
-    Eventos
+router.get("/rituais", (req, res) => {
+    Rituais
     .findAll({
-         attributes: [
+        attributes: [
             'id',
-            'nomeEvento',
+            'nomeRitual',
             'periodicidade',
             [sequelize.fn('date_format', sequelize.col('dataStart'), '%d/%m/%Y %h:%m:%s'), 'dataEvento'],
             'numMinimo',
             'numMaximo',
             'valorConvidado',
-            'valorXama'], 
+            'valorXama'],
         raw: true,
         order: [['id', 'AsC']]
     })
-    .then(eventos => {
+    .then(rituais => {
         console.log('\033[2J');
-        console.log(eventos);
-        
-        res.render("eventos/index", {
-            eventos : eventos
+        console.log(rituais);
+        console.log(fns.format(
+            new Date(2014, 6, 25),   
+            'dd/MM/yyyy',
+            {locale: eoLocale}
+          ));
+        res.render("rituais/index", {
+            rituais : rituais
         });
     });
 });
 
 router.get("/new", (req, res) => {
-    res.render("eventos/new");
+    res.render("rituais/new");
 });
 
 router.post("/salvarEvento", (req,res) => {
     console.log(req.body);
 
-    var nomeEvento = req.body.nomeEvento;
+    var nomeRitual = req.body.nomeRitual;
     var periodicidade = req.body.periodicidade;
     var dataStart = req.body.dataStart;
     var numMinimo = req.body.numMinimo;
@@ -43,9 +49,9 @@ router.post("/salvarEvento", (req,res) => {
     var valorConvidado = req.body.valorConvidado;
     var valorXama = req.body.valorXama;
 
-Eventos
+Rituais
     .create({
-        nomeEvento: nomeEvento,
+        nomeRitual: nomeRitual,
         periodicidade: periodicidade,
         dataStart: dataStart,
         numMinimo: numMinimo,
@@ -54,12 +60,13 @@ Eventos
         valorXama: valorXama
     })      
     .then(() => {
-        console.log('Evento ' + nomeEvento + ' incluído com sucesso!!!');
-        res.redirect("/controllers/eventos");
+        console.log('Evento ' + nomeRitual + ' incluído com sucesso!!!');
+        res.redirect("/rituais");
     })
 }); 
 
 router.post("/deleteEvento", (req, res) => {
+
 
 });
 
