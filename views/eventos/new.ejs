@@ -7,11 +7,11 @@
         <div class="card">
             <div class="card-header"><h3>Novo Evento</h3></div>
             <div class="card-body">
-                <form method="POST" action="salvarEvento">
+                <form method="POST" action="save">
                     <div class="row">
                         <div class="col"><label>Nome do Evento</label></div>
                         <div class="col-10">
-                            <input type="text" placeholder="Digite o nome do Evento" name="nomeRitual" class="form-control">
+                            <input type="text" placeholder="Digite o nome do Evento" name="nomeEvento" class="form-control">
                         </div>
                     </div>
 
@@ -25,10 +25,17 @@
                     <div class="row">
                         <div class="col"><label>Próximo Evento</label></div>
                         <div class="col-10">
-                            <input type="text" placeholder="__/__/____" name="dataStart" class="form-control">
+                            <input type="text" placeholder="__/__/____" name="dataProximoEvento" class="form-control">
                         </div>
                     </div>
                     
+                    <div class="row">
+                        <div class="col"><label>Horário</label></div>
+                        <div class="col-10">
+                            <input type="text" placeholder="__:__" name="horaProximoEvento" class="form-control">
+                        </div>
+                    </div>
+
                     <div class="row">
                         <div class="col"><label>Mínimo</label></div>
                         <div class="col-10">

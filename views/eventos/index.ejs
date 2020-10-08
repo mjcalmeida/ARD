@@ -1,0 +1,62 @@
+<%- include('../partials/header.ejs') %>
+<%- include ('../partials/navbar.ejs') %>
+
+<body>
+    <div class="container">
+        <hr>
+        <h2>Eventos</h2>
+        <a href="../eventos/new" class="btn btn-primary">Novo Evento</a>
+        <hr>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Nome do Evento</th>
+                    <th>Periodicidade</th>
+                    <th>Data</th>
+                    <th>Hora</th>
+                    <th>nº Mín</th>
+                    <th>nº Máx</th>
+                    <th>Vl. Convidado</th>
+                    <th>Vl. Xamã</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% eventos.forEach(evento => { %>
+                    <tr>                        
+                        <td> <%= evento.nomeEvento        %> </td>
+                        <td> <%= evento.periodicidade     %> </td>
+                        <td> <%= evento.dataProximoEvento %> </td>
+                        <td> <%= evento.horaProximoEvento %> </td>
+                        <td> <%= evento.numMinimo         %> </td>
+                        <td> <%= evento.numMaximo         %> </td>
+                        <td> <%= evento.valorConvidado    %> </td>
+                        <td> <%= evento.valorXama         %> </td>
+                        <td><a href="./eventos/edit/<%= evento.id %>" class="btn btn-warning">Editar</a>
+                            
+                            <form method="POST" action="./eventos/delete" 
+                                style="display: inline; padding-left: 5px;"
+                                onsubmit="confirmarDelecao(event, this)">
+                                <input type="hidden" name="id" value="<%= evento.id %>">
+                                <button class="btn btn-danger">Excluir</button>
+                            </form>
+                        </td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    </div>
+</body>
+
+<%- include ('../partials/footer.ejs') %>
+
+<script>
+    function confirmarDelecao(event, form){
+        event.preventDefault();
+        var decisao = confirm("Deseja excluir este Evento?");
+
+        if (decisao){
+            form.submit();
+        }        
+    }
+</script>

@@ -14,16 +14,16 @@ const Pessoas = conn.define(
             allowNull: false
         },
         dtNascimento:{
-            type:Sequelize.DATE,
-            allowNull: false
+            type:Sequelize.DATEONLY,
+            allowNull: true
         },
         endPessoa:{
             type:Sequelize.TEXT,
-            allowNull: false
+            allowNull: true
         },
         endComplemento:{
             type:Sequelize.TEXT,
-            allowNull: false
+            allowNull: true
         },
         cepPessoa:{
             type:Sequelize.TEXT,
@@ -31,11 +31,7 @@ const Pessoas = conn.define(
         },
         fonePessoa:{
             type:Sequelize.TEXT,
-            allowNull: false
-        },
-        nmPessoa:{
-            type:Sequelize.TEXT,
-            allowNull: false
+            allowNull: true
         },
         Ativo:{
             type:Sequelize.BOOLEAN,
@@ -55,18 +51,18 @@ const Pessoas = conn.define(
         },
         cidadePessoa:{
             type:Sequelize.TEXT,
-            allowNull: false
+            allowNull: true
         },
         dtEntrada:{
-            type:Sequelize.DATE,
+            type:Sequelize.DATEONLY,
             allowNull: false
         },
         dtDesligamento:{
-            type:Sequelize.DATE,
+            type:Sequelize.DATEONLY,
             allowNull: true
         },
         dtUltimaParticipacao:{
-            type:Sequelize.DATE,
+            type:Sequelize.DATEONLY,
             allowNull: true
         }
     });

@@ -6,7 +6,11 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:mjcalmeida/ARD.git"
+  },
+  "author": "Milton",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.19.0",
