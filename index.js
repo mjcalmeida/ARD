@@ -6,6 +6,7 @@ const conn = require("./models/database/database");
 // Importando os Models
 const Pessoa = require("./models/Pessoas");
 const Eventos = require("./models/Eventos");
+const eventosParticipantes = require("./models/EventosParticipantes")
 
 // View Engine
 app.set('view engine', 'ejs');

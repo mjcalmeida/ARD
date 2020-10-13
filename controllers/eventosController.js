@@ -4,7 +4,7 @@ const router = express.Router();
 const Eventos = require("../models/Eventos");
 const {format} = require('date-fns');
 const Utils = require("../public/js/utils");
-const utils = new Utils();  
+const utils = new Utils();
 
 router.get("/eventos", (req, res) => {
     Eventos
@@ -132,7 +132,7 @@ router.get("/eventos/edit/:id", (req, res) => {
     })
     .catch ( erro => {
         res.redirect("/eventos");
-    } )
+    })
 });
 
 router.post("/eventos/delete", (req, res) => {

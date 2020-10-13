@@ -1,15 +1,23 @@
+const express = require("express");
 const sequelize = require('sequelize');
+const op = sequelize.Op;
+const router = express.Router();
 const Eventos = require("../../models/Eventos");
-var endOfWeek = require('date-fns/endOfWeek')
+const EventosParticipantes = require("../../models/EventosParticipantes");
+var endOfWeek = require('date-fns/endOfWeek');
+var addWeeks = require('date-fns/addWeeks');
+var addMonths = require('date-fns/addMonths')
 
 module.exports = class Utils { 
-    calcularProximoEvento(evento) {
+    calcularProximoEvento(idevento) {
         var result = null;
-console.log('********************************************************************      ' + evento)
+        var dataEvento = null;
+        var valorEvento = null;
+        
         // Pegar dados do Evento
 
         Eventos
-        .findByPk(evento, {
+        .findByPk(idevento, {
             attributes: [
                 'id',
                 'nomeEvento',
@@ -24,21 +32,65 @@ console.log('*******************************************************************
         })
         .then ( evento => {
             if( evento != undefined ){
-                console.log(evento);
+                var maximoParticipantes = evento.numMaximo;
+                var periodicidade = evento.periodicidade;
+                dataEvento = evento.dataProximoEvento;
+                var valorEvento = evento.valorConvidado;
+
+                // Pegar número Participantes até o momento
+
+                EventosParticipantes
+                .findAndCountAll({
+                    where: {
+                        idEvento: evento.id,
+                        [op.and]: {
+                            dataParticipacao: evento.dataProximoEvento
+                        }
+                    },
+                    offset: 10,
+                    limit: 2
+                })
+                .then( result => {
+                    var quantidadeParticipantes = result.count
+                    
+                    console.log("--->" + quantidadeParticipantes);
+                    console.log("--->" + maximoParticipantes);
+                    console.log("--->" + periodicidade);
+
+                    if( quantidadeParticipantes > maximoParticipantes){
+                        dataEvento = calculoProximoEvento(periodicidade, )
+                    }
+                    console.log("--->" + dataEvento);
+                })
+                .catch ( erro => {
+                    console.log(erro);
+                });
             } else {
-                res.redirect("../admin");
+                console.log("sem registros")
             }
         })
         .catch ( erro => {
-            res.redirect("../admin");
-        } )
-
-        if (evento == 1){
-            // Calcula a próxima date de evento
-            result = endOfWeek(new Date(), {weekStartsOn: 5})
-        }
+            console.log(erro);
+        })
+    
         return result
     };
+
+    calculoProximoEvento(periodicidade, data){
+        var data = undefined;
+
+        if(periodicidade == 'Semanal'){
+            data = addWeeks(data, 1)
+        }
+
+        if(periodicidade == 'Ultimo Sábado do Mes'){
+
+            data = new Date()
+        }
+
+        console.log(data);
+        return data;
+    }
 
     parseDateBR_ENG(dataBR){
         var Saida = new Date();
@@ -49,5 +101,9 @@ console.log('*******************************************************************
                          dataBR.substr(0,2));
         }
         return Saida;
+    }
+
+    chkXama(email){
+        return true;
     }
 };

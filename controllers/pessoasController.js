@@ -2,6 +2,7 @@ const express = require("express");
 const sequelize = require('sequelize');
 const router = express.Router();
 const Pessoas = require("../models/Pessoas");
+const Eventos = require("../models/Eventos");
 const {format} = require('date-fns');
 const Utils = require("../public/js/utils");
 const utils = new Utils();   
@@ -208,8 +209,9 @@ router.post("/pessoas/delete", (req, res) => {
 
 router.get("/pessoas/cadRoda", (req, res) => {
     const utils = new Utils();
-    var proximaRoda = utils.calcularProximoEvento(2);
 
+    // Pegar a data do Próximo Evento de Roda de Cura
+    var proximaRoda = utils.calcularProximoEvento(2);
     res.render("./pessoas/cadRoda");
 });
 
