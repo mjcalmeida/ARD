@@ -140,7 +140,6 @@ router.post("/pessoas/edit/update", (req, res) => {
         res.redirect("/pessoas");
     })
     .catch( err =>  {
-        console.log('\033[2J');
         console.log(err);
     });
 });
@@ -212,6 +211,7 @@ router.get("/pessoas/cadRoda", (req, res) => {
 
     // Pegar a data do Próximo Evento de Roda de Cura
     var proximaRoda = utils.calcularProximoEvento(2);
+    console.log("-=-=-=-=-= " + proximaRoda);
     res.render("./pessoas/cadRoda");
 });
 

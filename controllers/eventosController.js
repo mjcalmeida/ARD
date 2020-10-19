@@ -96,7 +96,6 @@ router.post("/eventos/edit/update", (req, res) => {
             res.redirect("/eventos");
         })
         .catch( err =>  {
-            console.log('\033[2J');
             console.log(err);
         });
     }
