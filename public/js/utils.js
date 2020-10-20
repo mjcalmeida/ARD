@@ -34,29 +34,13 @@ module.exports = class Utils {
      
                 // Pegar número Participantes até o momento
                 
-                EventosParticipantes
-                .findAndCountAll({
-                    where: {
-                        idEvento: evento.id,
-                        [op.and]: {
-                            dataParticipacao: dataProximoEvento
-                        }
-                    },
-                    offset: 10,
-                    limit: 2
-                })
-                .then(result => {
-                    var quantidadeParticipantes = result.count
-                    
-                    if (quantidadeParticipantes > maximoParticipantes || ! this.TDate(dataProximoEvento)) {
-                            dataProximoEvento = this.calculoProximoEvento(periodicidade, dataProximoEvento);
-                        }
-                        
-                        return dataProximoEvento;
-                    })
-                .catch(erro => {
-                    console.log(erro);
-                });                
+                var quantidadeParticipantes = this.contaParticipantes(evento.id, dataProximoEvento);
+
+                if (quantidadeParticipantes > maximoParticipantes || ! this.TDate(dataProximoEvento)) {
+                    dataProximoEvento = this.calculoProximoEvento(periodicidade, dataProximoEvento);
+                }
+
+                return dataProximoEvento;
             } else {
                 console.log("sem registros")
             }
@@ -105,5 +89,25 @@ module.exports = class Utils {
             return false;
         }
         return true;
+    }
+
+    contaParticipantes(evento, dataProximoEvento){
+        EventosParticipantes
+        .findAndCountAll({
+            where: {
+                idEvento: evento,
+                [op.and]: {
+                    dataParticipacao: dataProximoEvento
+                }
+            },
+            offset: 10,
+            limit: 2
+        })
+        .then(result => {
+            return result.count;
+            })
+        .catch(erro => {
+            console.log(erro);
+        });                
     }
 };
