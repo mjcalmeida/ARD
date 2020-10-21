@@ -49,19 +49,9 @@ module.exports = class Utils {
                     dataProximoEvento = this.calculoProximoEvento(periodicidade, dataProximoEvento);
                 }
                 
-<<<<<<< HEAD
                 return new Promise(resolve => {
                     resolve(idevento);
                 })
-=======
-                var quantidadeParticipantes = this.contaParticipantes(evento.id, dataProximoEvento);
-
-                if (quantidadeParticipantes > maximoParticipantes || ! this.TDate(dataProximoEvento)) {
-                    dataProximoEvento = this.calculoProximoEvento(periodicidade, dataProximoEvento);
-                }
-
-                return dataProximoEvento;
->>>>>>> 10b36f00d0158ad718755606480d8a1e83c27d4c
             } else {
                 console.log("sem registros")
             }
@@ -125,19 +115,11 @@ module.exports = class Utils {
             limit: 2
         })
         .then(result => {
-<<<<<<< HEAD
             var quantidadeParticipantes = result.count
             return dataProximoEvento;
         })
         .catch(erro => {
             console.log(erro);
         });
-=======
-            return result.count;
-            })
-        .catch(erro => {
-            console.log(erro);
-        });                
->>>>>>> 10b36f00d0158ad718755606480d8a1e83c27d4c
     }
 };
