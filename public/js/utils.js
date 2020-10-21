@@ -5,9 +5,19 @@ const EventosParticipantes = require("../../models/EventosParticipantes");
 const format = require('date-fns/format')
 
 module.exports = class Utils {
-    calcularProximoEvento(idevento) {
-        var valorEvento = null;
+    async calcularProximoEvento(idevento) {
+        var dataProximoEvento = this.getEvento(idevento);
 
+        return await dataProximoEvento;
+    }
+
+    getEvento(idevento) {
+        var valorEvento = null;
+        var maximoParticipantes = 0;
+        var periodicidade = null;
+        var quantidadeParticipantes = 0;
+        var dataProximoEvento = null;
+    
         // Pegar dados do Evento
         Eventos
         .findByPk(idevento, {
@@ -25,38 +35,23 @@ module.exports = class Utils {
         })
         .then(evento => {
             if (evento != undefined) {
-                var maximoParticipantes = evento.numMaximo;
-                var periodicidade       = evento.periodicidade;
-                var dataProximoEvento   = evento.dataProximoEvento.substr(3,2) + "-" +
-                                          evento.dataProximoEvento.substr(0,2) + "-" +
-                                          evento.dataProximoEvento.substr(6,4);
-                    valorEvento         = evento.valorConvidado;
-     
-                // Pegar número Participantes até o momento
+                periodicidade       = evento.periodicidade; 
+                maximoParticipantes = evento.numMaximo;
+                dataProximoEvento   = evento.dataProximoEvento.substr(3,2) + "-" +
+                                      evento.dataProximoEvento.substr(0,2) + "-" +
+                                      evento.dataProximoEvento.substr(6,4);
+                valorEvento         = evento.valorConvidado;
+        
+                // Pegar número Participantes até o momento                
+                quantidadeParticipantes = this.contaParticipantes(evento.id, dataProximoEvento)
+                            
+                if (quantidadeParticipantes > maximoParticipantes || ! this.TDate(dataProximoEvento)) {
+                    dataProximoEvento = this.calculoProximoEvento(periodicidade, dataProximoEvento);
+                }
                 
-                EventosParticipantes
-                .findAndCountAll({
-                    where: {
-                        idEvento: evento.id,
-                        [op.and]: {
-                            dataParticipacao: dataProximoEvento
-                        }
-                    },
-                    offset: 10,
-                    limit: 2
+                return new Promise(resolve => {
+                    resolve(idevento);
                 })
-                .then(result => {
-                    var quantidadeParticipantes = result.count
-                    
-                    if (quantidadeParticipantes > maximoParticipantes || ! this.TDate(dataProximoEvento)) {
-                            dataProximoEvento = this.calculoProximoEvento(periodicidade, dataProximoEvento);
-                        }
-                        
-                        return dataProximoEvento;
-                    })
-                .catch(erro => {
-                    console.log(erro);
-                });                
             } else {
                 console.log("sem registros")
             }
@@ -66,7 +61,7 @@ module.exports = class Utils {
         })
     };
             
-    calculoProximoEvento(periodicidade, dataProximoEvento) {
+    async calculoProximoEvento(periodicidade, dataProximoEvento) {
         if (periodicidade == 'Semanal') {
             while ( ! this.TDate(dataProximoEvento)) {
                 dataProximoEvento = new Date(dataProximoEvento);
@@ -105,5 +100,26 @@ module.exports = class Utils {
             return false;
         }
         return true;
+    }
+
+    contaParticipantes(evento, dataProximoEvento){
+        EventosParticipantes
+        .findAndCountAll({
+            where: {
+                idEvento: evento,
+                [op.and]: {
+                    dataParticipacao: dataProximoEvento
+                }
+            },
+            offset: 10,
+            limit: 2
+        })
+        .then(result => {
+            var quantidadeParticipantes = result.count
+            return dataProximoEvento;
+        })
+        .catch(erro => {
+            console.log(erro);
+        });
     }
 };

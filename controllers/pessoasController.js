@@ -210,7 +210,9 @@ router.get("/pessoas/cadRoda", (req, res) => {
     const utils = new Utils();
 
     // Pegar a data do Próximo Evento de Roda de Cura
-    var proximaRoda = utils.calcularProximoEvento(2);
+    var  proximaRoda = utils.calcularProximoEvento(2);
+    
+
     console.log("-=-=-=-=-= " + proximaRoda);
     res.render("./pessoas/cadRoda");
 });
