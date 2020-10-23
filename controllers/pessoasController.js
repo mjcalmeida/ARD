@@ -4,7 +4,7 @@ const router = express.Router();
 const Pessoas = require("../models/Pessoas");
 const Eventos = require("../models/Eventos");
 const {format} = require('date-fns');
-const Utils = require("../public/js/utils");
+const Utils = require("../public/js/utilsPessoas");
 const utils = new Utils();   
 
 router.get("/pessoas", (req, res) => {
@@ -42,8 +42,7 @@ router.get("/pessoas/new", (req, res) => {
     res.render("./pessoas/new");
 });
 
-router.post("/pessoas/save", (req, res) => {
-    
+router.post("/pessoas/save", (req, res) => {    
     var idGrupo = req.body.idGrupo;
     var nmPessoa = req.body.nmPessoa;
     var dtNascimento = utils.parseDateBR_ENG(req.body.dtNascimento);
@@ -207,14 +206,21 @@ router.post("/pessoas/delete", (req, res) => {
 });
 
 router.get("/pessoas/cadRoda", (req, res) => {
-    const utils = new Utils();
-
     // Pegar a data do Próximo Evento de Roda de Cura
-    var  proximaRoda = utils.calcularProximoEvento(2);
+    var  proximaRoda = null;
     
+    var input = document.getElementById("country");
+    utils.cargaNomePessoas(input);
 
-    console.log("-=-=-=-=-= " + proximaRoda);
-    res.render("./pessoas/cadRoda");
+    utils.calcularProximoEvento(2)
+    .then( (dataProximoEvento) => {
+        proximaRoda = dataProximoEvento;
+        //console.log("-=-=-=-=-=   Fim     " + proximaRoda + "        =-=-=-=-=-");
+        res.render("./pessoas/cadRoda", {dataProximoEvento});
+    })
+    .catch(erro => {
+        console.log(erro);
+    });
 });
 
 module.exports = router;
