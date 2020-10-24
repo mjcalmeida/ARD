@@ -13,7 +13,6 @@
   "author": "Milton",
   "license": "ISC",
   "dependencies": {
-    "autocompleter": "^6.0.3",
     "body-parser": "^1.19.0",
     "date-fns": "^2.16.1",
     "ejs": "^3.1.5",
