@@ -5,8 +5,8 @@ const EventosParticipantes = require("../../models/EventosParticipantes");
 const format = require('date-fns/format');
 const getYear = require('date-fns/getYear')
 const getMonth = require('date-fns/getMonth')
-const getDate = require('date-fns/getDate')
-
+const getDate = require('date-fns/getDate');
+const Pessoas = require('../../models/Pessoas');
 module.exports = class UtilsPessoas {
     async calcularProximoEvento(idevento) {
         //console.log("+-+-+-+-+-+-         Entrada em calcularProximoEvento         +-+-+-+-+-+-");
@@ -20,8 +20,8 @@ module.exports = class UtilsPessoas {
         
         //console.log("Quantidade de participantes: " + quantidadeParticipantes);
 
-var maximoParticipantes = 2;
-var periodicidade = 'Semanal';
+        var maximoParticipantes = 2;
+        var periodicidade = 'Semanal';
 
         if (quantidadeParticipantes > maximoParticipantes || ! this.TDate(dataProximoEvento)) {
             dataProximoEvento = this.calculoProximoEvento(periodicidade, dataProximoEvento);
@@ -31,6 +31,42 @@ var periodicidade = 'Semanal';
         return dataProximoEvento;
     }
 
+    async getNomePessoas(){
+        var aPessoas = [];
+        var pessoas = await this.getPessoas();
+        
+        for ( var i = 0; i < pessoas.length; i++){
+            aPessoas[i] = pessoas[i].nmPessoa;
+        };
+            
+        return aPessoas;
+    }
+
+    getPessoas(){
+        return new Promise(resolve => {
+            setTimeout(() => {
+            Pessoas
+            .findAll({
+                attributes: [
+                    'id',
+                    'idGrupo',
+                    'nmPessoa',
+                    'emailPessoa'
+                ], 
+                where: { Ativo: 0 },
+                raw: true,
+                order: [['nmPessoa', 'ASC']]
+                })
+            .then(pessoas => {
+                return resolve(pessoas);
+            })
+            .catch(erro => {
+                console.log(erro);
+            })
+            }, 1000);
+        });
+    }
+    
     getEvento(idevento) {
         return new Promise(resolve => {
             setTimeout(() => {
@@ -78,7 +114,7 @@ var periodicidade = 'Semanal';
             }, 1000)
         }); 
     }
-    
+
     contaParticipantes(idevento, dataProximoEvento){
         return new Promise(resolve => {
             setTimeout(() => {
@@ -101,8 +137,7 @@ var periodicidade = 'Semanal';
                 })
                 .then(result => {
                     if(result != undefined) { 
-        //                console.log("Retornando a quantidade: " + result.count);
-                        
+        //                console.log("Retornando a quantidade: " + result.count);                       
         //                console.log("+-+-+-+-+-+-              Saida contaParticipantes              +-+-+-+-+-+-");               
                         return resolve(result.count);
                     } else {
@@ -151,9 +186,6 @@ var periodicidade = 'Semanal';
         return Saida;
     };
     
-    getPessoas(){
-        
-    }
     chkXama(email) {
         return true;
     }

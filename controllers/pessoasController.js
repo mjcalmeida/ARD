@@ -205,15 +205,25 @@ router.post("/pessoas/delete", (req, res) => {
     }
 });
 
-router.get("/pessoas/cadRoda", (req, res) => {
+router.get("/pessoas/cadRoda", (req, res) => {    
     // Pegar a data do Próximo Evento de Roda de Cura
     var  proximaRoda = null;
-    
+    var availableTags = [];
+
     utils.calcularProximoEvento(2)
-    .then( (dataProximoEvento) => {
+    .then( dataProximoEvento => {
         proximaRoda = dataProximoEvento;
+
         //console.log("-=-=-=-=-=   Fim     " + proximaRoda + "        =-=-=-=-=-");
-        res.render("./pessoas/cadRoda", {dataProximoEvento});
+
+        utils.getNomePessoas()
+        .then( aPessoas => {
+            var availableTags = JSON.stringify(aPessoas);
+            res.render("./pessoas/cadRoda", {dataProximoEvento, availableTags});
+        })
+        .catch(erro => {
+            console.log(erro);
+        });
     })
     .catch(erro => {
         console.log(erro);
