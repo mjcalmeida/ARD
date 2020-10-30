@@ -90,6 +90,37 @@ router.post("/pessoas/save", (req, res) => {
     }
 });
 
+router.post("/pessoas/saveRoda", (req, res) => {    
+    var nmPessoa = req.body.nmPessoa;
+    var receberEmails = req.body.receberEmails;
+    var emailPessoa = req.body.emailPessoa;
+    var dtEntrada = utils.parseDateBR_ENG(req.body.dtEntrada);
+        dtEntrada = format(dtEntrada,'yyyy-MM-dd');
+    var dtUltimaParticipacao = utils.parseDateBR_ENG(req.body.dtUltimaParticipacao);
+        dtUltimaParticipacao = format(dtUltimaParticipacao,'yyyy-MM-dd');
+   
+    if(emailPessoa != undefined){
+        Pessoas
+        .create({
+            idGrupo : 1,
+            nmPessoa : nmPessoa,
+            Ativo : 1,
+            receberEmails : receberEmails,
+            emailPessoa : emailPessoa,
+            sexoPessoa : sexoPessoa,
+            cidadePessoa : cidadePessoa,
+            dtEntrada : dtEntrada,
+            dtDesligamento : dtDesligamento,
+            dtUltimaParticipacao : dtUltimaParticipacao
+        })
+        .then(() => {
+            res.redirect("/pessoas");
+        });
+    } else {
+        res.redirect("/pessoas/new");
+    }
+});
+
 router.post("/pessoas/edit/update", (req, res) => {
     var id = req.body.id;
     var idGrupo = req.body.idGrupo;

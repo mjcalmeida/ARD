@@ -32,14 +32,15 @@ module.exports = class UtilsPessoas {
     }
 
     async getNomePessoas(){
-        var aPessoas = [];
         var pessoas = await this.getPessoas();
-        
+
+        var aPessoas = "";
+
         for ( var i = 0; i < pessoas.length; i++){
-            aPessoas[i] = pessoas[i].nmPessoa;
+            aPessoas += pessoas[i].nmPessoa + "-" + pessoas[i].id + "|" + pessoas[i].emailPessoa + ",";
         };
             
-        return aPessoas;
+        return aPessoas.substring(0,aPessoas.length-1);
     }
 
     getPessoas(){
@@ -53,7 +54,7 @@ module.exports = class UtilsPessoas {
                     'nmPessoa',
                     'emailPessoa'
                 ], 
-                where: { Ativo: 0 },
+                where: { Ativo: 1 },
                 raw: true,
                 order: [['nmPessoa', 'ASC']]
                 })
