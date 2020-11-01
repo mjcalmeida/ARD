@@ -7,20 +7,22 @@
         <div class="card">
             <div class="card-header"><h3>Cadastramento para a Roda de Cura de <%=dataProximoEvento%></h3></div>
             <div class="card-body">
-                <form method="POST" autocomplete="off" action="./pessoas/saveRoda">
+                <form method="POST" autocomplete="off" action="saveRoda">
                     <div class="row">
                         <div class="col"><label>Nome da Pessoa</label></div>
                         <div class="col-10">                          
                             <input type="text"   id="tags" placeholder="Digite o seu nome" name="nmPessoa" class="form-control">
                             <input type="hidden" id="Tags" value='<%=availableTags%>' name="Tags">
                             <input type="hidden" id="ID"   name="ID">
+                            <input type="hidden" id="Grupo" name="Grupo">
+                            <input type="hidden" id="dtEvento" name="dtEvento" value="<%=dataProximoEvento%>">
                         </div>
                     </div>
                     
                     <div class="row">
                         <div class="col"><label>Email</label></div>
                         <div class="col-10">
-                            <input type="text" placeholder="Digite o seu Email" name="emailPessoa" class="form-control">
+                            <input type="text" placeholder="Digite o seu Email" name="emailPessoa" id="emailPessoa" class="form-control">
                         </div>
                     </div>                    
                     <br>
@@ -44,30 +46,39 @@ $( function() {
     var aTagItem = [];
 
     aTags.forEach(element => {
-        aTagItem[i]=[
-            { 'value' : element.split('-')[1].split('|')[0], 
-              'label' : element.split('-')[0], 
-              'email' : element.split('|')[1]
+        aTagItem[i]=
+            { value : element.split('-')[1].split('|')[0], 
+              label : element.split('-')[0], 
+              email : element.split('|')[1].split('_')[0],
+              grupo : element.split('_')[1]
             }
-        ]
+        
         i++;
     });
 
-    $( "#tags" ).autocomplete({
-        source: aTagItem,
-        focus: function( event, ui ) {
+    $( "#tags" )
+        .autocomplete({
+            source: aTagItem,
+            focus: function( event, ui ) {
             $( "#tags" ).val( ui.item.label );
             return false;
         },
-        select: function( event, ui ) {
+            select: function( event, ui ) {
             $( "#emailPessoa" ).val( ui.item.email );
             $( "#ID" ).val( ui.item.value );
-            $( "#tags" ).val( ui.item.label) 
+            $( "#tags" ).val( ui.item.label );
+            $( "#Grupo" ).val( ui.item.grupo );
             return false;
         },
-        classes: {
+            classes: {
             "ui-autocomplete": "highlight"
         }
-    }); 
-});
+        })
+        .autocomplete( "instance" )
+        ._renderItem = function( ul, item ) {
+            return $( "<li>" )
+            .append( "<div>" + item.label + "</div>" )
+            .appendTo( ul );
+        };
+    });
 </script>

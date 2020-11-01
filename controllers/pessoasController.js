@@ -2,10 +2,13 @@ const express = require("express");
 const sequelize = require('sequelize');
 const router = express.Router();
 const Pessoas = require("../models/Pessoas");
-const Eventos = require("../models/Eventos");
+const Utils = require("../public/js/utils");
+const utils = new Utils();
+const UtilsEventos = require("../public/js/utilseventos");
+const utilseventos = new UtilsEventos();
+const UtilsPessoas = require("../public/js/utilsPessoas");
+const utilsPessoas = new UtilsPessoas();  
 const {format} = require('date-fns');
-const Utils = require("../public/js/utilsPessoas");
-const utils = new Utils();   
 
 router.get("/pessoas", (req, res) => {
     Pessoas
@@ -92,32 +95,35 @@ router.post("/pessoas/save", (req, res) => {
 
 router.post("/pessoas/saveRoda", (req, res) => {    
     var nmPessoa = req.body.nmPessoa;
-    var receberEmails = req.body.receberEmails;
-    var emailPessoa = req.body.emailPessoa;
-    var dtEntrada = utils.parseDateBR_ENG(req.body.dtEntrada);
+    var TodayDate = new Date();
+    var Ativo = 1;
+    var emailPessoa = req.body.emailPessoa == '' ? '' : req.body.emailPessoa;
+    var id = req.body.ID == '' ? 0 : req.body.ID;
+    var receberEmails = req.body.emailPessoa == '' ? 0 : 1;
+    var idGrupo = req.body.Grupo == '' ? 0 : req.body.Grupo;
+    var dtEntrada = utils.parseDateBR_ENG(TodayDate);
         dtEntrada = format(dtEntrada,'yyyy-MM-dd');
-    var dtUltimaParticipacao = utils.parseDateBR_ENG(req.body.dtUltimaParticipacao);
+    var dtUltimaParticipacao = utils.parseDateBR_ENG(req.body.dtEvento);
         dtUltimaParticipacao = format(dtUltimaParticipacao,'yyyy-MM-dd');
    
-    if(emailPessoa != undefined){
+    if(id != 0){
+        utilseventos.addParticipacaoEvento(2, id, idGrupo, dtUltimaParticipacao);
+        res.redirect("/admin");
+    } else {
         Pessoas
         .create({
-            idGrupo : 1,
+            idGrupo : idGrupo,
             nmPessoa : nmPessoa,
-            Ativo : 1,
+            Ativo : Ativo,
             receberEmails : receberEmails,
             emailPessoa : emailPessoa,
-            sexoPessoa : sexoPessoa,
-            cidadePessoa : cidadePessoa,
             dtEntrada : dtEntrada,
-            dtDesligamento : dtDesligamento,
             dtUltimaParticipacao : dtUltimaParticipacao
         })
-        .then(() => {
-            res.redirect("/pessoas");
-        });
-    } else {
-        res.redirect("/pessoas/new");
+        .then(() =>{
+            utilseventos.addParticipacaoEvento(2, id, idGrupo, dtUltimaParticipacao);
+            res.redirect("/admin");
+        })
     }
 });
 
@@ -164,7 +170,7 @@ router.post("/pessoas/edit/update", (req, res) => {
             where: { id: id },
             returning: true, // needed for affectedRows to be populated
             plain: true      // makes sure that the returned instances are just plain objects
-        }        
+        }
     )
     .then( () => {
         res.redirect("/pessoas");
@@ -241,13 +247,13 @@ router.get("/pessoas/cadRoda", (req, res) => {
     var  proximaRoda = null;
     var availableTags = [];
 
-    utils.calcularProximoEvento(2)
+    utilseventos.calcularProximoEvento(2)
     .then( dataProximoEvento => {
         proximaRoda = dataProximoEvento;
 
         //console.log("-=-=-=-=-=   Fim     " + proximaRoda + "        =-=-=-=-=-");
 
-        utils.getNomePessoas()
+        utilsPessoas.getNomePessoas()
         .then( aPessoas => {
             var availableTags = JSON.stringify(aPessoas);
             res.render("./pessoas/cadRoda", {dataProximoEvento, availableTags});

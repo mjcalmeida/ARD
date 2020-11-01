@@ -3,8 +3,6 @@ const sequelize = require('sequelize');
 const router = express.Router();
 const Eventos = require("../models/Eventos");
 const {format} = require('date-fns');
-const Utils = require("../public/js/utilsPessoas");
-const utils = new Utils();
 
 router.get("/eventos", (req, res) => {
     Eventos

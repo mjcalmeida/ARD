@@ -3,7 +3,7 @@ const conn = require('./database/database');
 
 console.log("Tabela de Participantes dos Eventos em Criação");
 
-const Eventos = conn.define(
+const EventosParticipantes = conn.define(
     'eventosparticipantes', {
         idEvento : {
             type: Sequelize.INTEGER,
@@ -29,10 +29,10 @@ const Eventos = conn.define(
     }
 );
 
-Eventos
+EventosParticipantes
     .sync({force: false})
     .then(() => {
         console.log("Tabela participação em Eventos criada com sucesso!!!");
     });
 
-module.exports = Eventos;
+module.exports = EventosParticipantes;

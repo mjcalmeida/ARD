@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const conn = require("./models/database/database");
 
 // Importando os Models
+const Grupos = require("./models/Grupos");
 const Pessoa = require("./models/Pessoas");
 const Eventos = require("./models/Eventos");
 const eventosParticipantes = require("./models/EventosParticipantes")
