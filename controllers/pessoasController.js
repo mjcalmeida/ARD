@@ -110,20 +110,36 @@ router.post("/pessoas/saveRoda", (req, res) => {
         utilseventos.addParticipacaoEvento(2, id, idGrupo, dtUltimaParticipacao);
         res.redirect("/admin");
     } else {
-        Pessoas
-        .create({
-            idGrupo : idGrupo,
+        var newItem =
+        {   idGrupo : idGrupo,
             nmPessoa : nmPessoa,
             Ativo : Ativo,
             receberEmails : receberEmails,
             emailPessoa : emailPessoa,
+            sexoPessoa : '',
+            cepPessoa : '',
             dtEntrada : dtEntrada,
             dtUltimaParticipacao : dtUltimaParticipacao
+        };
+
+    var model = Pessoas;
+    var where = 
+        {
+            nmPessoa    : nmPessoa, 
+            idGrupo     : idGrupo
+        };       
+          
+        utils.updateOrCreate (model, where, newItem)
+        .then((result) => {
+            result.item;
+            result.create;
+            utilseventos.addParticipacaoEvento(2, result.item.id, result.item.idGrupo, result.item.dtUltimaParticipacao);
         })
-        .then(() =>{
-            utilseventos.addParticipacaoEvento(2, id, idGrupo, dtUltimaParticipacao);
-            res.redirect("/admin");
-        })
+        .catch(erro => {
+            console.log(erro);
+        });
+
+        res.redirect("/admin");
     }
 });
 

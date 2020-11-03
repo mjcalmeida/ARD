@@ -27,7 +27,7 @@ const Pessoas = conn.define(
         },
         cepPessoa:{
             type:Sequelize.TEXT,
-            allowNull: false
+            allowNull: true
         },
         fonePessoa:{
             type:Sequelize.TEXT,

@@ -35,12 +35,6 @@ module.exports = class UtilsEventos {
             //    console.log("+-+-+-+-+-+-               Entrada em getEvento               +-+-+-+-+-+-");
             //    console.log("Recebido o id do evento: " + idevento);
 
-                // Pegar dados do Evento
-                var valorEvento = null;
-                var maximoParticipantes = 0;
-                var periodicidade = null;
-                var quantidadeParticipantes = 0;
-
                 Eventos
                 .findByPk(idevento, {
                     attributes: [
@@ -137,18 +131,33 @@ module.exports = class UtilsEventos {
         return format(dataProximoEvento,'dd/MM/yyyy');
     };
 
-    addParticipacaoEvento(idEvento, id, idGrupo, dtUltimaParticipacao){
-        dtUltimaParticipacao = utils.parseDateBR_ENG(dtUltimaParticipacao);
+    addParticipacaoEvento(idEvento, id, idGrupo, dtProximaParticipacao){
+        dtProximaParticipacao = utils.parseDateBR_ENG(dtProximaParticipacao);
 
-        EventosParticipantes
-        .create({
-            idEvento : idEvento,
-            idPessoa: id,
-            dataParticipacao: dtUltimaParticipacao,
-            valorPago: getValorEvento(idGrupo),
-            presenca: 0
-        })
+        this.getValorEvento(idEvento, idGrupo)
+        .then( valorEvento => {
+            var newItem =
+                {   idEvento        : idEvento, 
+                    idPessoa        : id, 
+                    dataParticipacao: dtProximaParticipacao,
+                    valorPago       : valorEvento,
+                    presenca        : 0
+                };
+
+            var model = EventosParticipantes;
+            var where = 
+                {
+                    idEvento        : idEvento, 
+                    idPessoa        : id,
+                    dataParticipacao: dtProximaParticipacao};
+
+            utils.updateOrCreate (model, where, newItem);
+        });
     };
     
-    getValor
+    async getValorEvento(idEvento, idGrupo){
+        let evento =  await this.getEvento(idEvento);
+        var valor = idGrupo == 0 ? evento.valorConvidado : evento.valorXama;
+        return valor;
+    };
 }

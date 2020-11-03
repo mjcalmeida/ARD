@@ -25,13 +25,40 @@ module.exports = class Utils {
     }
 
     parseDateBR_ENG(dataBR) {
-        var Saida = new Date();
+        var Saida = dataBR;
         
-        if (dataBR.length == 10) {
-            Saida = new Date(dataBR.substr(6, 4),
-            dataBR.substr(3, 2) - 1,
-            dataBR.substr(0, 2));
+        if (dataBR.length != undefined){
+            if (dataBR.indexOf('-') >= 0) {
+                dataBR = dataBR.split('-');
+                Saida = new Date(   dataBR[0], 
+                                    dataBR[1] - 1, 
+                                    dataBR[2]);
+
+            }
+            if (dataBR.indexOf('/') >= 0) {
+                Saida = new Date(   dataBR.substr(6, 4),
+                                    dataBR.substr(3, 2) - 1,
+                                    dataBR.substr(0, 2));
+            }
         }
         return Saida;
-    };    
+    };
+    
+    updateOrCreate (model, where, newItem) {
+        // First try to find the record
+        return model
+        .findOne({where: where})
+        .then(function (foundItem) {
+            if (!foundItem) {
+                // Item not found, create a new one
+                return model
+                    .create(newItem)
+                    .then(function (item) { return  {item: item, created: true}; })
+            }
+             // Found an item, update it
+            return model
+                .update(newItem, {where: where})
+                .then(function (item) { return {item: item, created: false} }) ;
+        })
+    };
 };
