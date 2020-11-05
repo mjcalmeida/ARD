@@ -9,23 +9,43 @@ const format = require('date-fns/format');
 module.exports = class UtilsEventos {
     async calcularProximoEvento(idevento) {
         //console.log("+-+-+-+-+-+-         Entrada em calcularProximoEvento         +-+-+-+-+-+-");
-       // console.log("Recebido de controller => " + idevento);
+        // console.log("Recebido de controller => " + idevento);
         
         let evento =  await this.getEvento(idevento);
-       
+        
+        var dataProximoEvento = utils.parseDateBR_ENG(evento.dataProximoEvento);
+
         //console.log("Recebido de getEvento => " + dataProximoEvento);
 
-        var quantidadeParticipantes =  await this.contaParticipantes(idevento, evento.dataProximoEvento);
-        var dataProximoEvento = '';
-
+        var quantidadeParticipantes =  await this.contaParticipantes(idevento, dataProximoEvento);
+       
         //console.log("Quantidade de participantes: " + quantidadeParticipantes);
 
-        if (quantidadeParticipantes > evento.numMaximo || ! utils.TDate(evento.dataProximoEvento)) {
-            dataProximoEvento = this.calculoProximoEvento(evento.periodicidade, evento.dataProximoEvento);
+        if (quantidadeParticipantes > evento.numMaximo || ! utils.TDate(dataProximoEvento)) {
+            dataProximoEvento = this.calculoProximoEvento(evento.periodicidade, dataProximoEvento);
         }
 
-        //console.log("+-+-+-+-+-+-          Saida de calcularProximoEvento          +-+-+-+-+-+-");
-        return dataProximoEvento;
+        //console.log("+-+-+-+-+-+-          Saida atualizada do Proximo Evento]          +-+-+-+-+-+-");
+        var newItem = 
+            {   dataProximoEvento: utils.parseDateBR_ENG(dataProximoEvento),
+                nomeEvento : evento.nomeEvento,
+                periodicidade : evento.periodicidade,
+                horaProximoEvento : evento.horaProximoEvento,
+                numMinimo : evento.numMinimo,
+                numMaximo : evento.numMaximo,
+                valorConvidado : evento.valorConvidado,
+                valorXama : evento.valorXama
+            };
+        var model = Eventos;
+        var where = { id : idevento };
+
+        utils.updateOrCreate (model, where, newItem)
+        .catch( error =>  {
+            console.log(error);
+        });
+
+        var x =  utils.parseDateENG_BR(dataProximoEvento);
+        return x;
     }
 
     getEvento(idevento) {
@@ -113,9 +133,6 @@ module.exports = class UtilsEventos {
 //        console.log("Recebida a Periodicidade: " + periodicidade);
         
         if (periodicidade == 'Semanal') {
-            var arrDataEvento = dataProximoEvento.split('/');
-            dataProximoEvento = new Date(arrDataEvento[2], arrDataEvento[1] - 1, arrDataEvento[0]);
-
             while (! utils.TDate(dataProximoEvento)) {
                 dataProximoEvento = new Date(dataProximoEvento);
                 dataProximoEvento.setDate(dataProximoEvento.getDate()+7);
@@ -138,7 +155,7 @@ module.exports = class UtilsEventos {
         .then( valorEvento => {
             var newItem =
                 {   idEvento        : idEvento, 
-                    idPessoa        : id, 
+                    pessoaId        : id, 
                     dataParticipacao: dtProximaParticipacao,
                     valorPago       : valorEvento,
                     presenca        : 0
@@ -146,10 +163,10 @@ module.exports = class UtilsEventos {
 
             var model = EventosParticipantes;
             var where = 
-                {
-                    idEvento        : idEvento, 
-                    idPessoa        : id,
-                    dataParticipacao: dtProximaParticipacao};
+                {   idEvento        : idEvento, 
+                    pessoaId        : id,
+                    dataParticipacao: dtProximaParticipacao
+                };
 
             utils.updateOrCreate (model, where, newItem);
         });

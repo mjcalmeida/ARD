@@ -1,5 +1,7 @@
 const Sequelize = require('sequelize');
 const conn = require('./database/database');
+const Eventos = require('./Eventos');
+const Pessoas = require('./Pessoas');
 
 console.log("Tabela de Participantes dos Eventos em Criação");
 
@@ -9,7 +11,7 @@ const EventosParticipantes = conn.define(
             type: Sequelize.INTEGER,
             allowNulls: false
         },
-        idPessoa: {
+        pessoaId: {
             type: Sequelize.INTEGER,
             allowNulls: false
         },
@@ -28,6 +30,9 @@ const EventosParticipantes = conn.define(
         }
     }
 );
+
+Pessoas.hasMany(EventosParticipantes, { foreignKey: {name : 'pessoaId' }});
+EventosParticipantes.belongsTo(Pessoas);
 
 EventosParticipantes
     .sync({force: false})

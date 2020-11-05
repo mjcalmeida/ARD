@@ -45,27 +45,24 @@ router.get("/pessoas/new", (req, res) => {
     res.render("./pessoas/new");
 });
 
-router.post("/pessoas/save", (req, res) => {    
+router.post("/pessoas/save", (req, res) => {
+    var TodayDate = new Date();
     var idGrupo = req.body.idGrupo;
     var nmPessoa = req.body.nmPessoa;
     var dtNascimento = utils.parseDateBR_ENG(req.body.dtNascimento);
-        dtNascimento = format(dtNascimento,'yyyy-MM-dd');
     var endPessoa = req.body.endPessoa;
     var endComplemento = req.body.endComplemento;
     var cepPessoa = req.body.cepPessoa;
     var fonePessoa = req.body.fonePessoa;
-    var Ativo = req.body.Ativo;
-    var receberEmails = req.body.receberEmails;
+    var Ativo = req.body.Ativo == '' ? 1 : req.body.Ativo;
+    var receberEmails = req.body.receberEmails== '' ? 1 : req.body.Ativo;
     var emailPessoa = req.body.emailPessoa;
     var sexoPessoa = req.body.sexoPessoa;
     var cidadePessoa = req.body.cidadePessoa;
-    var dtEntrada = utils.parseDateBR_ENG(req.body.dtEntrada);
-        dtEntrada = format(dtEntrada,'yyyy-MM-dd');
-    var dtDesligamento = utils.parseDateBR_ENG(req.body.dtDesligamento);
-        dtDesligamento = format(dtDesligamento,'yyyy-MM-dd');
+    var dtEntrada = req.body.dtEntrada == '' ? TodayDate : utils.parseDateBR_ENG(req.body.dtEntrada);        
+    var dtDesligamento = utils.parseDateBR_ENG(req.body.dtDesligamento);        
     var dtUltimaParticipacao = utils.parseDateBR_ENG(req.body.dtUltimaParticipacao);
-        dtUltimaParticipacao = format(dtUltimaParticipacao,'yyyy-MM-dd');
-   
+          
     if(emailPessoa != undefined){
         Pessoas
         .create({
@@ -118,8 +115,7 @@ router.post("/pessoas/saveRoda", (req, res) => {
             emailPessoa : emailPessoa,
             sexoPessoa : '',
             cepPessoa : '',
-            dtEntrada : dtEntrada,
-            dtUltimaParticipacao : dtUltimaParticipacao
+            dtEntrada : dtEntrada
         };
 
     var model = Pessoas;
@@ -131,9 +127,7 @@ router.post("/pessoas/saveRoda", (req, res) => {
           
         utils.updateOrCreate (model, where, newItem)
         .then((result) => {
-            result.item;
-            result.create;
-            utilseventos.addParticipacaoEvento(2, result.item.id, result.item.idGrupo, result.item.dtUltimaParticipacao);
+            utilseventos.addParticipacaoEvento(2, result.item.id, result.item.idGrupo, utils.parseDateBR_ENG(dtUltimaParticipacao));
         })
         .catch(erro => {
             console.log(erro);

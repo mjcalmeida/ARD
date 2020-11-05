@@ -25,9 +25,10 @@ module.exports = class Utils {
     }
 
     parseDateBR_ENG(dataBR) {
-        var Saida = dataBR;
+        var Saida = dataBR == '' ? null : dataBR ;
         
-        if (dataBR.length != undefined){
+        if (Saida.length != undefined &&
+            Saida != null){
             if (dataBR.indexOf('-') >= 0) {
                 dataBR = dataBR.split('-');
                 Saida = new Date(   dataBR[0], 
@@ -43,6 +44,32 @@ module.exports = class Utils {
         }
         return Saida;
     };
+
+    parseDateENG_BR(dataENG){
+        var Saida = dataENG;
+        
+        // Data em formato completo
+        if (dataENG.length != undefined){
+            Saida = getDate(dataENG) + "/" + 
+                    getMonth(dataENG) + "/" +  
+                    getYear(dataENG);
+        
+            // Data em formato YYYY-MM-DD
+            if (dataENG.indexOf('-') >= 0) {
+                dataENG = dataENG.split('-');
+                Saida = dataENG[0] + "/" + 
+                        dataENG[1] - 1 + "/" + 
+                        dataENG[2];
+            }
+            if (dataBR.indexOf('/') >= 0) {
+                // Data em formato MM/DD/YYYY
+                Saida = new Date(   dataBR.substr(6, 4),
+                                    dataBR.substr(3, 2) - 1,
+                                    dataBR.substr(0, 2));
+            }  
+        }
+        return format(Saida,'dd/MM/yyyy');
+    }
     
     updateOrCreate (model, where, newItem) {
         // First try to find the record

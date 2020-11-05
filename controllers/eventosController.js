@@ -93,8 +93,8 @@ router.post("/eventos/edit/update", (req, res) => {
         .then(() => {
             res.redirect("/eventos");
         })
-        .catch( err =>  {
-            console.log(err);
+        .catch( error =>  {
+            console.log(error);
         });
     }
 });

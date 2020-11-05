@@ -47,7 +47,7 @@ const Pessoas = conn.define(
         },
         sexoPessoa:{
             type:Sequelize.TEXT,
-            allowNull: false
+            allowNull: true
         },
         cidadePessoa:{
             type:Sequelize.TEXT,
@@ -68,11 +68,13 @@ const Pessoas = conn.define(
     });
 
 // Criação da tabela somente em caso de alteração ou se a tabela não existe no banco
-
 Pessoas
-    .sync({force: false})
-    .then(() => {
-        console.log("Tabela Pessoas criada com sucesso!!!")
-    });
+.sync({force: false})
+.then(() => {
+    console.log("Tabela Pessoas criada com sucesso!!!")
+})
+.catch(err => {
+    console.log("ERRO => " + err.message);
+});
 
 module.exports = Pessoas;
