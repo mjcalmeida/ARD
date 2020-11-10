@@ -1,6 +1,5 @@
 const Sequelize = require('sequelize');
 const conn = require('./database/database');
-const Eventos = require('./Eventos');
 const Pessoas = require('./Pessoas');
 
 console.log("Tabela de Participantes dos Eventos em Criação");
@@ -23,6 +22,10 @@ const EventosParticipantes = conn.define(
             type: Sequelize.DECIMAL,
             precision: "10,2",
             allowNulls: false
+        },
+        observacao:{
+            type: Sequelize.TEXT,
+            allowNulls: true
         },
         presenca: {
             type: Sequelize.BOOLEAN,

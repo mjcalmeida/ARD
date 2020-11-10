@@ -94,7 +94,9 @@ router.post("/pessoas/saveRoda", (req, res) => {
     var nmPessoa = req.body.nmPessoa;
     var TodayDate = new Date();
     var Ativo = 1;
+    var valorEvento = req.body.valorEvento;
     var emailPessoa = req.body.emailPessoa == '' ? '' : req.body.emailPessoa;
+    var observacao = req.body.observacao;
     var id = req.body.ID == '' ? 0 : req.body.ID;
     var receberEmails = req.body.emailPessoa == '' ? 0 : 1;
     var idGrupo = req.body.Grupo == '' ? 0 : req.body.Grupo;
@@ -102,10 +104,15 @@ router.post("/pessoas/saveRoda", (req, res) => {
         dtEntrada = format(dtEntrada,'yyyy-MM-dd');
     var dtUltimaParticipacao = utils.parseDateBR_ENG(req.body.dtEvento);
         dtUltimaParticipacao = format(dtUltimaParticipacao,'yyyy-MM-dd');
+    var presenca = req.body.presenca;
+
+    if(presenca == 0){
+        dtUltimaParticipacao = null;
+    }
    
     if(id != 0){
-        utilseventos.addParticipacaoEvento(2, id, idGrupo, dtUltimaParticipacao);
-        res.redirect("/admin");
+        utilseventos.addParticipacaoEvento(2, id, idGrupo, dtUltimaParticipacao, emailPessoa, presenca, valorEvento, observacao);
+        res.redirect("../listas");
     } else {
         var newItem =
         {   idGrupo : idGrupo,
@@ -115,7 +122,8 @@ router.post("/pessoas/saveRoda", (req, res) => {
             emailPessoa : emailPessoa,
             sexoPessoa : '',
             cepPessoa : '',
-            dtEntrada : dtEntrada
+            dtEntrada : dtEntrada,
+            dtUltimaParticipacao : dtUltimaParticipacao
         };
 
     var model = Pessoas;
@@ -127,13 +135,13 @@ router.post("/pessoas/saveRoda", (req, res) => {
           
         utils.updateOrCreate (model, where, newItem)
         .then((result) => {
-            utilseventos.addParticipacaoEvento(2, result.item.id, result.item.idGrupo, utils.parseDateBR_ENG(dtUltimaParticipacao));
+            utilseventos.addParticipacaoEvento(2, result.item.id, result.item.idGrupo, utils.parseDateBR_ENG(dtUltimaParticipacao), emailPessoa, presenca, valorEvento, observacao);
         })
         .catch(erro => {
             console.log(erro);
         });
 
-        res.redirect("/admin");
+        res.redirect("../listas");
     }
 });
 
@@ -275,6 +283,30 @@ router.get("/pessoas/cadRoda", (req, res) => {
     .catch(erro => {
         console.log(erro);
     });
+});
+
+router.get("/pessoas/cadRodaDia", (req, res) => {    
+    // Pegar a data do Próximo Evento de Roda de Cura
+    
+    var availableTags = [];
+
+    utilseventos.calcularProximoEvento(2)
+    .then( dataProximoEvento => {
+        dataProximoEvento = '05/11/2020';    // retirar
+        //console.log("-=-=-=-=-=   Fim     " + proximaRoda + "        =-=-=-=-=-");
+
+        utilsPessoas.getNomePessoas()
+        .then( aPessoas => {
+            var availableTags = JSON.stringify(aPessoas);
+            res.render("./pessoas/cadRodaDia", {dataProximoEvento, availableTags});
+        })
+        .catch(erro => {
+            console.log(erro);
+        });
+    })
+    .catch(erro => {
+        console.log(erro);
+    });        
 });
 
 module.exports = router;

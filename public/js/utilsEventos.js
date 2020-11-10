@@ -44,8 +44,7 @@ module.exports = class UtilsEventos {
             console.log(error);
         });
 
-        var x =  utils.parseDateENG_BR(dataProximoEvento);
-        return x;
+        return utils.parseDateENG_BR(dataProximoEvento);
     }
 
     getEvento(idevento) {
@@ -148,7 +147,7 @@ module.exports = class UtilsEventos {
         return format(dataProximoEvento,'dd/MM/yyyy');
     };
 
-    addParticipacaoEvento(idEvento, id, idGrupo, dtProximaParticipacao){
+    addParticipacaoEvento(idEvento, id, idGrupo, dtProximaParticipacao, emailPessoa, presenca, valorEvento, observacao){
         dtProximaParticipacao = utils.parseDateBR_ENG(dtProximaParticipacao);
 
         this.getValorEvento(idEvento, idGrupo)
@@ -158,7 +157,9 @@ module.exports = class UtilsEventos {
                     pessoaId        : id, 
                     dataParticipacao: dtProximaParticipacao,
                     valorPago       : valorEvento,
-                    presenca        : 0
+                    presenca        : presenca,
+                    emailPessoa     : emailPessoa,
+                    observacao      : observacao
                 };
 
             var model = EventosParticipantes;

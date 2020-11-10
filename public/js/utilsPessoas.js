@@ -1,7 +1,5 @@
 const sequelize = require('sequelize');
-const op = sequelize.Op;
 const Pessoas = require('../../models/Pessoas');
-
 
 module.exports = class UtilsPessoas {
     async getNomePessoas(){

@@ -2,32 +2,72 @@
 <%- include('../../partials/navbar.ejs') %>
 
 <body>
+    <hr>
     <div class="container">
-        <hr>
-        <h2>Roda de Cura ( <%= dataEvento %> )</h2>
-        <a href="../pessoas/cadRoda" class="btn btn-primary">Nova Pessoa</a>
-        <hr>
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>Presença</th>
-                    <th>Nome</th>                    
-                    <th>Contribuição</th>
-                    <th>Ação</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% eventosRoda.forEach(evento => { %>
-                    <tr> 
-                        <td> <input type="checkbox" name="presenca"></td>                       
-                        <td> <%= evento.nmPessoa%> </td>
-                        <td> <input type="text" name="valorPago" value="<%= evento.valorPago%>"/> </td>
-                        <td><a href="./pessoas/putRoda/<%= evento.idPessoa %>" class="btn btn-success">Salvar</a></td>   
-                    </tr>
+        <div class="card">
+            <div class="card-header"><h3>Roda de Cura ( <%= dataEvento %> )</h3></div>
+            
+            <div class="card-body">
+                <a href="../pessoas/cadRodaDia" class="btn btn-primary" style="margin-bottom: 15px;">Nova Pessoa</a>
+                <div class="row">
+                    <div class="col-1">#</div>
+                    <div class="col">Nome</div>                    
+                    <div class="col-2">Contribuição</div>
+                    <div class="col">Observações</div>
+                    <div class="col-1">Ação</div>
+                </div>
+                <hr>
+                <% eventosRoda.forEach(evento => {  %>
+                <form method="POST" action="./cadPresenca">
+                        <div class="row">
+                            <div class="col-1">
+                                <input type="hidden" name="pessoaId"   value="<%= evento.pessoaId %>"/>
+                                <input type="hidden" name="idEvento"   value="<%= evento.idEvento %>"/>
+                                <input type="hidden" name="dataEvento" value="<%= dataEvento %>"/>
+                                                                
+                                <input type="checkbox" name="presenca" <%= evento.presenca == 1 ? "checked" : "" %>/>
+                            </div>
+                        
+                            <div class="col">
+                                <%= evento.nmPessoa %>
+                            </div>
+
+                            <div class="col-2">
+                                <input type="text" name="valorPago" value="<%= evento.valorPago%> " >
+                            </div>
+
+                            <div class="col">
+                                <input type="text" name="observacao" value="<%= evento.observacao%>">
+                            </div>
+                        
+                            <div class="col-1">
+                                <button class="btn btn-success">Salvar</button>
+                            </div>
+                        </div>
+                    </form>
                 <% }) %>
-            </tbody>
-        </table>
+            </div>
+        </div>  
     </div>
 </body>
 
 <%- include ('../../partials/footer.ejs') %>
+
+<script>
+        function confirmarDelecao(event, form){
+        event.preventDefault();
+        var decisao = confirm("Confirma ?");
+
+        if (decisao){
+            form.submit();
+        }        
+    }
+//$('.blr').blur(function(o){
+//    if( $(this).val() != undefined ) {
+//        $("#PessoaId").val($("#pessoaId").val());
+//        $("#Presenca").val()   = $("#presenca")[0].checked;
+//        $("#ValorPago").val()  = $("#valorPago").val();
+//        $("#Observacao").val() = $("#observacao").val();
+//    }
+//});
+</script>
