@@ -5,8 +5,7 @@ const Pessoas = require("../models/Pessoas");
 const UtilsEventos = require("../public/js/utilsEventos");
 const utilseventos = new UtilsEventos();
 
-
-const Utils = require("../public/js/utils");     // retirar
+const Utils = require("../public/js/utils");   
 const utils = new Utils();    // retirar
 
 router.post('/cadPresenca', (req, res) => {
@@ -60,7 +59,6 @@ router.post('/cadPresenca', (req, res) => {
 router.get("/listas", (req, res) => {
     utilseventos.calcularProximoEvento(2)
     .then( dataEvento => {
-        dataEvento = '05/11/2020';    // retirar
         EventosParticipantes
         .findAll({
             attributes: [
@@ -79,7 +77,7 @@ router.get("/listas", (req, res) => {
                 required: true
             }],
             raw: true,
-            order: [['pessoaId', 'ASC']]
+            order: [['pessoa','nmPessoa', 'ASC']]
         })
         .then(eventosRoda => {
             res.render("listas/roda/index", {

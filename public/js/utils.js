@@ -27,8 +27,8 @@ module.exports = class Utils {
     parseDateBR_ENG(dataBR) {
         var Saida = dataBR == '' ? null : dataBR ;
         
-        if (Saida.length != undefined &&
-            Saida != null){
+        if (Saida != null &&
+            Saida.length != undefined){
             if (dataBR.indexOf('-') >= 0) {
                 dataBR = dataBR.split('-');
                 Saida = new Date(   dataBR[0], 
@@ -57,15 +57,17 @@ module.exports = class Utils {
             // Data em formato YYYY-MM-DD
             if (dataENG.indexOf('-') >= 0) {
                 dataENG = dataENG.split('-');
-                Saida = dataENG[0] + "/" + 
-                        dataENG[1] - 1 + "/" + 
-                        dataENG[2];
+                Saida = 
+                    dataENG[0] + "/" + 
+                    dataENG[1] - 1 + "/" + 
+                    dataENG[2];
             }
             if (dataBR.indexOf('/') >= 0) {
                 // Data em formato MM/DD/YYYY
-                Saida = new Date(   dataBR.substr(6, 4),
-                                    dataBR.substr(3, 2) - 1,
-                                    dataBR.substr(0, 2));
+                Saida = new Date(   
+                    dataENG.substr(6, 4),
+                    dataENG.substr(3, 2) - 1,
+                    dataENG.substr(0, 2));
             }  
         }
         return format(Saida,'dd/MM/yyyy');

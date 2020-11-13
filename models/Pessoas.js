@@ -45,6 +45,10 @@ const Pessoas = conn.define(
             type:Sequelize.TEXT,
             allowNull: false
         },
+        VIP:{
+            type:Sequelize.BOOLEAN,
+            allowNull: false
+        },
         sexoPessoa:{
             type:Sequelize.TEXT,
             allowNull: true

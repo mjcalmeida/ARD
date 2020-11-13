@@ -25,6 +25,7 @@ router.get("/pessoas", (req, res) => {
             'Ativo',
             'receberEmails',
             'emailPessoa',
+            'VIP',
             'sexoPessoa',
             'cidadePessoa',
             [sequelize.fn('date_format', sequelize.col('dtEntrada'), '%d/%m/%Y'), 'dtEntrada'],
@@ -32,7 +33,7 @@ router.get("/pessoas", (req, res) => {
             [sequelize.fn('date_format', sequelize.col('dtUltimaParticipacao'), '%d/%m/%Y'), 'dtUltimaParticipacao']
         ], 
         raw: true,
-        order: [['id', 'ASC']]
+        order: [['nmPessoa', 'ASC']]
     })
     .then(pessoas => {
         res.render("pessoas/index", {
@@ -58,6 +59,7 @@ router.post("/pessoas/save", (req, res) => {
     var receberEmails = req.body.receberEmails== '' ? 1 : req.body.Ativo;
     var emailPessoa = req.body.emailPessoa;
     var sexoPessoa = req.body.sexoPessoa;
+    var VIP = req.body.VIP == '' ? 0 : req.body.VIP;
     var cidadePessoa = req.body.cidadePessoa;
     var dtEntrada = req.body.dtEntrada == '' ? TodayDate : utils.parseDateBR_ENG(req.body.dtEntrada);        
     var dtDesligamento = utils.parseDateBR_ENG(req.body.dtDesligamento);        
@@ -66,7 +68,7 @@ router.post("/pessoas/save", (req, res) => {
     if(emailPessoa != undefined){
         Pessoas
         .create({
-            idGrupo : 1,
+            idGrupo : idGrupo,
             nmPessoa : nmPessoa,
             dtNascimento : dtNascimento,
             endPessoa : endPessoa,
@@ -79,6 +81,7 @@ router.post("/pessoas/save", (req, res) => {
             sexoPessoa : sexoPessoa,
             cidadePessoa : cidadePessoa,
             dtEntrada : dtEntrada,
+            VIP : VIP,
             dtDesligamento : dtDesligamento,
             dtUltimaParticipacao : dtUltimaParticipacao
         })
@@ -101,9 +104,8 @@ router.post("/pessoas/saveRoda", (req, res) => {
     var receberEmails = req.body.emailPessoa == '' ? 0 : 1;
     var idGrupo = req.body.Grupo == '' ? 0 : req.body.Grupo;
     var dtEntrada = utils.parseDateBR_ENG(TodayDate);
-        dtEntrada = format(dtEntrada,'yyyy-MM-dd');
     var dtUltimaParticipacao = utils.parseDateBR_ENG(req.body.dtEvento);
-        dtUltimaParticipacao = format(dtUltimaParticipacao,'yyyy-MM-dd');
+    var dtUltimaRoda = dtUltimaParticipacao;
     var presenca = req.body.presenca;
 
     if(presenca == 0){
@@ -111,13 +113,14 @@ router.post("/pessoas/saveRoda", (req, res) => {
     }
    
     if(id != 0){
-        utilseventos.addParticipacaoEvento(2, id, idGrupo, dtUltimaParticipacao, emailPessoa, presenca, valorEvento, observacao);
+        utilseventos.addParticipacaoEvento(2, id, idGrupo, dtUltimaRoda, emailPessoa, presenca, valorEvento, observacao);
         res.redirect("../listas");
     } else {
         var newItem =
         {   idGrupo : idGrupo,
             nmPessoa : nmPessoa,
             Ativo : Ativo,
+            VIP : 0,
             receberEmails : receberEmails,
             emailPessoa : emailPessoa,
             sexoPessoa : '',
@@ -135,7 +138,7 @@ router.post("/pessoas/saveRoda", (req, res) => {
           
         utils.updateOrCreate (model, where, newItem)
         .then((result) => {
-            utilseventos.addParticipacaoEvento(2, result.item.id, result.item.idGrupo, utils.parseDateBR_ENG(dtUltimaParticipacao), emailPessoa, presenca, valorEvento, observacao);
+            utilseventos.addParticipacaoEvento(2, result.item.id, result.item.idGrupo, dtUltimaRoda, emailPessoa, presenca, valorEvento, observacao);
         })
         .catch(erro => {
             console.log(erro);
@@ -150,22 +153,19 @@ router.post("/pessoas/edit/update", (req, res) => {
     var idGrupo = req.body.idGrupo;
     var nmPessoa = req.body.nmPessoa;
     var dtNascimento = utils.parseDateBR_ENG(req.body.dtNascimento);
-        dtNascimento = format(dtNascimento,'yyyy-MM-dd');
     var endPessoa = req.body.endPessoa;
     var endComplemento = req.body.endComplemento;
     var cepPessoa = req.body.cepPessoa;
     var fonePessoa = req.body.fonePessoa;
     var Ativo = req.body.Ativo;
+    var VIP = req.body.VIP == 0 ? 0 : 1;
     var receberEmails = req.body.receberEmails;
     var emailPessoa = req.body.emailPessoa;
     var sexoPessoa = req.body.sexoPessoa;
     var cidadePessoa = req.body.cidadePessoa;
     var dtEntrada = utils.parseDateBR_ENG(req.body.dtEntrada);
-        dtEntrada = format(dtEntrada,'yyyy-MM-dd');
     var dtDesligamento = utils.parseDateBR_ENG(req.body.dtDesligamento);
-        dtDesligamento = format(dtDesligamento,'yyyy-MM-dd');
     var dtUltimaParticipacao = utils.parseDateBR_ENG(req.body.dtUltimaParticipacao);
-        dtUltimaParticipacao = format(dtUltimaParticipacao,'yyyy-MM-dd');    
     Pessoas
     .update(
         {
@@ -181,6 +181,7 @@ router.post("/pessoas/edit/update", (req, res) => {
             emailPessoa : emailPessoa,
             sexoPessoa : sexoPessoa,
             cidadePessoa : cidadePessoa,
+            VIP : VIP,
             dtEntrada : dtEntrada,
             dtDesligamento : dtDesligamento,
             dtUltimaParticipacao : dtUltimaParticipacao
@@ -217,6 +218,7 @@ router.get("/pessoas/edit/:id", (req, res) => {
             'cepPessoa',
             'fonePessoa',
             'Ativo',
+            'VIP',
             'receberEmails',
             'emailPessoa',
             'sexoPessoa',
@@ -292,7 +294,6 @@ router.get("/pessoas/cadRodaDia", (req, res) => {
 
     utilseventos.calcularProximoEvento(2)
     .then( dataProximoEvento => {
-        dataProximoEvento = '05/11/2020';    // retirar
         //console.log("-=-=-=-=-=   Fim     " + proximaRoda + "        =-=-=-=-=-");
 
         utilsPessoas.getNomePessoas()

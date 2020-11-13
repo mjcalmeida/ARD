@@ -1,5 +1,6 @@
 const sequelize = require('sequelize');
 const op = sequelize.Op;
+const Pessoas = require("../../models/Pessoas");
 const Eventos = require("../../models/Eventos");
 const EventosParticipantes = require("../../models/EventosParticipantes");
 const Utils = require("./utils");
@@ -23,6 +24,9 @@ module.exports = class UtilsEventos {
 
         if (quantidadeParticipantes > evento.numMaximo || ! utils.TDate(dataProximoEvento)) {
             dataProximoEvento = this.calculoProximoEvento(evento.periodicidade, dataProximoEvento);
+
+            //  Cadastramento dos VIP´s
+            this.putVips(dataProximoEvento);
         }
 
         //console.log("+-+-+-+-+-+-          Saida atualizada do Proximo Evento]          +-+-+-+-+-+-");
@@ -146,6 +150,32 @@ module.exports = class UtilsEventos {
         
         return format(dataProximoEvento,'dd/MM/yyyy');
     };
+
+    putVips(dataProximoEvento){
+        Pessoas
+        .findAll({
+            attributes: [
+                'id',
+                'idGrupo',
+                'emailPessoa'
+            ],
+            where : {VIP : true },
+            raw: true
+        })
+        .then(pessoa => {
+            for (var n = 0; pessoa.length; n++){
+                this.addParticipacaoEvento(
+                    2, 
+                    pessoa[n].id, 
+                    pessoa[n].idGrupo, 
+                    utils.parseDateBR_ENG(dataProximoEvento), 
+                    pessoa[n].emailPessoa, 0, 0, '')
+            }
+        })
+        .catch(err => {
+            console.log("ERRO => " + err.message);
+        });
+    }
 
     addParticipacaoEvento(idEvento, id, idGrupo, dtProximaParticipacao, emailPessoa, presenca, valorEvento, observacao){
         dtProximaParticipacao = utils.parseDateBR_ENG(dtProximaParticipacao);
