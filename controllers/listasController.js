@@ -2,16 +2,17 @@ const express = require("express");
 const router = express.Router();
 const EventosParticipantes = require("../models/EventosParticipantes");
 const Pessoas = require("../models/Pessoas");
+const Grupos = require("../models/Grupos");
 const UtilsEventos = require("../public/js/utilsEventos");
 const utilseventos = new UtilsEventos();
 
 const Utils = require("../public/js/utils");   
-const utils = new Utils();    // retirar
+const utils = new Utils();
 
 router.post('/cadPresenca', (req, res) => {
-    const idEvento = req.body.idEvento;
+    const eventoId = req.body.eventoId;
     const idPessoa = req.body.pessoaId;
-    const presenca = req.body.presenca=='on' ? 1 : 0;
+    const presenca =  1;
     const valorPago = req.body.valorPago;
     const observacao = req.body.observacao;
     const dataEvento = utils.parseDateBR_ENG(req.body.dataEvento);
@@ -36,7 +37,7 @@ router.post('/cadPresenca', (req, res) => {
             };
         var model = EventosParticipantes;
         var where = 
-        {   idEvento        : idEvento, 
+        {   eventoId        : eventoId, 
             pessoaId        : idPessoa,
             dataParticipacao: dataEvento
         };
@@ -57,13 +58,13 @@ router.post('/cadPresenca', (req, res) => {
 });
 
 router.get("/listas", (req, res) => {
-    utilseventos.calcularProximoEvento(2)
+    utilseventos.calcularProximoEvento(1)
     .then( dataEvento => {
         EventosParticipantes
         .findAll({
             attributes: [
                 'id',
-                'idEvento',
+                'eventoId',
                 'pessoaId',
                 'valorPago',
                 'observacao',
@@ -82,7 +83,7 @@ router.get("/listas", (req, res) => {
         .then(eventosRoda => {
             res.render("listas/roda/index", {
                 eventosRoda : eventosRoda,
-                dataEvento : dataEvento
+                dataEvento : utils.parseDateENG_BR(dataEvento)
             });
         })
         .catch(err => {

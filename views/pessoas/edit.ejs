@@ -14,8 +14,8 @@
                         <div class="col-9">
                             <input type="hidden" name="id" value="<%= pessoa.id %>">
                             <input type="text" placeholder="Digite o Grupo da Pessoa" 
-                                    name="idGrupo" class="form-control"
-                                    value="<%= pessoa.idGrupo %>">
+                                    name="grupoId" class="form-control"
+                                    value="<%= pessoa.grupoId %>">
                         </div>
                     </div>
 
@@ -33,7 +33,7 @@
                         <div class="col"><label>Nascimento</label></div>
                         <div class="col-9">
                             <input type="text" placeholder="__/__/____" 
-                                name="dtNascimento" class="form-control"
+                                name="dtNascimento" class="form-control date"
                                 value="<%= pessoa.dtNascimento %>">
                         </div>
                     </div>
@@ -60,7 +60,7 @@
                         <div class="col"><label>CEP</label></div>
                         <div class="col-9">
                             <input type="text" placeholder="_____-___" 
-                                name="cepPessoa" class="form-control"
+                                name="cepPessoa" class="form-control cep"
                                 value="<%= pessoa.cepPessoa %>">
                         </div>
                     </div>
@@ -68,8 +68,8 @@
                     <div class="row">
                         <div class="col"><label>Telefone</label></div>
                         <div class="col-9">
-                            <input type="text" placeholder="(xx) xxxx-xxxx" 
-                                name="fonePessoa" class="form-control"
+                            <input type="text" placeholder="(xx) xxxxx-xxxx" 
+                                name="fonePessoa" class="form-control phone_with_ddd"
                                 value="<%= pessoa.fonePessoa %>">
                         </div>
                     </div>
@@ -104,7 +104,7 @@
                     <div class="row">
                         <div class="col"><label>Sexo</label></div>
                         <div class="col-9">
-                            <input type="text" placeholder="S/M/X" 
+                            <input type="text" placeholder="F/M/It´s not my business" 
                                 name="sexoPessoa" class="form-control"
                                 value="<%= pessoa.sexoPessoa %>">
                         </div>
@@ -123,7 +123,7 @@
                         <div class="col"><label>Data de Entrada</label></div>
                         <div class="col-9">
                             <input type="text" placeholder="__/__/____" 
-                                name="dtEntrada" class="form-control"
+                                name="dtEntrada" class="form-control date"
                                 value="<%= pessoa.dtEntrada %>">
                         </div>
                     </div>
@@ -132,7 +132,7 @@
                         <div class="col"><label>Data de Saída</label></div>
                         <div class="col-9">
                             <input type="text" placeholder="__/__/____" 
-                                name="dtDesligamento" class="form-control"
+                                name="dtDesligamento" class="form-control date"
                                 value="<%= pessoa.dtDesligamento %>">
                         </div>
                     </div>
@@ -141,7 +141,7 @@
                         <div class="col"><label>Última Participação</label></div>
                         <div class="col-9">
                             <input type="text" placeholder="__/__/____" 
-                                name="dtUltimaParticipacao" class="form-control"
+                                name="dtUltimaParticipacao" class="form-control date"
                                 value="<%= pessoa.dtUltimaParticipacao %>">
                         </div>
                     </div>
@@ -161,3 +161,6 @@
 </body>
 
 <%- include ('../partials/footer.ejs') %>
+
+<script src="/jQuery/jquery.mask.js"></script>
+<script src="/jQuery/mascaras.js"></script>

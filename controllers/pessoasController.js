@@ -4,7 +4,7 @@ const router = express.Router();
 const Pessoas = require("../models/Pessoas");
 const Utils = require("../public/js/utils");
 const utils = new Utils();
-const UtilsEventos = require("../public/js/utilseventos");
+const UtilsEventos = require("../public/js/utilsEventos");
 const utilseventos = new UtilsEventos();
 const UtilsPessoas = require("../public/js/utilsPessoas");
 const utilsPessoas = new UtilsPessoas();  
@@ -15,7 +15,7 @@ router.get("/pessoas", (req, res) => {
     .findAll({
         attributes: [
             'id',
-            'idGrupo',
+            'grupoId',
             'nmPessoa',
             [sequelize.fn('date_format', sequelize.col('dtNascimento'), '%d/%m/%Y'), 'dtNascimento'],
             'endPessoa',
@@ -48,7 +48,7 @@ router.get("/pessoas/new", (req, res) => {
 
 router.post("/pessoas/save", (req, res) => {
     var TodayDate = new Date();
-    var idGrupo = req.body.idGrupo;
+    var grupoId = req.body.grupoId;
     var nmPessoa = req.body.nmPessoa;
     var dtNascimento = utils.parseDateBR_ENG(req.body.dtNascimento);
     var endPessoa = req.body.endPessoa;
@@ -68,7 +68,7 @@ router.post("/pessoas/save", (req, res) => {
     if(emailPessoa != undefined){
         Pessoas
         .create({
-            idGrupo : idGrupo,
+            grupoId : grupoId,
             nmPessoa : nmPessoa,
             dtNascimento : dtNascimento,
             endPessoa : endPessoa,
@@ -97,27 +97,23 @@ router.post("/pessoas/saveRoda", (req, res) => {
     var nmPessoa = req.body.nmPessoa;
     var TodayDate = new Date();
     var Ativo = 1;
-    var valorEvento = req.body.valorEvento;
+    var valorEvento = req.body.valorEvento == '' ? 0 : req.body.valorEvento;
     var emailPessoa = req.body.emailPessoa == '' ? '' : req.body.emailPessoa;
     var observacao = req.body.observacao;
     var id = req.body.ID == '' ? 0 : req.body.ID;
     var receberEmails = req.body.emailPessoa == '' ? 0 : 1;
-    var idGrupo = req.body.Grupo == '' ? 0 : req.body.Grupo;
+    var grupoId = req.body.Grupo == '' ? 1 : req.body.Grupo;
     var dtEntrada = utils.parseDateBR_ENG(TodayDate);
     var dtUltimaParticipacao = utils.parseDateBR_ENG(req.body.dtEvento);
     var dtUltimaRoda = dtUltimaParticipacao;
     var presenca = req.body.presenca;
+    var grupoId = 1;
 
-    if(presenca == 0){
-        dtUltimaParticipacao = null;
-    }
-   
     if(id != 0){
-        utilseventos.addParticipacaoEvento(2, id, idGrupo, dtUltimaRoda, emailPessoa, presenca, valorEvento, observacao);
-        res.redirect("../listas");
+        utilseventos.addParticipacaoEvento(1, id, grupoId, dtUltimaRoda, emailPessoa, presenca, valorEvento, observacao);
     } else {
         var newItem =
-        {   idGrupo : idGrupo,
+        {   grupoId : grupoId,
             nmPessoa : nmPessoa,
             Ativo : Ativo,
             VIP : 0,
@@ -126,31 +122,35 @@ router.post("/pessoas/saveRoda", (req, res) => {
             sexoPessoa : '',
             cepPessoa : '',
             dtEntrada : dtEntrada,
-            dtUltimaParticipacao : dtUltimaParticipacao
+            dtUltimaParticipacao : dtUltimaParticipacao,
+            valorEvento : valorEvento
         };
 
-    var model = Pessoas;
-    var where = 
-        {
+        var model = Pessoas;
+        var where = {
             nmPessoa    : nmPessoa, 
-            idGrupo     : idGrupo
+            grupoId     : grupoId
         };       
           
         utils.updateOrCreate (model, where, newItem)
         .then((result) => {
-            utilseventos.addParticipacaoEvento(2, result.item.id, result.item.idGrupo, dtUltimaRoda, emailPessoa, presenca, valorEvento, observacao);
+            utilseventos.addParticipacaoEvento(2, result.item.id, result.item.grupoId, dtUltimaRoda, emailPessoa, presenca, valorEvento, observacao);
         })
         .catch(erro => {
             console.log(erro);
         });
-
-        res.redirect("../listas");
+    }
+    if(presenca==0){
+        res.redirect("/admin");
+    }else 
+    {
+        res.redirect("/listas");
     }
 });
 
 router.post("/pessoas/edit/update", (req, res) => {
     var id = req.body.id;
-    var idGrupo = req.body.idGrupo;
+    var grupoId = req.body.grupoId;
     var nmPessoa = req.body.nmPessoa;
     var dtNascimento = utils.parseDateBR_ENG(req.body.dtNascimento);
     var endPessoa = req.body.endPessoa;
@@ -169,7 +169,7 @@ router.post("/pessoas/edit/update", (req, res) => {
     Pessoas
     .update(
         {
-            idGrupo : idGrupo,
+            grupoId : grupoId,
             nmPessoa : nmPessoa,
             dtNascimento :  dtNascimento,
             endPessoa : endPessoa,
@@ -210,7 +210,7 @@ router.get("/pessoas/edit/:id", (req, res) => {
     .findByPk(id,{
         attributes:[
             'id',
-            'idGrupo',
+            'grupoId',
             'nmPessoa',
             [sequelize.fn('date_format', sequelize.col('dtNascimento'), '%d/%m/%Y'), 'dtNascimento'],
             'endPessoa',
@@ -267,7 +267,7 @@ router.get("/pessoas/cadRoda", (req, res) => {
     var  proximaRoda = null;
     var availableTags = [];
 
-    utilseventos.calcularProximoEvento(2)
+    utilseventos.calcularProximoEvento(1)
     .then( dataProximoEvento => {
         proximaRoda = dataProximoEvento;
 
@@ -276,6 +276,7 @@ router.get("/pessoas/cadRoda", (req, res) => {
         utilsPessoas.getNomePessoas()
         .then( aPessoas => {
             var availableTags = JSON.stringify(aPessoas);
+            dataProximoEvento = utils.parseDateENG_BR(dataProximoEvento);
             res.render("./pessoas/cadRoda", {dataProximoEvento, availableTags});
         })
         .catch(erro => {
@@ -292,13 +293,14 @@ router.get("/pessoas/cadRodaDia", (req, res) => {
     
     var availableTags = [];
 
-    utilseventos.calcularProximoEvento(2)
+    utilseventos.calcularProximoEvento(1)
     .then( dataProximoEvento => {
         //console.log("-=-=-=-=-=   Fim     " + proximaRoda + "        =-=-=-=-=-");
 
         utilsPessoas.getNomePessoas()
         .then( aPessoas => {
             var availableTags = JSON.stringify(aPessoas);
+            dataProximoEvento = utils.parseDateENG_BR(dataProximoEvento);
             res.render("./pessoas/cadRodaDia", {dataProximoEvento, availableTags});
         })
         .catch(erro => {

@@ -8,17 +8,17 @@ const utils = new Utils();
 const format = require('date-fns/format');
 
 module.exports = class UtilsEventos {
-    async calcularProximoEvento(idevento) {
+    async calcularProximoEvento(eventoId) {
         //console.log("+-+-+-+-+-+-         Entrada em calcularProximoEvento         +-+-+-+-+-+-");
-        // console.log("Recebido de controller => " + idevento);
+        // console.log("Recebido de controller => " + eventoId);
         
-        let evento =  await this.getEvento(idevento);
+        let evento =  await this.getEvento(eventoId);
         
         var dataProximoEvento = utils.parseDateBR_ENG(evento.dataProximoEvento);
 
         //console.log("Recebido de getEvento => " + dataProximoEvento);
 
-        var quantidadeParticipantes =  await this.contaParticipantes(idevento, dataProximoEvento);
+        var quantidadeParticipantes =  await this.contaParticipantes(eventoId, dataProximoEvento);
        
         //console.log("Quantidade de participantes: " + quantidadeParticipantes);
 
@@ -41,25 +41,25 @@ module.exports = class UtilsEventos {
                 valorXama : evento.valorXama
             };
         var model = Eventos;
-        var where = { id : idevento };
+        var where = { id : eventoId };
 
         utils.updateOrCreate (model, where, newItem)
         .catch( error =>  {
             console.log(error);
         });
 
-        return utils.parseDateENG_BR(dataProximoEvento);
+        return dataProximoEvento;
     }
 
-    getEvento(idevento) {
+    getEvento(eventoId) {
         return new Promise(resolve => {
             setTimeout(() => {
                 var dataProximoEvento = null;
             //    console.log("+-+-+-+-+-+-               Entrada em getEvento               +-+-+-+-+-+-");
-            //    console.log("Recebido o id do evento: " + idevento);
+            //    console.log("Recebido o id do evento: " + eventoId);
 
                 Eventos
-                .findByPk(idevento, {
+                .findByPk(eventoId, {
                     attributes: [
                         'id',
                         'nomeEvento',
@@ -74,10 +74,6 @@ module.exports = class UtilsEventos {
                 })
                 .then( evento => {
                     if (evento != undefined) {
-                        dataProximoEvento   = evento.dataProximoEvento.substr(6,4) + "-" +
-                        evento.dataProximoEvento.substr(3,2) + "-" +
-                        evento.dataProximoEvento.substr(0,2);                      
-
                 //        console.log("Retornando a data cadastrada de próximo evento: " + dataProximoEvento);
                         
                //         console.log("+-+-+-+-+-+-              Saida em getEvento              +-+-+-+-+-+-");
@@ -93,20 +89,19 @@ module.exports = class UtilsEventos {
         }); 
     }
 
-    contaParticipantes(idevento, dataProximoEvento){
+    contaParticipantes(eventoId, dataProximoEvento){
         return new Promise(resolve => {
             setTimeout(() => {
             //    console.log("+-+-+-+-+-+-            Entrada em contaParticipantes            +-+-+-+-+-+-");
-            //    console.log("Recebido o id do evento: " + idevento);
+            //    console.log("Recebido o id do evento: " + eventoId);
             //    console.log("Recebida data do evento: " + dataProximoEvento);
 
                 var quantidadeParticipantes = 0;
-                dataProximoEvento = utils.parseDateBR_ENG(dataProximoEvento);
 
                 EventosParticipantes
                 .findAndCountAll({
                     where: {
-                        idEvento: idevento,
+                        eventoId: eventoId,
                         [op.and]: {
                             dataParticipacao: dataProximoEvento
                         }
@@ -156,18 +151,19 @@ module.exports = class UtilsEventos {
         .findAll({
             attributes: [
                 'id',
-                'idGrupo',
-                'emailPessoa'
+                'grupoId',
+                'emailPessoa',
+                'VIP'
             ],
-            where : {VIP : true },
+            where : { VIP : 1 },
             raw: true
         })
         .then(pessoa => {
-            for (var n = 0; pessoa.length; n++){
+            for (var n = 0; pessoa.length -1; n++){
                 this.addParticipacaoEvento(
                     2, 
                     pessoa[n].id, 
-                    pessoa[n].idGrupo, 
+                    pessoa[n].grupoId, 
                     utils.parseDateBR_ENG(dataProximoEvento), 
                     pessoa[n].emailPessoa, 0, 0, '')
             }
@@ -177,13 +173,18 @@ module.exports = class UtilsEventos {
         });
     }
 
-    addParticipacaoEvento(idEvento, id, idGrupo, dtProximaParticipacao, emailPessoa, presenca, valorEvento, observacao){
+    addParticipacaoEvento(eventoId, id, grupoId, dtProximaParticipacao, emailPessoa, presenca, valorEvento, observacao){
         dtProximaParticipacao = utils.parseDateBR_ENG(dtProximaParticipacao);
 
-        this.getValorEvento(idEvento, idGrupo)
-        .then( valorEvento => {
+        this.getValorEvento(eventoId, grupoId)
+        .then( valorEvento1 => {
+
+            if(valorEvento == 0){
+                valorEvento = valorEvento1;
+            }
+
             var newItem =
-                {   idEvento        : idEvento, 
+                {   eventoId        : eventoId, 
                     pessoaId        : id, 
                     dataParticipacao: dtProximaParticipacao,
                     valorPago       : valorEvento,
@@ -194,18 +195,21 @@ module.exports = class UtilsEventos {
 
             var model = EventosParticipantes;
             var where = 
-                {   idEvento        : idEvento, 
+                {   eventoId        : eventoId, 
                     pessoaId        : id,
                     dataParticipacao: dtProximaParticipacao
                 };
 
             utils.updateOrCreate (model, where, newItem);
+        })
+        .catch(err => {
+            console.log("ERRO => " + err.message);
         });
     };
     
-    async getValorEvento(idEvento, idGrupo){
-        let evento =  await this.getEvento(idEvento);
-        var valor = idGrupo == 0 ? evento.valorConvidado : evento.valorXama;
+    async getValorEvento(eventoId, grupoId){
+        let evento =  await this.getEvento(eventoId);
+        var valor = grupoId == 1 ? evento.valorConvidado : evento.valorXama;
         return valor;
     };
 }

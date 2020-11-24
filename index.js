@@ -5,9 +5,12 @@ const conn = require("./models/database/database");
 
 // Importando os Models
 const Grupos = require("./models/Grupos");
-const Pessoas = require("./models/Pessoas");
 const Eventos = require("./models/Eventos");
-const eventosParticipantes = require("./models/EventosParticipantes")
+//const Pessoas = require("./models/Pessoas");
+//const eventosParticipantes = require("./models/EventosParticipantes")
+
+const UtilsAdmin = require("./public/js/utilsAdmin");
+const utilsadmin = new UtilsAdmin();
 
 // View Engine
 app.set('view engine', 'ejs');
@@ -30,6 +33,7 @@ conn
     });
 
 app.get("/", (req, res) => {
+ //   utilsadmin.getDados(2);
     res.render("index");
 });
 

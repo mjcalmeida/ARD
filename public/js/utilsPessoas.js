@@ -11,7 +11,7 @@ module.exports = class UtilsPessoas {
             aPessoas += pessoas[i].nmPessoa + "-" + 
                         pessoas[i].id + "|" + 
                         pessoas[i].emailPessoa + "_" + 
-                        pessoas[i].idGrupo + ",";
+                        pessoas[i].grupoId + ",";
         };
             
         return aPessoas.substring(0,aPessoas.length-1);
@@ -24,7 +24,7 @@ module.exports = class UtilsPessoas {
             .findAll({
                 attributes: [
                     'id',
-                    'idGrupo',
+                    'grupoId',
                     'nmPessoa',
                     'emailPessoa'
                 ], 

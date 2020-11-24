@@ -27,19 +27,20 @@ module.exports = class Utils {
     parseDateBR_ENG(dataBR) {
         var Saida = dataBR == '' ? null : dataBR ;
         
-        if (Saida != null &&
-            Saida.length != undefined){
-            if (dataBR.indexOf('-') >= 0) {
-                dataBR = dataBR.split('-');
-                Saida = new Date(   dataBR[0], 
-                                    dataBR[1] - 1, 
-                                    dataBR[2]);
+        if (Saida != null){
+            if (Saida.length != undefined){
+                if (Saida.indexOf('-') >= 0) {
+                    Saida = Saida.split('-');
+                    Saida = new Date(   Saida[0], 
+                                        Saida[1] - 1, 
+                                        Saida[2]);
 
-            }
-            if (dataBR.indexOf('/') >= 0) {
-                Saida = new Date(   dataBR.substr(6, 4),
-                                    dataBR.substr(3, 2) - 1,
-                                    dataBR.substr(0, 2));
+                }
+                if (Saida.indexOf('/') >= 0) {
+                    Saida = new Date(   Saida.substr(6, 4),
+                                        Saida.substr(3, 2) - 1,
+                                        Saida.substr(0, 2));
+                }
             }
         }
         return Saida;

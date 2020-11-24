@@ -5,10 +5,6 @@ console.log("Tabela de Grupos em Criação");
 
 const Grupos = conn.define(
     'grupos', {
-        idGrupo : {
-            type: Sequelize.INTEGER,
-            allowNulls: false
-        },
         nmGrupo:{
             type:Sequelize.TEXT,
             allowNull: false

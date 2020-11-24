@@ -32,7 +32,7 @@
                         <div class="col"><label>Próximo Evento</label></div>
                         <div class="col-10">
                             <input type="text" placeholder="__/__/____" 
-                            name="dataProximoEvento" class="form-control"
+                            name="dataProximoEvento" class="form-control date"
                             value="<%= evento.dataProximoEvento %>">
                         </div>
                     </div>
@@ -41,7 +41,7 @@
                         <div class="col"><label>Horário</label></div>
                         <div class="col-10">
                             <input type="text" placeholder="__:__" 
-                            name="dataProximoEvento" class="form-control"
+                            name="dataProximoEvento" class="form-control timeHM"
                             value="<%= evento.dataProximoEvento %>">
                         </div>
                     </div>
@@ -50,7 +50,7 @@
                         <div class="col"><label>Mínimo</label></div>
                         <div class="col-10">
                                 <input type="text" placeholder="0" 
-                                name="numMinimo" class="form-control"
+                                name="numMinimo" class="form-control int3"
                                 value="<%= evento.numMinimo %>">
                         </div>
                     </div>
@@ -59,7 +59,7 @@
                         <div class="col"><label>Máximo</label></div>
                         <div class="col-10">
                             <input type="text" placeholder="0" 
-                            name="numMaximo" class="form-control"
+                            name="numMaximo" class="form-control int3"
                             value="<%= evento.numMaximo %>">
                         </div>
                     </div>
@@ -68,7 +68,7 @@
                         <div class="col"><label>Valor Convidado</label></div>
                         <div class="col-10">
                             <input type="text" placeholder="0,00" 
-                            name="valorConvidado" class="form-control"
+                            name="valorConvidado" class="form-control money"
                             value="<%= evento.valorConvidado %>">
                         </div>
                     </div>
@@ -77,7 +77,7 @@
                         <div class="col"><label>Valor Xamã</label></div>
                         <div class="col-10">
                             <input type="text" placeholder="0,00"
-                             name="valorXama" class="form-control"
+                             name="valorXama" class="form-control money"
                              value="<%= evento.valorXama %>">
                         </div>
                     </div>
@@ -91,3 +91,6 @@
 </body>
 
 <%- include ('../partials/footer.ejs') %>
+
+<script src="/jQuery/jquery.mask.js"></script>
+<script src="/jQuery/mascaras.js"></script>
