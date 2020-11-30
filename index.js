@@ -33,8 +33,17 @@ conn
     });
 
 app.get("/", (req, res) => {
- //   utilsadmin.getDados(2);
-    res.render("index");
+    var admin = [];
+    
+    utilsadmin.getDados(2)
+    .then(data => {
+        res.render("index", {
+            data
+        });
+    })
+    .catch(error => {
+        console.log(error);
+    });
 });
 
 // Importando os Controllers

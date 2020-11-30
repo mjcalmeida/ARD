@@ -91,4 +91,17 @@ module.exports = class Utils {
                 .then(function (item) { return {item: item, created: false} }) ;
         })
     };
+
+    chkArray(arrayAPesquisar, indice, Palavra){
+        var Saida = false;
+
+        if(arrayAPesquisar.length != 0){
+            for(var n = 0;  n <= arrayAPesquisar.length-1; n++){
+                if(arrayAPesquisar[n][indice] == Palavra)
+                { Saida = true; }     
+            }
+        }
+
+        return Saida;
+    }
 };
