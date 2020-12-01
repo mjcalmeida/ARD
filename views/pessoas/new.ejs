@@ -9,103 +9,122 @@
             <div class="card-body">
                 <form method="POST" action="save">
                     <div class="row">
+                        <div class="col"><label>Grupo</label></div>
+                        <div class="col-9">
+                            <input type="text" placeholder="Grupo" name="grupoId" value='1' class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="row">
                         <div class="col"><label>Nome da Pessoa</label></div>
-                        <div class="col-10">
+                        <div class="col-9">
                             <input type="text" placeholder="Digite o nome da Pessoa" name="nmPessoa" class="form-control">
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col"><label>Nascimento</label></div>
-                        <div class="col-10">
-                            <input type="text" placeholder="__/__/____" name="dtNascimento" class="form-control">
+                        <div class="col-9">
+                            <input type="text" placeholder="__/__/____" 
+                            name="dtNascimento" class="form-control date">
                         </div>
                     </div>
   
                     <div class="row">
                         <div class="col"><label>Endereço</label></div>
-                        <div class="col-10">
+                        <div class="col-9">
                             <input type="text" placeholder="Digite o endereço da Pessoa" name="endPessoa" class="form-control">
                         </div>
                     </div>
                     
                     <div class="row">
                         <div class="col"><label>Complemento</label></div>
-                        <div class="col-10">
+                        <div class="col-9">
                                 <input type="text" placeholder="Apto, Bloco, etc." name="endComplemento" class="form-control">
                         </div>
                     </div>
                     
                     <div class="row">
                         <div class="col"><label>CEP</label></div>
-                        <div class="col-10">
-                            <input type="text" placeholder="_____-___" name="cepPessoa" class="form-control">
+                        <div class="col-9">
+                            <input type="text" placeholder="_____-___" name="cepPessoa" 
+                            class="form-control cep">
                         </div>
                     </div>
                                         
                     <div class="row">
                         <div class="col"><label>Telefone</label></div>
-                        <div class="col-10">
-                            <input type="text" placeholder="(xx) xxxx-xxxx" name="fonePessoa" class="form-control">
+                        <div class="col-9">
+                            <input type="text" placeholder="(xx) xxxxx-xxxxx" 
+                            name="fonePessoa" class="form-control phone_with_ddd">
                         </div>
                     </div>
                     
                     <div class="row">
                         <div class="col"><label>Ativo ?</label></div>
-                        <div class="col-10">
-                            <input type="text" placeholder="true" name="Ativo" class="form-control">
+                        <div class="col-9">
+                            <input type="text" placeholder="true" name="Ativo" value='true' class="form-control">
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col"><label>Recebe Emails?</label></div>
-                        <div class="col-10">
-                                <input type="text" placeholder="true" name="receberEmails" class="form-control">
+                        <div class="col-9">
+                                <input type="text" placeholder="true" name="receberEmails" value='true' class="form-control">
                         </div>
                     </div>
                     
                     <div class="row">
                         <div class="col"><label>Email</label></div>
-                        <div class="col-10">
+                        <div class="col-9">
                             <input type="text" placeholder="Digite o Email" name="emailPessoa" class="form-control">
                         </div>
                     </div>
                                         
                     <div class="row">
                         <div class="col"><label>Sexo</label></div>
-                        <div class="col-10">
-                            <input type="text" placeholder="S/M/X" name="sexoPessoa" class="form-control">
+                        <div class="col-9">
+                            <input type="text" placeholder="F/M/It´s not my business" name="sexoPessoa" class="form-control">
                         </div>
                     </div>
                     
                     <div class="row">
                         <div class="col"><label>Cidade</label></div>
-                        <div class="col-10">
+                        <div class="col-9">
                             <input type="text" placeholder="Digite a Cidade da Pessoa" name="cidadePessoa" class="form-control">
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col"><label>Data de Entrada</label></div>
-                        <div class="col-10">
-                            <input type="text" placeholder="__/__/____" name="dtEntrada" class="form-control">
+                        <div class="col-9">
+                            <input type="text" placeholder="__/__/____" name="dtEntrada" 
+                            class="form-control date">
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col"><label>Data de Saída</label></div>
-                        <div class="col-10">
-                            <input type="text" placeholder="__/__/____" name="dtDesligamento" class="form-control">
+                        <div class="col-9">
+                            <input type="text" placeholder="__/__/____" 
+                            name="dtDesligamento" class="form-control date">
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col"><label>Última Participação</label></div>
-                        <div class="col-10">
-                            <input type="text" placeholder="__/__/____" name="dtUltimaParticipacao" class="form-control">
+                        <div class="col-9">
+                            <input type="text" placeholder="__/__/____" 
+                            name="dtUltimaParticipacao" class="form-control date">
                         </div>
                     </div>
                     
+                    <div class="row">
+                        <div class="col"><label>Participação Automática</label></div>
+                        <div class="col-9">
+                            <input type="text" placeholder="true or false" name="VIP" value='false' class="form-control">
+                        </div>
+                    </div>
                     <br>
                     <button class="btn btn-success">Salvar</button>
                 </form>
@@ -115,3 +134,6 @@
 </body>
 
 <%- include ('../partials/footer.ejs') %>
+
+<script src="/jQuery/jquery.mask.js"></script>
+<script src="/jQuery/mascaras.js"></script>

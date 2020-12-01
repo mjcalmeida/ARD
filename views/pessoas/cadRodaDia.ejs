@@ -1,5 +1,5 @@
 <%- include ('../partials/header.ejs') %>
-<%- include ('../partials/navbarUser.ejs') %>
+<%- include ('../partials/navbar.ejs') %>
 
 <body>
     <hr>
@@ -11,12 +11,11 @@
                     <div class="row">
                         <div class="col"><label>Nome da Pessoa</label></div>
                         <div class="col-10">                          
-                            <input type="text"   id="tags" placeholder="Digite o seu nome" name="nmPessoa" class="form-control">
-                            <input type="hidden" id="Tags" value='<%=availableTags%>' name="Tags">
-                            <input type="hidden" id="ID"   name="ID">
-                            <input type="hidden" id="presenca" name="presenca" value="0">
-                            <input type="hidden" id="valorEvento" name="valorPago" value="0">
-                            <input type="hidden" id="Grupo" name="Grupo">
+                            <input type="text"   id="tags"     name="nmPessoa" placeholder="Digite o seu nome" class="form-control">
+                            <input type="hidden" id="Tags"     name="Tags"     value='<%=availableTags%>'>
+                            <input type="hidden" id="ID"       name="ID">
+                            <input type="hidden" id="presenca" name="presenca" value="1">
+                            <input type="hidden" id="Grupo"    name="Grupo">
                             <input type="hidden" id="dtEvento" name="dtEvento" value="<%=dataProximoEvento%>">
                         </div>
                     </div>
@@ -26,7 +25,21 @@
                         <div class="col-10">
                             <input type="text" placeholder="Digite o seu Email" name="emailPessoa" id="emailPessoa" class="form-control">
                         </div>
-                    </div>                    
+                    </div>
+
+                    <div class="row">
+                        <div class="col"><label>Contribuição</label></div>
+                        <div class="col-10">
+                            <input type="text" placeholder="Valor" name="valorEvento" id="valorEvento" class="form-control">
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col"><label>Observação</label></div>
+                        <div class="col-10">
+                            <input type="text" placeholder="Observações" name="observacao" id="observacao" class="form-control">
+                        </div>
+                    </div>    
                     <br>
                     <button class="btn btn-success">Salvar</button>
                 </form>

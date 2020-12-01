@@ -2,17 +2,20 @@ const express = require("express");
 const sequelize = require('sequelize');
 const router = express.Router();
 const Pessoas = require("../models/Pessoas");
-const Eventos = require("../models/Eventos");
-const {format} = require('date-fns');
 const Utils = require("../public/js/utils");
-const utils = new Utils();   
+const utils = new Utils();
+const UtilsEventos = require("../public/js/utilsEventos");
+const utilseventos = new UtilsEventos();
+const UtilsPessoas = require("../public/js/utilsPessoas");
+const utilsPessoas = new UtilsPessoas();  
+const {format} = require('date-fns');
 
 router.get("/pessoas", (req, res) => {
     Pessoas
     .findAll({
         attributes: [
             'id',
-            'idGrupo',
+            'grupoId',
             'nmPessoa',
             [sequelize.fn('date_format', sequelize.col('dtNascimento'), '%d/%m/%Y'), 'dtNascimento'],
             'endPessoa',
@@ -22,6 +25,7 @@ router.get("/pessoas", (req, res) => {
             'Ativo',
             'receberEmails',
             'emailPessoa',
+            'VIP',
             'sexoPessoa',
             'cidadePessoa',
             [sequelize.fn('date_format', sequelize.col('dtEntrada'), '%d/%m/%Y'), 'dtEntrada'],
@@ -29,7 +33,7 @@ router.get("/pessoas", (req, res) => {
             [sequelize.fn('date_format', sequelize.col('dtUltimaParticipacao'), '%d/%m/%Y'), 'dtUltimaParticipacao']
         ], 
         raw: true,
-        order: [['id', 'ASC']]
+        order: [['nmPessoa', 'ASC']]
     })
     .then(pessoas => {
         res.render("pessoas/index", {
@@ -43,31 +47,28 @@ router.get("/pessoas/new", (req, res) => {
 });
 
 router.post("/pessoas/save", (req, res) => {
-    
-    var idGrupo = req.body.idGrupo;
+    var TodayDate = new Date();
+    var grupoId = req.body.grupoId;
     var nmPessoa = req.body.nmPessoa;
     var dtNascimento = utils.parseDateBR_ENG(req.body.dtNascimento);
-        dtNascimento = format(dtNascimento,'yyyy-MM-dd');
     var endPessoa = req.body.endPessoa;
     var endComplemento = req.body.endComplemento;
     var cepPessoa = req.body.cepPessoa;
     var fonePessoa = req.body.fonePessoa;
-    var Ativo = req.body.Ativo;
-    var receberEmails = req.body.receberEmails;
+    var Ativo = req.body.Ativo == '' ? 1 : req.body.Ativo;
+    var receberEmails = req.body.receberEmails== '' ? 1 : req.body.Ativo;
     var emailPessoa = req.body.emailPessoa;
     var sexoPessoa = req.body.sexoPessoa;
+    var VIP = req.body.VIP == '' ? 0 : req.body.VIP;
     var cidadePessoa = req.body.cidadePessoa;
-    var dtEntrada = utils.parseDateBR_ENG(req.body.dtEntrada);
-        dtEntrada = format(dtEntrada,'yyyy-MM-dd');
-    var dtDesligamento = utils.parseDateBR_ENG(req.body.dtDesligamento);
-        dtDesligamento = format(dtDesligamento,'yyyy-MM-dd');
+    var dtEntrada = req.body.dtEntrada == '' ? TodayDate : utils.parseDateBR_ENG(req.body.dtEntrada);        
+    var dtDesligamento = utils.parseDateBR_ENG(req.body.dtDesligamento);        
     var dtUltimaParticipacao = utils.parseDateBR_ENG(req.body.dtUltimaParticipacao);
-        dtUltimaParticipacao = format(dtUltimaParticipacao,'yyyy-MM-dd');
-   
+          
     if(emailPessoa != undefined){
         Pessoas
         .create({
-            idGrupo : 1,
+            grupoId : grupoId,
             nmPessoa : nmPessoa,
             dtNascimento : dtNascimento,
             endPessoa : endPessoa,
@@ -80,6 +81,7 @@ router.post("/pessoas/save", (req, res) => {
             sexoPessoa : sexoPessoa,
             cidadePessoa : cidadePessoa,
             dtEntrada : dtEntrada,
+            VIP : VIP,
             dtDesligamento : dtDesligamento,
             dtUltimaParticipacao : dtUltimaParticipacao
         })
@@ -91,31 +93,83 @@ router.post("/pessoas/save", (req, res) => {
     }
 });
 
+router.post("/pessoas/saveRoda", (req, res) => {    
+    var nmPessoa = req.body.nmPessoa;
+    var TodayDate = new Date();
+    var Ativo = 1;
+    var valorEvento = req.body.valorEvento == '' ? 0 : req.body.valorEvento;
+    var emailPessoa = req.body.emailPessoa == '' ? '' : req.body.emailPessoa;
+    var observacao = req.body.observacao;
+    var id = req.body.ID == '' ? 0 : req.body.ID;
+    var receberEmails = req.body.emailPessoa == '' ? 0 : 1;
+    var grupoId = req.body.Grupo == '' ? 1 : req.body.Grupo;
+    var dtEntrada = utils.parseDateBR_ENG(TodayDate);
+    var dtUltimaParticipacao = utils.parseDateBR_ENG(req.body.dtEvento);
+    var dtUltimaRoda = dtUltimaParticipacao;
+    var presenca = req.body.presenca;
+    var grupoId = 1;
+
+    if(id != 0){
+        utilseventos.addParticipacaoEvento(1, id, grupoId, dtUltimaRoda, emailPessoa, presenca, valorEvento, observacao);
+    } else {
+        var newItem =
+        {   grupoId : grupoId,
+            nmPessoa : nmPessoa,
+            Ativo : Ativo,
+            VIP : 0,
+            receberEmails : receberEmails,
+            emailPessoa : emailPessoa,
+            sexoPessoa : '',
+            cepPessoa : '',
+            dtEntrada : dtEntrada,
+            dtUltimaParticipacao : dtUltimaParticipacao,
+            valorEvento : valorEvento
+        };
+
+        var model = Pessoas;
+        var where = {
+            nmPessoa    : nmPessoa, 
+            grupoId     : grupoId
+        };       
+          
+        utils.updateOrCreate (model, where, newItem)
+        .then((result) => {
+            utilseventos.addParticipacaoEvento(2, result.item.id, result.item.grupoId, dtUltimaRoda, emailPessoa, presenca, valorEvento, observacao);
+        })
+        .catch(erro => {
+            console.log(erro);
+        });
+    }
+    if(presenca==0){
+        res.redirect("/admin");
+    }else 
+    {
+        res.redirect("/listas");
+    }
+});
+
 router.post("/pessoas/edit/update", (req, res) => {
     var id = req.body.id;
-    var idGrupo = req.body.idGrupo;
+    var grupoId = req.body.grupoId;
     var nmPessoa = req.body.nmPessoa;
     var dtNascimento = utils.parseDateBR_ENG(req.body.dtNascimento);
-        dtNascimento = format(dtNascimento,'yyyy-MM-dd');
     var endPessoa = req.body.endPessoa;
     var endComplemento = req.body.endComplemento;
     var cepPessoa = req.body.cepPessoa;
     var fonePessoa = req.body.fonePessoa;
     var Ativo = req.body.Ativo;
+    var VIP = req.body.VIP == 0 ? 0 : 1;
     var receberEmails = req.body.receberEmails;
     var emailPessoa = req.body.emailPessoa;
     var sexoPessoa = req.body.sexoPessoa;
     var cidadePessoa = req.body.cidadePessoa;
     var dtEntrada = utils.parseDateBR_ENG(req.body.dtEntrada);
-        dtEntrada = format(dtEntrada,'yyyy-MM-dd');
     var dtDesligamento = utils.parseDateBR_ENG(req.body.dtDesligamento);
-        dtDesligamento = format(dtDesligamento,'yyyy-MM-dd');
     var dtUltimaParticipacao = utils.parseDateBR_ENG(req.body.dtUltimaParticipacao);
-        dtUltimaParticipacao = format(dtUltimaParticipacao,'yyyy-MM-dd');    
     Pessoas
     .update(
         {
-            idGrupo : idGrupo,
+            grupoId : grupoId,
             nmPessoa : nmPessoa,
             dtNascimento :  dtNascimento,
             endPessoa : endPessoa,
@@ -127,6 +181,7 @@ router.post("/pessoas/edit/update", (req, res) => {
             emailPessoa : emailPessoa,
             sexoPessoa : sexoPessoa,
             cidadePessoa : cidadePessoa,
+            VIP : VIP,
             dtEntrada : dtEntrada,
             dtDesligamento : dtDesligamento,
             dtUltimaParticipacao : dtUltimaParticipacao
@@ -134,7 +189,7 @@ router.post("/pessoas/edit/update", (req, res) => {
             where: { id: id },
             returning: true, // needed for affectedRows to be populated
             plain: true      // makes sure that the returned instances are just plain objects
-        }        
+        }
     )
     .then( () => {
         res.redirect("/pessoas");
@@ -155,7 +210,7 @@ router.get("/pessoas/edit/:id", (req, res) => {
     .findByPk(id,{
         attributes:[
             'id',
-            'idGrupo',
+            'grupoId',
             'nmPessoa',
             [sequelize.fn('date_format', sequelize.col('dtNascimento'), '%d/%m/%Y'), 'dtNascimento'],
             'endPessoa',
@@ -163,6 +218,7 @@ router.get("/pessoas/edit/:id", (req, res) => {
             'cepPessoa',
             'fonePessoa',
             'Ativo',
+            'VIP',
             'receberEmails',
             'emailPessoa',
             'sexoPessoa',
@@ -206,15 +262,54 @@ router.post("/pessoas/delete", (req, res) => {
     }
 });
 
-router.get("/pessoas/cadRoda", (req, res) => {
-    const utils = new Utils();
-
+router.get("/pessoas/cadRoda", (req, res) => {    
     // Pegar a data do Próximo Evento de Roda de Cura
-    var  proximaRoda = utils.calcularProximoEvento(2);
-    
+    var  proximaRoda = null;
+    var availableTags = [];
 
-    console.log("-=-=-=-=-= " + proximaRoda);
-    res.render("./pessoas/cadRoda");
+    utilseventos.calcularProximoEvento(1)
+    .then( dataProximoEvento => {
+        proximaRoda = dataProximoEvento;
+
+        //console.log("-=-=-=-=-=   Fim     " + proximaRoda + "        =-=-=-=-=-");
+
+        utilsPessoas.getNomePessoas()
+        .then( aPessoas => {
+            var availableTags = JSON.stringify(aPessoas);
+            dataProximoEvento = utils.parseDateENG_BR(dataProximoEvento);
+            res.render("./pessoas/cadRoda", {dataProximoEvento, availableTags});
+        })
+        .catch(erro => {
+            console.log(erro);
+        });
+    })
+    .catch(erro => {
+        console.log(erro);
+    });
+});
+
+router.get("/pessoas/cadRodaDia", (req, res) => {    
+    // Pegar a data do Próximo Evento de Roda de Cura
+    
+    var availableTags = [];
+
+    utilseventos.calcularProximoEvento(1)
+    .then( dataProximoEvento => {
+        //console.log("-=-=-=-=-=   Fim     " + proximaRoda + "        =-=-=-=-=-");
+
+        utilsPessoas.getNomePessoas()
+        .then( aPessoas => {
+            var availableTags = JSON.stringify(aPessoas);
+            dataProximoEvento = utils.parseDateENG_BR(dataProximoEvento);
+            res.render("./pessoas/cadRodaDia", {dataProximoEvento, availableTags});
+        })
+        .catch(erro => {
+            console.log(erro);
+        });
+    })
+    .catch(erro => {
+        console.log(erro);
+    });        
 });
 
 module.exports = router;

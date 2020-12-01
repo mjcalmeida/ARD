@@ -4,9 +4,13 @@ const bodyParser = require("body-parser");
 const conn = require("./models/database/database");
 
 // Importando os Models
-const Pessoa = require("./models/Pessoas");
+const Grupos = require("./models/Grupos");
 const Eventos = require("./models/Eventos");
-const eventosParticipantes = require("./models/EventosParticipantes")
+//const Pessoas = require("./models/Pessoas");
+//const eventosParticipantes = require("./models/EventosParticipantes")
+
+const UtilsAdmin = require("./public/js/utilsAdmin");
+const utilsadmin = new UtilsAdmin();
 
 // View Engine
 app.set('view engine', 'ejs');
@@ -29,17 +33,29 @@ conn
     });
 
 app.get("/", (req, res) => {
-    res.render("index");
+    var admin = [];
+    
+    utilsadmin.getDados(2)
+    .then(data => {
+        res.render("index", {
+            data
+        });
+    })
+    .catch(error => {
+        console.log(error);
+    });
 });
 
 // Importando os Controllers
 const eventosController = require("./controllers/eventosController");
 const pessoasController = require("./controllers/pessoasController");
 const adminController   = require("./controllers/adminController");
+const listasController  = require("./controllers/listasController");
 
 app.use(eventosController);
 app.use(pessoasController);
 app.use(adminController);
+app.use(listasController);
 
 app.listen(8080, () => {
     console.log("O serviço está rodando!");

@@ -40,6 +40,20 @@ const Eventos = conn.define(
     }
 );
 
+class Evento {
+    constructor(nomeEvento, periodicidade, dataProximoEvento, horaProximoEvento, 
+                numMinimo, numMaximo, valorConvidado, valorXama){
+        nomeEvento       : nomeEvento;
+        periodicidade    : periodicidade;
+        dataProximoEvento: dataProximoEvento;
+        horaProximoEvento: horaProximoEvento;
+        numMinimo        : numMinimo;
+        numMaximo        : numMaximo;
+        valorConvidado   : valorConvidado; 
+        valorXama        : valorXama;
+    }
+}
+
 Eventos
     .sync({force: false})
     .then(() => {

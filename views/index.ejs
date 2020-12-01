@@ -4,7 +4,76 @@
         <%- include ('partials/navbar.ejs') %>
 
         <div class="container">
-            <h1>Página principal</h1>
+            <div class="d-flex mt-5 justify-content-center">
+                <div class= "card card-custom mx-2 mb-1" style="width: 50%;">
+                    <div class="card-header">
+                        <div style="text-align:center"><h3>Eventos</h3></div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col col-custom mx-3 mb-1" style="text-align: center">
+                                Roda de Cura
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col card-custom mx-2 mb-1" style="text-align: center">
+                                Data
+                            </div>
+                            <div class="col card-custom mx-5 mb-1" style="text-align: center">
+                                Quantidade
+                            </div>
+                            <div class="col card-custom mx-5 mb-1" style="text-align: center">
+                                Valor
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col card-custom mx-2 mb-1" style="text-align: center">
+                                Evento
+                            </div>
+                            <div class="col card-custom mx-6 mb-1" style="text-align: center">
+                                Xama
+                            </div>
+                            <div class="col card-custom mx-6 mb-1" style="text-align: center">
+                                Convidado
+                            </div>
+                            <div class="col card-custom mx-6 mb-1" style="text-align: center">
+                                Total
+                            </div>
+                            <div class="col card-custom mx-6 mb-1" style="text-align: center">
+                                Xama
+                            </div>
+                            <div class="col card-custom mx-6 mb-1" style="text-align: center">
+                                Total
+                            </div>
+                        </div>
+                        <% for(x of data) { %>   
+                            <div class="row">
+                                <div class="col card-custom mx-2 mb-1" style="text-align: center">
+                                    <%= x[0] %>
+                                </div>
+                                <div class="col card-custom mx-6 mb-1" style="text-align: center">
+                                    <%= x[1] %>
+                                </div>
+                                <div class="col card-custom mx-6 mb-1" style="text-align: center">
+                                    <%= x[2] %>
+                                </div>
+                                <div class="col card-custom mx-6 mb-1" style="text-align: center">
+                                    <%= x[1]+x[2] %>
+                                </div>
+                                <div class="col card-custom mx-6 mb-1" style="text-align: center">
+                                    <%= parseInt(x[3]) %>
+                                </div>
+                                <div class="col card-custom mx-6 mb-1" style="text-align: center">
+                                    <%= parseInt(x[4]) %>
+                                </div>
+                                <div class="col card-custom mx-6 mb-1" style="text-align: center">
+                                    <%= parseInt(x[3]) + parseInt(x[4]) %>
+                                </div>
+                            </div>    
+                        <% } %>
+                    </div>
+                </div>
+            </div>
         </div>
     </body>
 

@@ -1,125 +1,107 @@
-const sequelize = require('sequelize');
-const op = sequelize.Op;
-const Eventos = require("../../models/Eventos");
-const EventosParticipantes = require("../../models/EventosParticipantes");
-const format = require('date-fns/format')
+const getYear = require('date-fns/getYear')
+const getMonth = require('date-fns/getMonth')
+const getDate = require('date-fns/getDate');
+const format = require('date-fns/format');
 
 module.exports = class Utils {
-    async calcularProximoEvento(idevento) {
-        var dataProximoEvento = this.getEvento(idevento);
-
-        return await dataProximoEvento;
-    }
-
-    getEvento(idevento) {
-        var valorEvento = null;
-        var maximoParticipantes = 0;
-        var periodicidade = null;
-        var quantidadeParticipantes = 0;
-        var dataProximoEvento = null;
-    
-        // Pegar dados do Evento
-        Eventos
-        .findByPk(idevento, {
-            attributes: [
-                'id',
-                'nomeEvento',
-                'periodicidade',
-                [sequelize.fn('date_format', sequelize.col('dataProximoEvento'), '%d/%m/%Y'), 'dataProximoEvento'],
-                'horaProximoEvento',
-                'numMinimo',
-                'numMaximo',
-                'valorConvidado',
-                'valorXama'
-            ]
-        })
-        .then(evento => {
-            if (evento != undefined) {
-                periodicidade       = evento.periodicidade; 
-                maximoParticipantes = evento.numMaximo;
-                dataProximoEvento   = evento.dataProximoEvento.substr(3,2) + "-" +
-                                      evento.dataProximoEvento.substr(0,2) + "-" +
-                                      evento.dataProximoEvento.substr(6,4);
-                valorEvento         = evento.valorConvidado;
-        
-                // Pegar número Participantes até o momento                
-                quantidadeParticipantes = this.contaParticipantes(evento.id, dataProximoEvento)
-                            
-                if (quantidadeParticipantes > maximoParticipantes || ! this.TDate(dataProximoEvento)) {
-                    dataProximoEvento = this.calculoProximoEvento(periodicidade, dataProximoEvento);
-                }
-                
-                return new Promise(resolve => {
-                    resolve(idevento);
-                })
-            } else {
-                console.log("sem registros")
-            }
-        })
-        .catch(erro => {
-            console.log(erro);
-        })
-    };
-            
-    async calculoProximoEvento(periodicidade, dataProximoEvento) {
-        if (periodicidade == 'Semanal') {
-            while ( ! this.TDate(dataProximoEvento)) {
-                dataProximoEvento = new Date(dataProximoEvento);
-                dataProximoEvento.setDate(dataProximoEvento.getDate()+7);
-                dataProximoEvento = dataProximoEvento.getTime()
-            }
-            dataProximoEvento = new Date(dataProximoEvento);
-        }
-        
-        if (periodicidade == 'Ultimo Sábado do Mes') {
-            data = new Date();
-        }        
-        
-        return format(dataProximoEvento,'dd/MM/yyyy');
-    };
-
-    parseDateBR_ENG(dataBR) {
-        var Saida = new Date();
-
-        if (dataBR.length == 10) {
-            Saida = new Date(dataBR.substr(6, 4),
-                dataBR.substr(3, 2) - 1,
-                dataBR.substr(0, 2));
-        }
-        return Saida;
-    };
-
-    chkXama(email) {
-        return true;
-    }
-
     TDate(UserDate) {
-        var ToDate = new Date();
-          
-        if (new Date(UserDate).getTime() <= ToDate.getTime()) {
+        var TodayDate = new Date();
+        UserDate = new Date(UserDate);
+
+        TodayDate = ( getYear(TodayDate)      * 10000) + 
+                    ((getMonth(TodayDate) +1) *   100) + 
+                    ( getDate(TodayDate));
+        
+        UserDate  = ( getYear(UserDate)       * 10000) + 
+                    ((getMonth(UserDate) +1)  *   100) + 
+                    ( getDate(UserDate));
+        
+    //    console.log(UserDate + " <= " + TodayDate + " = " + (UserDate <= TodayDate));
+
+        if (UserDate < TodayDate) {
             return false;
         }
         return true;
     }
 
-    contaParticipantes(evento, dataProximoEvento){
-        EventosParticipantes
-        .findAndCountAll({
-            where: {
-                idEvento: evento,
-                [op.and]: {
-                    dataParticipacao: dataProximoEvento
+    parseDateBR_ENG(dataBR) {
+        var Saida = dataBR == '' ? null : dataBR ;
+        
+        if (Saida != null){
+            if (Saida.length != undefined){
+                if (Saida.indexOf('-') >= 0) {
+                    Saida = Saida.split('-');
+                    Saida = new Date(   Saida[0], 
+                                        Saida[1] - 1, 
+                                        Saida[2]);
+
                 }
-            },
-            offset: 10,
-            limit: 2
+                if (Saida.indexOf('/') >= 0) {
+                    Saida = new Date(   Saida.substr(6, 4),
+                                        Saida.substr(3, 2) - 1,
+                                        Saida.substr(0, 2));
+                }
+            }
+        }
+        return Saida;
+    };
+
+    parseDateENG_BR(dataENG){
+        var Saida = dataENG;
+        
+        // Data em formato completo
+        if (dataENG.length != undefined){
+            Saida = getDate(dataENG) + "/" + 
+                    getMonth(dataENG) + "/" +  
+                    getYear(dataENG);
+        
+            // Data em formato YYYY-MM-DD
+            if (dataENG.indexOf('-') >= 0) {
+                dataENG = dataENG.split('-');
+                Saida = 
+                    dataENG[0] + "/" + 
+                    dataENG[1] - 1 + "/" + 
+                    dataENG[2];
+            }
+            if (dataBR.indexOf('/') >= 0) {
+                // Data em formato MM/DD/YYYY
+                Saida = new Date(   
+                    dataENG.substr(6, 4),
+                    dataENG.substr(3, 2) - 1,
+                    dataENG.substr(0, 2));
+            }  
+        }
+        return format(Saida,'dd/MM/yyyy');
+    }
+    
+    updateOrCreate (model, where, newItem) {
+        // First try to find the record
+        return model
+        .findOne({where: where})
+        .then(function (foundItem) {
+            if (!foundItem) {
+                // Item not found, create a new one
+                return model
+                    .create(newItem)
+                    .then(function (item) { return  {item: item, created: true}; })
+            }
+             // Found an item, update it
+            return model
+                .update(newItem, {where: where})
+                .then(function (item) { return {item: item, created: false} }) ;
         })
-        .then(result => {
-            var quantidadeParticipantes = result.count
-            return dataProximoEvento;
-        })
-        .catch(erro => {
-            console.log(erro);
-        });
+    };
+
+    chkArray(arrayAPesquisar, indice, Palavra){
+        var Saida = false;
+
+        if(arrayAPesquisar.length != 0){
+            for(var n = 0;  n <= arrayAPesquisar.length-1; n++){
+                if(arrayAPesquisar[n][indice] == Palavra)
+                { Saida = true; }     
+            }
+        }
+
+        return Saida;
     }
 };

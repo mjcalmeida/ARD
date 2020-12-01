@@ -25,42 +25,48 @@
                     <div class="row">
                         <div class="col"><label>Próximo Evento</label></div>
                         <div class="col-10">
-                            <input type="text" placeholder="__/__/____" name="dataProximoEvento" class="form-control">
+                            <input type="text" placeholder="__/__/____" 
+                            name="dataProximoEvento" class="form-control date">
                         </div>
                     </div>
                     
                     <div class="row">
                         <div class="col"><label>Horário</label></div>
                         <div class="col-10">
-                            <input type="text" placeholder="__:__" name="horaProximoEvento" class="form-control">
+                            <input type="text" placeholder="__:__" 
+                            name="horaProximoEvento" class="form-control timeHM">
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col"><label>Mínimo</label></div>
                         <div class="col-10">
-                                <input type="text" placeholder="0" name="numMinimo" class="form-control">
+                                <input type="text" placeholder="0" name="numMinimo" 
+                                class="form-control int3">
                         </div>
                     </div>
                     
                     <div class="row">
                         <div class="col"><label>Máximo</label></div>
                         <div class="col-10">
-                            <input type="text" placeholder="0" name="numMaximo" class="form-control">
+                            <input type="text" placeholder="0" name="numMaximo" 
+                            class="form-control int3">
                         </div>
                     </div>
                                         
                     <div class="row">
                         <div class="col"><label>Valor Convidado</label></div>
                         <div class="col-10">
-                            <input type="text" placeholder="0,00" name="valorConvidado" class="form-control">
+                            <input type="text" placeholder="0,00" name="valorConvidado" 
+                            class="form-control money">
                         </div>
                     </div>
                     
                     <div class="row">
                         <div class="col"><label>Valor Xamã</label></div>
                         <div class="col-10">
-                            <input type="text" placeholder="0,00" name="valorXama" class="form-control">
+                            <input type="text" placeholder="0,00" name="valorXama" 
+                            class="form-control money">
                         </div>
                     </div>
 
@@ -73,3 +79,6 @@
 </body>
 
 <%- include ('../partials/footer.ejs') %>
+
+<script src="/jQuery/jquery.mask.js"></script>
+<script src="/jQuery/mascaras.js"></script>

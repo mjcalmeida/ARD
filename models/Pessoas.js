@@ -1,14 +1,11 @@
 const Sequelize = require("sequelize");
 const conn = require("./database/database");
+const Grupos = require('./Grupos');
 
 console.log("Tabela Pessoas em criação!!!");
 
 const Pessoas = conn.define(
     'pessoas',{
-        idGrupo: {
-            type: Sequelize.INTEGER,
-            allowNull: false
-        },
         nmPessoa:{
             type:Sequelize.TEXT,
             allowNull: false
@@ -27,7 +24,7 @@ const Pessoas = conn.define(
         },
         cepPessoa:{
             type:Sequelize.TEXT,
-            allowNull: false
+            allowNull: true
         },
         fonePessoa:{
             type:Sequelize.TEXT,
@@ -45,9 +42,13 @@ const Pessoas = conn.define(
             type:Sequelize.TEXT,
             allowNull: false
         },
+        VIP:{
+            type:Sequelize.BOOLEAN,
+            allowNull: false
+        },
         sexoPessoa:{
             type:Sequelize.TEXT,
-            allowNull: false
+            allowNull: true
         },
         cidadePessoa:{
             type:Sequelize.TEXT,
@@ -64,15 +65,48 @@ const Pessoas = conn.define(
         dtUltimaParticipacao:{
             type:Sequelize.DATEONLY,
             allowNull: true
+        },
+        grupoId:{
+            type:Sequelize.INTEGER,
+            allowNull: true
         }
     });
 
-// Criação da tabela somente em caso de alteração ou se a tabela não existe no banco
+class Pessoa {
+    constructor(nmPessoa, dtNascimento, endPessoa, endComplemento, cepPessoa, fonePessoa, Ativo,
+                receberEmails, emailPessoa, VIP, sexoPessoa, cidadePessoa, dtEntrada, dtDesligamento,
+                dtUltimaParticipacao, grupoId){
+        nmPessoa: nmPessoa; 
+        dtNascimento : dtNascimento;
+        endPessoa : endPessoa;
+        endComplemento: endComplemento;
+        cepPessoa : cepPessoa;
+        fonePessoa : fonePessoa;
+        Ativo : Ativo;
+        receberEmails : receberEmails;
+        emailPessoa : emailPessoa;
+        VIP : VIP;
+        sexoPessoa : sexoPessoa;
+        cidadePessoa : cidadePessoa;
+        dtEntrada : dtEntrada;
+        dtDesligamento : dtDesligamento;
+        dtUltimaParticipacao : dtUltimaParticipacao;
+        grupoId : grupoId;
+    }
+}
+                        
+    // Criação da tabela somente em caso de alteração ou se a tabela não existe no banco
+
+Grupos.hasMany(Pessoas);
+Pessoas.belongsTo(Grupos);
 
 Pessoas
-    .sync({force: false})
-    .then(() => {
-        console.log("Tabela Pessoas criada com sucesso!!!")
-    });
+.sync({force: false})
+.then(() => {
+    console.log("Tabela Pessoas criada com sucesso!!!")
+})
+.catch(err => {
+    console.log("ERRO => " + err.message);
+});
 
 module.exports = Pessoas;
