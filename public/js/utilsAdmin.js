@@ -24,9 +24,10 @@ module.exports = class UtilsAdmin {
                 
                 data.forEach(dtEvento => {
                     var dt = utils.parseDateENG_BR(dtEvento.dataParticipacao)
+                    var dt2 = dtEvento.dataParticipacao;
                     
                     if(utils.chkArray(Saida, 0, dt) == false){
-                        Saida[n]=[dt, 0, 0, 0, 0];
+                        Saida[n]=[dt, 0, 0, 0, 0, dt2];
                         n++;
                     }
 
@@ -38,8 +39,7 @@ module.exports = class UtilsAdmin {
                     if( dtEvento.grupoId == 2 ){
                         Saida[n-1][2] = dtEvento.quantidade;
                         Saida[n-1][4] = dtEvento.valor;                      
-                    }  
-                    console.log(Saida);             
+                    }               
                 });
                 
                 resolve(Saida);

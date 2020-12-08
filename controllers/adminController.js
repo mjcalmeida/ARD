@@ -6,8 +6,11 @@ var app = express();
 app.use(bodyparser.urlencoded({extended:true}));
 
 router.get("/admin", (req, res) => {
-   // res.render("admin/index", { proximaRoda });
     res.render("admin/index");
+});
+
+router.get("/formEmails", (req, res) => {
+    res.render("admin/formEmails");
 });
 
 

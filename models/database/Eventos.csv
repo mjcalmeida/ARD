@@ -1,5 +1,5 @@
-insert into Eventos id,nomeEvento,periodicidade,dataProximoEvento,horaProximoEvento,numMinimo,numMaximo,valorConvidado,valorXama,createdAt,updatedAt
-(nomeEvento,periodicidade,dataProximoEvento,horaProximoEvento,numMinimo,numMaximo,valorConvidado,valorXama,createdAt,updatedAt)
+insert into eventos 
+(nomeEvento    ,periodicidade         ,dataProximoEvento,horaProximoEvento,numMinimo,numMaximo,valorConvidado,valorXama,createdAt,updatedAt)
 values
-("Roda de Cura","Semanal",2020-11-19","19:00",1,15,10,10,"2020-01-01 00:00:00","2020-11-16 10:27:56"
-("Ayauasca","Ultimo Sábado do Mês",2020-10-31,"16:00",15,70,150,120,"2020-01-01 00:00:00","2020-01-01 00:00:00"
+("Roda de Cura","Semanal"             ,"2020-11-19","19:00",1,15,10,10,"2020-01-01 00:00:00","2020-11-16 10:27:56"),
+("Ayauasca"    ,"Ultimo Sábado do Mês","2020-10-31","16:00",15,70,150,120,"2020-01-01 00:00:00","2020-01-01 00:00:00")

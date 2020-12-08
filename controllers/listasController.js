@@ -9,7 +9,7 @@ const utilseventos = new UtilsEventos();
 const Utils = require("../public/js/utils");   
 const utils = new Utils();
 
-router.post('/cadPresenca', (req, res) => {
+router.post('/listas/cadPresenca', (req, res) => {
     const eventoId = req.body.eventoId;
     const idPessoa = req.body.pessoaId;
     const presenca =  1;
@@ -45,7 +45,8 @@ router.post('/cadPresenca', (req, res) => {
         utils.updateOrCreate (model, where, newItem)
         .then( () => {
             console.log("Cadastro Atualizado");
-            res.redirect("/listas");
+            var backURL=req.header('Referer') || '/0';
+            res.redirect(backURL);
             
         })
         .catch(err =>  {
@@ -57,9 +58,16 @@ router.post('/cadPresenca', (req, res) => {
     });
 });
 
-router.get("/listas", (req, res) => {
+router.get("/listas/:dataEventoSelecao", (req, res) => {
+    var dataEventoSelecao = req.params.dataEventoSelecao;
+
     utilseventos.calcularProximoEvento(1)
     .then( dataEvento => {
+        
+        if(dataEventoSelecao == "0"){
+            dataEventoSelecao =  utils.parseDateBR_ENG(dataEvento);
+        }
+        
         EventosParticipantes
         .findAll({
             attributes: [
@@ -72,7 +80,7 @@ router.get("/listas", (req, res) => {
                 'dataParticipacao',
                 'pessoa.nmPessoa'
             ],
-            where : {dataParticipacao : utils.parseDateBR_ENG(dataEvento)},
+            where : {dataParticipacao : dataEventoSelecao},
             include : [{
                 model: Pessoas,
                 required: true
@@ -82,8 +90,9 @@ router.get("/listas", (req, res) => {
         })
         .then(eventosRoda => {
             res.render("listas/roda/index", {
-                eventosRoda : eventosRoda,
-                dataEvento : utils.parseDateENG_BR(dataEvento)
+                eventosRoda       : eventosRoda,
+                dataEvento        : utils.parseDateENG_BR(dataEventoSelecao),
+                dataEventoSelecao : dataEventoSelecao
             });
         })
         .catch(err => {

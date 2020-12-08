@@ -104,7 +104,7 @@ router.post("/pessoas/saveRoda", (req, res) => {
     var receberEmails = req.body.emailPessoa == '' ? 0 : 1;
     var grupoId = req.body.Grupo == '' ? 1 : req.body.Grupo;
     var dtEntrada = utils.parseDateBR_ENG(TodayDate);
-    var dtUltimaParticipacao = utils.parseDateBR_ENG(req.body.dtEvento);
+    var dtUltimaParticipacao = req.body.dtEvento;
     var dtUltimaRoda = dtUltimaParticipacao;
     var presenca = req.body.presenca;
     var grupoId = 1;
@@ -134,7 +134,7 @@ router.post("/pessoas/saveRoda", (req, res) => {
           
         utils.updateOrCreate (model, where, newItem)
         .then((result) => {
-            utilseventos.addParticipacaoEvento(2, result.item.id, result.item.grupoId, dtUltimaRoda, emailPessoa, presenca, valorEvento, observacao);
+            utilseventos.addParticipacaoEvento(1, result.item.id, result.item.grupoId, dtUltimaRoda, emailPessoa, presenca, valorEvento, observacao);
         })
         .catch(erro => {
             console.log(erro);
@@ -144,7 +144,7 @@ router.post("/pessoas/saveRoda", (req, res) => {
         res.redirect("/admin");
     }else 
     {
-        res.redirect("/listas");
+        res.redirect("/listas/"+ dtUltimaParticipacao);
     }
 });
 
@@ -276,8 +276,8 @@ router.get("/pessoas/cadRoda", (req, res) => {
         utilsPessoas.getNomePessoas()
         .then( aPessoas => {
             var availableTags = JSON.stringify(aPessoas);
-            dataProximoEvento = utils.parseDateENG_BR(dataProximoEvento);
-            res.render("./pessoas/cadRoda", {dataProximoEvento, availableTags});
+            var dataEvento = utils.parseDateENG_BR(dataProximoEvento);
+            res.render("./pessoas/cadRoda", {dataEvento, dataProximoEvento, availableTags});
         })
         .catch(erro => {
             console.log(erro);
@@ -288,10 +288,11 @@ router.get("/pessoas/cadRoda", (req, res) => {
     });
 });
 
-router.get("/pessoas/cadRodaDia", (req, res) => {    
+router.get("/pessoas/cadRodaDia/:dataEventoSelecao", (req, res) => {
     // Pegar a data do Próximo Evento de Roda de Cura
     
     var availableTags = [];
+    var dataEventoSelecao = req.params.dataEventoSelecao;
 
     utilseventos.calcularProximoEvento(1)
     .then( dataProximoEvento => {
@@ -299,9 +300,16 @@ router.get("/pessoas/cadRodaDia", (req, res) => {
 
         utilsPessoas.getNomePessoas()
         .then( aPessoas => {
+            var dataEvento = utils.parseDateENG_BR(dataEventoSelecao);
+
+            if(dataEventoSelecao == "0"){
+                dataEventoSelecao = dataProximoEvento;
+                dataEvento = utils.parseDateENG_BR(dataProximoEvento);
+            }
+
             var availableTags = JSON.stringify(aPessoas);
-            dataProximoEvento = utils.parseDateENG_BR(dataProximoEvento);
-            res.render("./pessoas/cadRodaDia", {dataProximoEvento, availableTags});
+           
+            res.render("./pessoas/cadRodaDia", {dataEvento, dataEventoSelecao, availableTags});
         })
         .catch(erro => {
             console.log(erro);

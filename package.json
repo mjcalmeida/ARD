@@ -18,9 +18,11 @@
     "ejs": "^3.1.5",
     "express": "^4.17.1",
     "jquery.autocomplete": "^1.2.0",
+    "knex": "^0.21.12",
     "mysql2": "^2.1.0",
     "nodemon": "^2.0.6",
-    "sequelize": "^6.3.5"
+    "sequelize": "^6.3.5",
+    "tinymce": "^5.6.1"
   },
   "devDependencies": {
     "sucrase": "^3.16.0"

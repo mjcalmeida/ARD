@@ -1,0 +1,10 @@
+KingHost  - Editor Nano
+
+Host FTP
+ftp.ard.kinghost.net:21033
+
+Usuário FTP
+ard
+
+Password
+Matrix05
