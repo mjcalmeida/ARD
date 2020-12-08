@@ -8,7 +8,7 @@
             <div class="card-header"><h3>Roda de Cura ( <%= dataEvento %> )</h3></div>
             
             <div class="card-body">
-                <a href="../pessoas/cadRodaDia" class="btn btn-primary" style="margin-bottom: 15px;">Nova Pessoa</a>
+                <a href="../pessoas/cadRodaDia/<%= dataEventoSelecao %>" class="btn btn-primary" style="margin-bottom: 15px;">Nova Pessoa</a>
                 <div class="row">
                     <div class="col-1">#</div>
                     <div class="col">Nome</div>                    
@@ -18,7 +18,7 @@
                 </div>
                 <hr>
                 <% eventosRoda.forEach(evento => {  %>
-                <form method="POST" action="./cadPresenca">
+                <form method="POST" action="../listas/cadPresenca">
                         <div class="row">
                             <div class="col-1">
                                 <input type="hidden" name="pessoaId"   value="<%= evento.pessoaId %>"/>

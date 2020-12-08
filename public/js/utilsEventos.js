@@ -161,7 +161,7 @@ module.exports = class UtilsEventos {
         .then(pessoa => {
             for (var n = 0; pessoa.length -1; n++){
                 this.addParticipacaoEvento(
-                    2, 
+                    1, 
                     pessoa[n].id, 
                     pessoa[n].grupoId, 
                     utils.parseDateBR_ENG(dataProximoEvento), 
@@ -174,37 +174,24 @@ module.exports = class UtilsEventos {
     }
 
     addParticipacaoEvento(eventoId, id, grupoId, dtProximaParticipacao, emailPessoa, presenca, valorEvento, observacao){
-        dtProximaParticipacao = utils.parseDateBR_ENG(dtProximaParticipacao);
+        var newItem =
+            {   eventoId        : eventoId, 
+                pessoaId        : id, 
+                dataParticipacao: dtProximaParticipacao,
+                valorPago       : valorEvento,
+                presenca        : presenca,
+                emailPessoa     : emailPessoa,
+                observacao      : observacao
+            };
 
-        this.getValorEvento(eventoId, grupoId)
-        .then( valorEvento1 => {
+        var model = EventosParticipantes;
+        var where = 
+            {   eventoId        : eventoId, 
+                pessoaId        : id,
+                dataParticipacao: dtProximaParticipacao
+            };
 
-            if(valorEvento == 0){
-                valorEvento = valorEvento1;
-            }
-
-            var newItem =
-                {   eventoId        : eventoId, 
-                    pessoaId        : id, 
-                    dataParticipacao: dtProximaParticipacao,
-                    valorPago       : valorEvento,
-                    presenca        : presenca,
-                    emailPessoa     : emailPessoa,
-                    observacao      : observacao
-                };
-
-            var model = EventosParticipantes;
-            var where = 
-                {   eventoId        : eventoId, 
-                    pessoaId        : id,
-                    dataParticipacao: dtProximaParticipacao
-                };
-
-            utils.updateOrCreate (model, where, newItem);
-        })
-        .catch(err => {
-            console.log("ERRO => " + err.message);
-        });
+        utils.updateOrCreate (model, where, newItem);
     };
     
     async getValorEvento(eventoId, grupoId){

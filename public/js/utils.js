@@ -47,31 +47,22 @@ module.exports = class Utils {
     };
 
     parseDateENG_BR(dataENG){
-        var Saida = dataENG;
-        
+        var Saida = "";
+
         // Data em formato completo
-        if (dataENG.length != undefined){
-            Saida = getDate(dataENG) + "/" + 
-                    getMonth(dataENG) + "/" +  
-                    getYear(dataENG);
-        
-            // Data em formato YYYY-MM-DD
-            if (dataENG.indexOf('-') >= 0) {
-                dataENG = dataENG.split('-');
-                Saida = 
-                    dataENG[0] + "/" + 
-                    dataENG[1] - 1 + "/" + 
-                    dataENG[2];
-            }
-            if (dataBR.indexOf('/') >= 0) {
-                // Data em formato MM/DD/YYYY
-                Saida = new Date(   
-                    dataENG.substr(6, 4),
-                    dataENG.substr(3, 2) - 1,
-                    dataENG.substr(0, 2));
-            }  
-        }
-        return format(Saida,'dd/MM/yyyy');
+      //  if (dataENG.length == undefined){
+            var wDia = getDate(Date.parse(dataENG));
+            var wMes = getMonth(Date.parse(dataENG))+1;
+            wDia = "0" + wDia;
+            wMes = "0" + wMes;
+            wDia = wDia.substr(-2);
+            wMes = wMes.substr(-2);
+
+            Saida = wDia + "/" + 
+                    wMes + "/" +  
+                    getYear(Date.parse(dataENG));
+     //   }
+        return Saida;
     }
     
     updateOrCreate (model, where, newItem) {
