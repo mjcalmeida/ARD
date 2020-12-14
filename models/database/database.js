@@ -1,7 +1,7 @@
 const Sequelize = require("sequelize");
 
-const conn = new Sequelize('ARD', 'root', '1234', {
-    host: 'localhost',
+const conn = new Sequelize('ard', 'ard', 'Matrix05', {
+    host: 'mysql.ard.kinghost.net',
     dialect: 'mysql',
     timezone: '-03:00'     
 });

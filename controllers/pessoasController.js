@@ -30,7 +30,8 @@ router.get("/pessoas", (req, res) => {
             'cidadePessoa',
             [sequelize.fn('date_format', sequelize.col('dtEntrada'), '%d/%m/%Y'), 'dtEntrada'],
             [sequelize.fn('date_format', sequelize.col('dtDesligamento'), '%d/%m/%Y'), 'dtDesligamento'],
-            [sequelize.fn('date_format', sequelize.col('dtUltimaParticipacao'), '%d/%m/%Y'), 'dtUltimaParticipacao']
+            [sequelize.fn('date_format', sequelize.col('dtUltimaParticipacao'), '%d/%m/%Y'), 'dtUltimaParticipacao'],
+            'idFranqueado'
         ], 
         raw: true,
         order: [['nmPessoa', 'ASC']]
@@ -55,6 +56,7 @@ router.post("/pessoas/save", (req, res) => {
     var endComplemento = req.body.endComplemento;
     var cepPessoa = req.body.cepPessoa;
     var fonePessoa = req.body.fonePessoa;
+    var idFranqueado = req.body.idFranqueado;
     var Ativo = req.body.Ativo == '' ? 1 : req.body.Ativo;
     var receberEmails = req.body.receberEmails== '' ? 1 : req.body.Ativo;
     var emailPessoa = req.body.emailPessoa;
@@ -68,21 +70,22 @@ router.post("/pessoas/save", (req, res) => {
     if(emailPessoa != undefined){
         Pessoas
         .create({
-            grupoId : grupoId,
-            nmPessoa : nmPessoa,
-            dtNascimento : dtNascimento,
-            endPessoa : endPessoa,
-            endComplemento : endComplemento,
-            cepPessoa : cepPessoa,
-            fonePessoa : fonePessoa,
-            Ativo : Ativo,
-            receberEmails : receberEmails,
-            emailPessoa : emailPessoa,
-            sexoPessoa : sexoPessoa,
-            cidadePessoa : cidadePessoa,
-            dtEntrada : dtEntrada,
-            VIP : VIP,
-            dtDesligamento : dtDesligamento,
+            grupoId              : grupoId,
+            nmPessoa             : nmPessoa,
+            dtNascimento         : dtNascimento,
+            endPessoa            : endPessoa,
+            endComplemento       : endComplemento,
+            cepPessoa            : cepPessoa,
+            fonePessoa           : fonePessoa,
+            Ativo                : Ativo,
+            receberEmails        : receberEmails,
+            emailPessoa          : emailPessoa,
+            sexoPessoa           : sexoPessoa,
+            cidadePessoa         : cidadePessoa,
+            dtEntrada            : dtEntrada,
+            VIP                  : VIP,
+            idFranqueado         : idFranqueado,
+            dtDesligamento       : dtDesligamento,
             dtUltimaParticipacao : dtUltimaParticipacao
         })
         .then(() => {
@@ -96,34 +99,37 @@ router.post("/pessoas/save", (req, res) => {
 router.post("/pessoas/saveRoda", (req, res) => {    
     var nmPessoa = req.body.nmPessoa;
     var TodayDate = new Date();
-    var Ativo = 1;
-    var valorEvento = req.body.valorEvento == '' ? 0 : req.body.valorEvento;
-    var emailPessoa = req.body.emailPessoa == '' ? '' : req.body.emailPessoa;
-    var observacao = req.body.observacao;
-    var id = req.body.ID == '' ? 0 : req.body.ID;
-    var receberEmails = req.body.emailPessoa == '' ? 0 : 1;
-    var grupoId = req.body.Grupo == '' ? 1 : req.body.Grupo;
-    var dtEntrada = utils.parseDateBR_ENG(TodayDate);
-    var dtUltimaParticipacao = req.body.dtEvento;
-    var dtUltimaRoda = dtUltimaParticipacao;
-    var presenca = req.body.presenca;
-    var grupoId = 1;
-
+    var Ativo                = 1;
+    var valorEvento          = req.body.valorEvento == '' ? 0 : req.body.valorEvento;
+    var emailPessoa          = req.body.emailPessoa == '' ? '' : req.body.emailPessoa;
+    var observacao           = req.body.observacao;
+    var id                   = req.body.ID == '' ? 0 : req.body.ID;
+    var receberEmails        = req.body.emailPessoa == '' ? 0 : 1;
+    var grupoId              = req.body.Grupo == '' ? 1 : req.body.Grupo;
+    var idFranqueado         = req.body.idFranqueado;
+    var dtEntrada            = utils.parseDateBR_ENG(TodayDate);
+    var dtUltimaParticipacao = req.body.dtEventoSelecao;
+    var dtUltimaRoda         = dtUltimaParticipacao;
+    var presenca             = req.body.presenca;
+    
     if(id != 0){
-        utilseventos.addParticipacaoEvento(1, id, grupoId, dtUltimaRoda, emailPessoa, presenca, valorEvento, observacao);
+        // Tem cadastro
+        utilseventos.addParticipacaoEvento(2, id, grupoId, dtUltimaRoda, emailPessoa, presenca, valorEvento, observacao, idFranqueado);
     } else {
+        // Não tem cadastro
         var newItem =
-        {   grupoId : grupoId,
-            nmPessoa : nmPessoa,
-            Ativo : Ativo,
-            VIP : 0,
-            receberEmails : receberEmails,
-            emailPessoa : emailPessoa,
-            sexoPessoa : '',
-            cepPessoa : '',
-            dtEntrada : dtEntrada,
-            dtUltimaParticipacao : dtUltimaParticipacao,
-            valorEvento : valorEvento
+        {   grupoId              : 1,
+            nmPessoa             : nmPessoa,
+            Ativo                : Ativo,
+            VIP                  : 0,
+            receberEmails        : receberEmails,
+            emailPessoa          : emailPessoa,
+            sexoPessoa           : '',
+            cepPessoa            : '',
+            dtEntrada            : dtEntrada,
+            dtUltimaParticipacao : TodayDate,
+            valorEvento          : valorEvento,
+            idFranqueado         : idFranqueado
         };
 
         var model = Pessoas;
@@ -134,56 +140,59 @@ router.post("/pessoas/saveRoda", (req, res) => {
           
         utils.updateOrCreate (model, where, newItem)
         .then((result) => {
-            utilseventos.addParticipacaoEvento(1, result.item.id, result.item.grupoId, dtUltimaRoda, emailPessoa, presenca, valorEvento, observacao);
+            utilseventos.addParticipacaoEvento(2, result.item.id, result.item.grupoId, dtUltimaRoda, emailPessoa, presenca, valorEvento, observacao);
         })
         .catch(erro => {
             console.log(erro);
         });
     }
     if(presenca==0){
-        res.redirect("/admin");
+        res.redirect("/admin/"+dtUltimaRoda);
     }else 
     {
-        res.redirect("/listas/"+ dtUltimaParticipacao);
+        res.redirect("/listas/"+ dtUltimaRoda);
     }
 });
 
 router.post("/pessoas/edit/update", (req, res) => {
-    var id = req.body.id;
-    var grupoId = req.body.grupoId;
-    var nmPessoa = req.body.nmPessoa;
-    var dtNascimento = utils.parseDateBR_ENG(req.body.dtNascimento);
-    var endPessoa = req.body.endPessoa;
-    var endComplemento = req.body.endComplemento;
-    var cepPessoa = req.body.cepPessoa;
-    var fonePessoa = req.body.fonePessoa;
-    var Ativo = req.body.Ativo;
-    var VIP = req.body.VIP == 0 ? 0 : 1;
-    var receberEmails = req.body.receberEmails;
-    var emailPessoa = req.body.emailPessoa;
-    var sexoPessoa = req.body.sexoPessoa;
-    var cidadePessoa = req.body.cidadePessoa;
-    var dtEntrada = utils.parseDateBR_ENG(req.body.dtEntrada);
-    var dtDesligamento = utils.parseDateBR_ENG(req.body.dtDesligamento);
+    var id                   = req.body.id;
+    var grupoId              = req.body.grupoId;
+    var nmPessoa             = req.body.nmPessoa;
+    var dtNascimento         = utils.parseDateBR_ENG(req.body.dtNascimento);
+    var endPessoa            = req.body.endPessoa;
+    var endComplemento       = req.body.endComplemento;
+    var cepPessoa            = req.body.cepPessoa;
+    var fonePessoa           = req.body.fonePessoa;
+    var Ativo                = req.body.Ativo;
+    var VIP                  = req.body.VIP == 0 ? 0 : 1;
+    var receberEmails        = req.body.receberEmails;
+    var emailPessoa          = req.body.emailPessoa;
+    var sexoPessoa           = req.body.sexoPessoa;
+    var cidadePessoa         = req.body.cidadePessoa;
+    var dtEntrada            = utils.parseDateBR_ENG(req.body.dtEntrada);
+    var dtDesligamento       = utils.parseDateBR_ENG(req.body.dtDesligamento);
     var dtUltimaParticipacao = utils.parseDateBR_ENG(req.body.dtUltimaParticipacao);
+    var idFranqueado         = req.body.idFranqueado;
+
     Pessoas
     .update(
         {
-            grupoId : grupoId,
-            nmPessoa : nmPessoa,
-            dtNascimento :  dtNascimento,
-            endPessoa : endPessoa,
-            endComplemento : endComplemento,
-            cepPessoa : cepPessoa,
-            fonePessoa : fonePessoa,
-            Ativo : Ativo,
-            receberEmails : receberEmails,
-            emailPessoa : emailPessoa,
-            sexoPessoa : sexoPessoa,
-            cidadePessoa : cidadePessoa,
-            VIP : VIP,
-            dtEntrada : dtEntrada,
-            dtDesligamento : dtDesligamento,
+            grupoId              : grupoId,
+            nmPessoa             : nmPessoa,
+            dtNascimento         :  dtNascimento,
+            endPessoa            : endPessoa,
+            endComplemento       : endComplemento,
+            cepPessoa            : cepPessoa,
+            fonePessoa           : fonePessoa,
+            Ativo                : Ativo,
+            receberEmails        : receberEmails,
+            emailPessoa          : emailPessoa,
+            sexoPessoa           : sexoPessoa,
+            cidadePessoa         : cidadePessoa,
+            VIP                  : VIP,
+            idFranqueado         : idFranqueado,
+            dtEntrada            : dtEntrada,
+            dtDesligamento       : dtDesligamento,
             dtUltimaParticipacao : dtUltimaParticipacao
         }, {
             where: { id: id },
@@ -225,7 +234,8 @@ router.get("/pessoas/edit/:id", (req, res) => {
             'cidadePessoa',
             [sequelize.fn('date_format', sequelize.col('dtEntrada'), '%d/%m/%Y'), 'dtEntrada'],
             [sequelize.fn('date_format', sequelize.col('dtDesligamento'), '%d/%m/%Y'), 'dtDesligamento'],
-            [sequelize.fn('date_format', sequelize.col('dtUltimaParticipacao'), '%d/%m/%Y'), 'dtUltimaParticipacao']
+            [sequelize.fn('date_format', sequelize.col('dtUltimaParticipacao'), '%d/%m/%Y'), 'dtUltimaParticipacao'],
+            'idFranqueado'
         ]
     })
     .then ( pessoa => {

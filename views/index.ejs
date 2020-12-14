@@ -12,7 +12,7 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col col-custom mx-3 mb-1" style="text-align: center">
-                                Roda de Cura
+                                Rodas de Cura
                             </div>
                         </div>
                         <div class="row">
@@ -52,22 +52,46 @@
                                     <a href="./listas/<%= x[5] %>"><%= x[0] %></a>
                                 </div>
                                 <div class="col card-custom mx-6 mb-1" style="text-align: center">
-                                    <%= x[1] %>
+                                    <%= x[2] %>
                                 </div>
                                 <div class="col card-custom mx-6 mb-1" style="text-align: center">
-                                    <%= x[2] %>
+                                    <%= x[1] %>
                                 </div>
                                 <div class="col card-custom mx-6 mb-1" style="text-align: center">
                                     <%= x[1]+x[2] %>
                                 </div>
                                 <div class="col card-custom mx-6 mb-1" style="text-align: center">
-                                    <%= parseInt(x[3]) %>
-                                </div>
-                                <div class="col card-custom mx-6 mb-1" style="text-align: center">
                                     <%= parseInt(x[4]) %>
                                 </div>
                                 <div class="col card-custom mx-6 mb-1" style="text-align: center">
+                                    <%= parseInt(x[3]) %>
+                                </div>
+                                <div class="col card-custom mx-6 mb-1" style="text-align: center">
                                     <%= parseInt(x[3]) + parseInt(x[4]) %>
+                                </div>
+                            </div>    
+                        <% } %>
+                        <br>
+                        <div class="row">
+                            <div class="col col-custom mx-3 mb-1" style="text-align: center">
+                                Saldos
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col card-custom mx-2 mb-1" style="text-align: center">
+                                Nome
+                            </div>
+                            <div class="col card-custom mx-5 mb-1" style="text-align: center">
+                                Valor
+                            </div>
+                        </div>
+                        <% for(saldo of saldos) { %>   
+                            <div class="row">
+                                <div class="col card-custom mx-2 mb-1" style="text-align: center">
+                                    <%= saldo.nmPessoa %>
+                                </div>
+                                <div class="col card-custom mx-6 mb-1" style="text-align: center">
+                                    <%= saldo.Saldo %>
                                 </div>
                             </div>    
                         <% } %>

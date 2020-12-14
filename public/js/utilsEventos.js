@@ -2,7 +2,7 @@ const sequelize = require('sequelize');
 const op = sequelize.Op;
 const Pessoas = require("../../models/Pessoas");
 const Eventos = require("../../models/Eventos");
-const EventosParticipantes = require("../../models/EventosParticipantes");
+const eventosparticipantes = require("../../models/EventosParticipantes");
 const Utils = require("./utils");
 const utils = new Utils();
 const format = require('date-fns/format');
@@ -98,7 +98,7 @@ module.exports = class UtilsEventos {
 
                 var quantidadeParticipantes = 0;
 
-                EventosParticipantes
+                eventosparticipantes
                 .findAndCountAll({
                     where: {
                         eventoId: eventoId,
@@ -184,7 +184,7 @@ module.exports = class UtilsEventos {
                 observacao      : observacao
             };
 
-        var model = EventosParticipantes;
+        var model = eventosparticipantes;
         var where = 
             {   eventoId        : eventoId, 
                 pessoaId        : id,

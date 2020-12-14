@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const EventosParticipantes = require("../models/EventosParticipantes");
+const eventosparticipantes = require("../models/EventosParticipantes");
 const Pessoas = require("../models/Pessoas");
 const Grupos = require("../models/Grupos");
 const UtilsEventos = require("../public/js/utilsEventos");
@@ -35,7 +35,7 @@ router.post('/listas/cadPresenca', (req, res) => {
                 presenca        : presenca,
                 observacao      : observacao,
             };
-        var model = EventosParticipantes;
+        var model = eventosparticipantes;
         var where = 
         {   eventoId        : eventoId, 
             pessoaId        : idPessoa,
@@ -68,7 +68,7 @@ router.get("/listas/:dataEventoSelecao", (req, res) => {
             dataEventoSelecao =  utils.parseDateBR_ENG(dataEvento);
         }
         
-        EventosParticipantes
+        eventosparticipantes
         .findAll({
             attributes: [
                 'id',

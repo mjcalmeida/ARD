@@ -1,14 +1,11 @@
-const express = require("express");
-const app = express();
+const express    = require("express");
+const app        = express();
 const bodyParser = require("body-parser");
-const conn = require("./models/database/database");
+const conn       = require("./models/database/database");
 
 // Importando os Models
 const Grupos = require("./models/Grupos");
 const Eventos = require("./models/Eventos");
-//const Pessoas = require("./models/Pessoas");
-//const eventosParticipantes = require("./models/EventosParticipantes")
-
 const UtilsAdmin = require("./public/js/utilsAdmin");
 const utilsadmin = new UtilsAdmin();
 
@@ -16,7 +13,7 @@ const utilsadmin = new UtilsAdmin();
 app.set('view engine', 'ejs');
 
 //Static
-app.use(express.static('/public'));
+app.use(express.static('public'));
 
 //Body-parser
 app.use(bodyParser.urlencoded({extended: false}))
@@ -37,9 +34,13 @@ app.get("/", (req, res) => {
     
     utilsadmin.getDados(2)
     .then(data => {
-        res.render("index", {
-            data
-        });
+        utilsadmin.getSaldos()
+        .then( saldos => {
+            res.render("index", { data, saldos })
+        })
+        .catch(error => { 
+            console.log(error) 
+        })
     })
     .catch(error => {
         console.log(error);

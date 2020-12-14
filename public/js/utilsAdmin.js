@@ -9,16 +9,16 @@ module.exports = class UtilsAdmin {
             var Saida=[];
             
             dbKnex
-            .select( "eventosparticipantes.dataParticipacao", 
-            "grupoId",
-            dbKnex.raw("SUM(valorPago) as valor"),
-            dbKnex.raw("count(valorPago) as quantidade")
+            .select( "dataParticipacao", 
+                     "grupoId",
+                     dbKnex.raw("SUM(valorPago) as valor"),
+                     dbKnex.raw("count(valorPago) as quantidade")
             )
-            .table("EventosParticipantes")
-            .innerJoin("Pessoas", "pessoas.id", "eventosParticipantes.pessoaId")
+            .table("eventosparticipantes")
+            .innerJoin("pessoas", "pessoas.id", "eventosparticipantes.pessoaId")
             .where({ presenca : 1 })
-            .groupBy("eventosparticipantes.dataParticipacao", "grupoId")
-            .orderBy("eventosparticipantes.dataParticipacao", "desc", "grupoId", "asc")
+            .groupBy("dataParticipacao", "grupoId")
+            .orderBy("dataParticipacao", "desc", "grupoId", "asc")
             .then( data => {
                 var n = 0;
                 
@@ -48,5 +48,26 @@ module.exports = class UtilsAdmin {
                 console.log(err);
             })
         });
-    } 
+    }
+
+    getSaldos(){
+        return new Promise( resolve => {
+            dbKnex
+            .select("nmPessoa",
+                    dbKnex.raw("SUM(valorPago) - count(pessoaId) * 10 as Saldo") 
+            )
+            .table("eventosparticipantes")
+            .innerJoin("pessoas", "pessoas.id", "eventosparticipantes.pessoaId")
+            .where({ "pessoas.idFranqueado" : "0" })
+            .having( "Saldo","<>", "0")
+            .groupBy("pessoas.nmPessoa")            
+            .orderBy("pessoas.id")
+            .then( data => {                
+                resolve(data);
+            })
+            .catch( err => {
+                console.log(err);
+            })
+        });
+    }
 }
