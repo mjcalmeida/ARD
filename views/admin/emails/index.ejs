@@ -1,0 +1,50 @@
+<%- include('../../partials/header.ejs') %>
+<%- include ('../../partials/navbar.ejs') %>
+
+<body>
+    <div class="container">
+        <hr>
+        <h2>Lista de Emails</h2>
+        <a href="./formEmails" class="btn btn-primary">Novo Email</a>
+        <hr>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Evento</th>
+                    <th>Título do Email</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% emails.forEach(email => { %>
+                    <tr>                        
+                        <td> <%= email.nomeEvento %> </td>
+                        <td> <%= email.titulo  %> </td>
+                        <td><a href="./emails/edit/<%= email.eventoId %>" class="btn btn-warning">Editar</a>
+                            
+                            <form method="POST" action="./emails/delete" 
+                                style="display: inline; padding-left: 5px;"
+                                onsubmit="confirmarDelecao(email, this)">
+                                <input type="hidden" name="id" value="<%= email.id %>">
+                                <button class="btn btn-danger">Excluir</button>
+                            </form>
+                        </td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    </div>
+</body>
+
+<%- include ('../../partials/footer.ejs') %>
+
+<script>
+    function confirmarDelecao(event, form){
+        event.preventDefault();
+        var decisao = confirm("Deseja excluir este Email?");
+
+        if (decisao){
+            form.submit();
+        }        
+    }
+</script>

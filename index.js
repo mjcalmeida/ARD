@@ -4,8 +4,6 @@ const bodyParser = require("body-parser");
 const conn       = require("./models/database/database");
 
 // Importando os Models
-const Grupos = require("./models/Grupos");
-const Eventos = require("./models/Eventos");
 const UtilsAdmin = require("./public/js/utilsAdmin");
 const utilsadmin = new UtilsAdmin();
 
@@ -52,12 +50,14 @@ const eventosController = require("./controllers/eventosController");
 const pessoasController = require("./controllers/pessoasController");
 const adminController   = require("./controllers/adminController");
 const listasController  = require("./controllers/listasController");
+const emailsController  = require("./controllers/emailsController");
 
 app.use(eventosController);
 app.use(pessoasController);
 app.use(adminController);
 app.use(listasController);
+app.use(emailsController);
 
-app.listen(8080, () => {
+app.listen(8081, () => {
     console.log("O serviço está rodando!");
 });
