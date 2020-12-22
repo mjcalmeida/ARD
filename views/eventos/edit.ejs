@@ -41,8 +41,8 @@
                         <div class="col"><label>Horário</label></div>
                         <div class="col-10">
                             <input type="text" placeholder="__:__" 
-                            name="dataProximoEvento" class="form-control timeHM"
-                            value="<%= evento.dataProximoEvento %>">
+                            name="horaProximoEvento" class="form-control timeHM"
+                            value="<%= evento.horaProximoEvento %>">
                         </div>
                     </div>
                     
@@ -82,6 +82,49 @@
                         </div>
                     </div>
 
+                    <br>   
+
+                    <div class="wrapper wrapper-content">
+                        <div class="row animated fadeInRight">
+                            <div class="col-lg-12">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-title">
+                                        <h4>Timeline</h4>
+                                        <div class="ibox-tools">
+                                            <a class="collapse-link">
+                                                <i class="fa fa-chevron-up"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="ibox-content inspinia-timeline">
+                                        <div class="timeline-item">
+                                            <div class="row">
+                                                <div class="col-lg-3">
+                                                    <i class="fa fa-briefcase"></i>
+                                                    '6:00 am'
+                                                    <br />
+                                                    <small class="text-navy">2 hour ago</small>
+                                                </div>
+                                                <div class="col-lg-7 content no-top-border">
+                                                    <p class="m-b-xs"><strong>Meeting</strong></p>
+                        
+                                                    <p>
+                                                        Conference on the sales results for the previous year. Monica please examine sales trends in marketing and products. Below please find the current status of the
+                                                        sale.
+                                                    </p>
+                        
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
                     <br>
                     <button class="btn btn-success">Salvar</button>
                 </form>
@@ -94,3 +137,35 @@
 
 <script src="/jQuery/jquery.mask.js"></script>
 <script src="/jQuery/mascaras.js"></script>
+
+
+<script>
+// Ajax call for timeline data
+/* $.ajax({
+    url: tasksDataUrl,
+    method: 'GET',
+    dataType: 'json',
+    success: function (data) {
+        var timelineDiv = $('.inspinia-timeline');
+        $.each(data, function (i, item) {
+            addTimelineTask(timelineDiv, item);
+        })
+    }
+}); */
+
+// Simple function to append new timeline element
+function addTimelineTask(timelineDiv, task) {
+    switch (task.Type) {
+        case 'Call': iconType = "phone";
+            break;
+        case 'Meeting': iconType = "coffee";
+            break;
+        case 'Chat': iconType = "comments";
+            break;
+        case 'File': iconType = "file-text";
+            break;
+        default: iconType = "briefcase";
+    }
+    timelineDiv.append($('<div class="timeline-item">').html('<div class="row"> <div class="col-xs-3 date"><i class="fa fa-' + iconType + '"></i> ' + task.Time + ' <br></div> <div class="col-xs-7 content"><p class="m-b-xs"><strong>' + task.Title + '</strong></p> <p> ' + task.Desc + '</p> </div> </div>'))
+};
+</script>

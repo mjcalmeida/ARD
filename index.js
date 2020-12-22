@@ -58,6 +58,6 @@ app.use(adminController);
 app.use(listasController);
 app.use(emailsController);
 
-app.listen(8081, () => {
+app.listen(8080, () => {
     console.log("O serviço está rodando!");
 });

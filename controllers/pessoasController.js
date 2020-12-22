@@ -96,29 +96,34 @@ router.post("/pessoas/save", (req, res) => {
     }
 });
 
+//   --->    Grava a participação na Roda - Verifica se a pessoa é Xamã ou Visitante
 router.post("/pessoas/saveRoda", (req, res) => {    
     var nmPessoa = req.body.nmPessoa;
     var TodayDate = new Date();
-    var Ativo                = 1;
-    var valorEvento          = req.body.valorEvento == '' ? 0 : req.body.valorEvento;
-    var emailPessoa          = req.body.emailPessoa == '' ? '' : req.body.emailPessoa;
-    var observacao           = req.body.observacao;
-    var id                   = req.body.ID == '' ? 0 : req.body.ID;
-    var receberEmails        = req.body.emailPessoa == '' ? 0 : 1;
-    var grupoId              = req.body.Grupo == '' ? 1 : req.body.Grupo;
-    var idFranqueado         = req.body.idFranqueado;
-    var dtEntrada            = utils.parseDateBR_ENG(TodayDate);
-    var dtUltimaParticipacao = req.body.dtEventoSelecao;
-    var dtUltimaRoda         = dtUltimaParticipacao;
-    var presenca             = req.body.presenca;
+    var Ativo         = 1;
+    var valorEvento   = req.body.valorEvento;
+    var emailPessoa   = req.body.emailPessoa == '' ? '' : req.body.emailPessoa;
+    var observacao    = req.body.observacao;
+    var id            = req.body.ID == '' ? 0 : req.body.ID;
+    var receberEmails = req.body.emailPessoa == '' ? 0 : 1;
+    var grupoId       = req.body.Grupo == '' ? 1 : req.body.Grupo;
+    var idFranqueado  = req.body.idFranqueado;
+    var dtEntrada     = utils.parseDateBR_ENG(TodayDate);
+    var dtEvento      = req.body.dtEvento;
+    var presenca      = req.body.presenca;
     
+    if(valorEvento == undefined){
+        valorEvento = utilseventos.getValorEvento(1,1) ;
+    }
+
     if(id != 0){
         // Tem cadastro
-        utilseventos.addParticipacaoEvento(2, id, grupoId, dtUltimaRoda, emailPessoa, presenca, valorEvento, observacao, idFranqueado);
+        utilseventos.addParticipacaoEvento(1, id, grupoId, dtEvento, emailPessoa, presenca, valorEvento, observacao, idFranqueado);
     } else {
+//   --->   Grava Última participação de uma pessoa em um evento        
         // Não tem cadastro
         var newItem =
-        {   grupoId              : 1,
+        {   grupoId              : grupoId,
             nmPessoa             : nmPessoa,
             Ativo                : Ativo,
             VIP                  : 0,
@@ -126,10 +131,9 @@ router.post("/pessoas/saveRoda", (req, res) => {
             emailPessoa          : emailPessoa,
             sexoPessoa           : '',
             cepPessoa            : '',
-            dtEntrada            : dtEntrada,
-            dtUltimaParticipacao : TodayDate,
-            valorEvento          : valorEvento,
-            idFranqueado         : idFranqueado
+            dtEntrada            : dtEntrada,            
+            idFranqueado         : idFranqueado,
+            dtUltimaParticipacao : dtEntrada = dtEvento ? dtEvento : null
         };
 
         var model = Pessoas;
@@ -140,17 +144,18 @@ router.post("/pessoas/saveRoda", (req, res) => {
           
         utils.updateOrCreate (model, where, newItem)
         .then((result) => {
-            utilseventos.addParticipacaoEvento(2, result.item.id, result.item.grupoId, dtUltimaRoda, emailPessoa, presenca, valorEvento, observacao);
+            utilseventos.addParticipacaoEvento(1, result.item.id, result.item.grupoId, dtEvento, emailPessoa, presenca, valorEvento, observacao);
         })
         .catch(erro => {
             console.log(erro);
         });
     }
+
     if(presenca==0){
-        res.redirect("/admin/"+dtUltimaRoda);
+        res.redirect("/admin");
     }else 
     {
-        res.redirect("/listas/"+ dtUltimaRoda);
+        res.redirect("/listas/"+ dtEvento);
     }
 });
 
@@ -163,16 +168,16 @@ router.post("/pessoas/edit/update", (req, res) => {
     var endComplemento       = req.body.endComplemento;
     var cepPessoa            = req.body.cepPessoa;
     var fonePessoa           = req.body.fonePessoa;
-    var Ativo                = req.body.Ativo;
-    var VIP                  = req.body.VIP == 0 ? 0 : 1;
-    var receberEmails        = req.body.receberEmails;
+    var Ativo                = req.body.Ativo         == 'false' ? 0 : 1;
+    var VIP                  = req.body.VIP           == 'false' ? 0 : 1;
+    var receberEmails        = req.body.receberEmails == 'false' ? 0 : 1;
+    var idFranqueado         = req.body.idFranqueado  == 'false' ? 0 : 1;
     var emailPessoa          = req.body.emailPessoa;
     var sexoPessoa           = req.body.sexoPessoa;
     var cidadePessoa         = req.body.cidadePessoa;
     var dtEntrada            = utils.parseDateBR_ENG(req.body.dtEntrada);
     var dtDesligamento       = utils.parseDateBR_ENG(req.body.dtDesligamento);
     var dtUltimaParticipacao = utils.parseDateBR_ENG(req.body.dtUltimaParticipacao);
-    var idFranqueado         = req.body.idFranqueado;
 
     Pessoas
     .update(
@@ -274,20 +279,17 @@ router.post("/pessoas/delete", (req, res) => {
 
 router.get("/pessoas/cadRoda", (req, res) => {    
     // Pegar a data do Próximo Evento de Roda de Cura
-    var  proximaRoda = null;
     var availableTags = [];
 
     utilseventos.calcularProximoEvento(1)
-    .then( dataProximoEvento => {
-        proximaRoda = dataProximoEvento;
-
+    .then( proximaRoda => {        
         //console.log("-=-=-=-=-=   Fim     " + proximaRoda + "        =-=-=-=-=-");
 
         utilsPessoas.getNomePessoas()
         .then( aPessoas => {
             var availableTags = JSON.stringify(aPessoas);
-            var dataEvento = utils.parseDateENG_BR(dataProximoEvento);
-            res.render("./pessoas/cadRoda", {dataEvento, dataProximoEvento, availableTags});
+            var dataEvento = utils.parseDateBR_ENG(proximaRoda);
+            res.render("./pessoas/cadRoda", {dataEvento, proximaRoda, availableTags});
         })
         .catch(erro => {
             console.log(erro);

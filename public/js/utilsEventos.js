@@ -173,15 +173,16 @@ module.exports = class UtilsEventos {
         });
     }
 
+//   --->    Grava a participação na Roda - Grava ou altera na tabela
     addParticipacaoEvento(eventoId, id, grupoId, dtProximaParticipacao, emailPessoa, presenca, valorEvento, observacao){
         var newItem =
             {   eventoId        : eventoId, 
-                pessoaId        : id, 
-                dataParticipacao: dtProximaParticipacao,
+                pessoaId        : id,
                 valorPago       : valorEvento,
                 presenca        : presenca,
                 emailPessoa     : emailPessoa,
-                observacao      : observacao
+                observacao      : observacao,
+                dataParticipacao : dtProximaParticipacao
             };
 
         var model = eventosparticipantes;
@@ -195,7 +196,7 @@ module.exports = class UtilsEventos {
     };
     
     async getValorEvento(eventoId, grupoId){
-        let evento =  await this.getEvento(eventoId);
+        let evento = await this.getEvento(eventoId);
         var valor = grupoId == 1 ? evento.valorConvidado : evento.valorXama;
         return valor;
     };

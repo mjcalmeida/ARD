@@ -1,3 +1,5 @@
+//host : 'mysql.ard.kinghost.net',
+
 var knex = require('knex')({
     client: 'mysql2',
     connection: {

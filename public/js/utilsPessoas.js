@@ -2,6 +2,7 @@ const sequelize = require('sequelize');
 const Pessoas = require('../../models/Pessoas');
 
 module.exports = class UtilsPessoas {
+    //   ---> Lista dados das pessoas para o autocomplete
     async getNomePessoas(){
         var pessoas = await this.getPessoas();
 
@@ -11,12 +12,13 @@ module.exports = class UtilsPessoas {
             aPessoas += pessoas[i].nmPessoa + "-" + 
                         pessoas[i].id + "|" + 
                         pessoas[i].emailPessoa + "_" + 
-                        pessoas[i].grupoId + ",";
+                        pessoas[i].grupoId + "?" + 
+                        pessoas[i].idFranqueado + ",";
         };
             
         return aPessoas.substring(0,aPessoas.length-1);
     }
-
+//   ---> Pega os dados de uma Pessoa
     getPessoas(){
         return new Promise(resolve => {
             setTimeout(() => {
@@ -26,6 +28,7 @@ module.exports = class UtilsPessoas {
                     'id',
                     'grupoId',
                     'nmPessoa',
+                    'idFranqueado',
                     'emailPessoa'
                 ], 
                 where: { Ativo: 1 },

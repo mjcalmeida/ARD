@@ -1,9 +1,16 @@
 const getYear = require('date-fns/getYear')
 const getMonth = require('date-fns/getMonth')
 const getDate = require('date-fns/getDate');
-const format = require('date-fns/format');
 
 module.exports = class Utils {
+    convDoubleBR (valor){
+        var buf = Buffer.from(valor);
+        if(buf.indexOf(',') == -1 || buf.indexOf('.') == -1) {
+            valor = valor + "00";
+        };
+        return valor;
+    }
+
     TDate(UserDate) {
         var TodayDate = new Date();
         UserDate = new Date(UserDate);
