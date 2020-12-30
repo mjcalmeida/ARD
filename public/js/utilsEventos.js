@@ -1,7 +1,9 @@
+const dbKnex = require("../../models/database/db_Knex");
 const sequelize = require('sequelize');
 const op = sequelize.Op;
 const Pessoas = require("../../models/Pessoas");
 const Eventos = require("../../models/Eventos");
+const Timeline = require("../../models/Timeline");
 const eventosparticipantes = require("../../models/EventosParticipantes");
 const Utils = require("./utils");
 const utils = new Utils();
@@ -88,47 +90,11 @@ module.exports = class UtilsEventos {
             }, 1000)
         }); 
     }
-
-    contaParticipantes(eventoId, dataProximoEvento){
-        return new Promise(resolve => {
-            setTimeout(() => {
-            //    console.log("+-+-+-+-+-+-            Entrada em contaParticipantes            +-+-+-+-+-+-");
-            //    console.log("Recebido o id do evento: " + eventoId);
-            //    console.log("Recebida data do evento: " + dataProximoEvento);
-
-                var quantidadeParticipantes = 0;
-
-                eventosparticipantes
-                .findAndCountAll({
-                    where: {
-                        eventoId: eventoId,
-                        [op.and]: {
-                            dataParticipacao: dataProximoEvento
-                        }
-                    },
-                    offset: 10,
-                    limit: 2
-                })
-                .then(result => {
-                    if(result != undefined) { 
-        //                console.log("Retornando a quantidade: " + result.count);                       
-        //                console.log("+-+-+-+-+-+-              Saida contaParticipantes              +-+-+-+-+-+-");               
-                        return resolve(result.count);
-                    } else {
-                        return resolve(0);
-                    }
-                })
-                .catch(erro => {
-                    console.log(erro);
-                });
-            }, 1000)
-        });
-    }
-
+    
     calculoProximoEvento(periodicidade, dataProximoEvento) {
-//        console.log("+-+-+-+-+-+-            Entrada em calculoProximoEvento            +-+-+-+-+-+-");
-//        console.log("Recebida data do evento: " + dataProximoEvento);
-//        console.log("Recebida a Periodicidade: " + periodicidade);
+        //        console.log("+-+-+-+-+-+-            Entrada em calculoProximoEvento            +-+-+-+-+-+-");
+        //        console.log("Recebida data do evento: " + dataProximoEvento);
+        //        console.log("Recebida a Periodicidade: " + periodicidade);
         
         if (periodicidade == 'Semanal') {
             while (! utils.TDate(dataProximoEvento)) {
@@ -172,32 +138,92 @@ module.exports = class UtilsEventos {
             console.log("ERRO => " + err.message);
         });
     }
-
-//   --->    Grava a participação na Roda - Grava ou altera na tabela
+    
+    //   --->    Grava a participação na Roda - Grava ou altera na tabela
     addParticipacaoEvento(eventoId, id, grupoId, dtProximaParticipacao, emailPessoa, presenca, valorEvento, observacao){
         var newItem =
-            {   eventoId        : eventoId, 
-                pessoaId        : id,
-                valorPago       : valorEvento,
-                presenca        : presenca,
-                emailPessoa     : emailPessoa,
-                observacao      : observacao,
-                dataParticipacao : dtProximaParticipacao
-            };
-
+        {   eventoId        : eventoId, 
+            pessoaId        : id,
+            valorPago       : valorEvento,
+            presenca        : presenca,
+            emailPessoa     : emailPessoa,
+            observacao      : observacao,
+            dataParticipacao : dtProximaParticipacao
+        };
+        
         var model = eventosparticipantes;
         var where = 
-            {   eventoId        : eventoId, 
-                pessoaId        : id,
-                dataParticipacao: dtProximaParticipacao
-            };
-
+        {   eventoId        : eventoId, 
+            pessoaId        : id,
+            dataParticipacao: dtProximaParticipacao
+        };
+        
         utils.updateOrCreate (model, where, newItem);
     };
     
-    async getValorEvento(eventoId, grupoId){
+    async getValorEvento(eventoid, grupoId){
         let evento = await this.getEvento(eventoId);
         var valor = grupoId == 1 ? evento.valorConvidado : evento.valorXama;
         return valor;
     };
+    
+    contaParticipantes(eventoId, dataProximoEvento){
+        return new Promise(resolve => {
+            setTimeout(() => {
+            //    console.log("+-+-+-+-+-+-            Entrada em contaParticipantes            +-+-+-+-+-+-");
+            //    console.log("Recebido o id do evento: " + eventoId);
+            //    console.log("Recebida data do evento: " + dataProximoEvento);
+
+                var quantidadeParticipantes = 0;
+
+                eventosparticipantes
+                .findAndCountAll({
+                    where: {
+                        eventoId: eventoId,
+                        [op.and]: {
+                            dataParticipacao: dataProximoEvento
+                        }
+                    },
+                    offset: 10,
+                    limit: 2
+                })
+                .then(result => {
+                    if(result != undefined) { 
+        //                console.log("Retornando a quantidade: " + result.count);                       
+        //                console.log("+-+-+-+-+-+-              Saida contaParticipantes              +-+-+-+-+-+-");               
+                        return resolve(result.count);
+                    } else {
+                        return resolve(0);
+                    }
+                })
+                .catch(erro => {
+                    console.log(erro);
+                });
+            }, 1000)
+        });
+    }
+
+    async getTimeline(eventoid){
+        return new Promise(resolve => {
+            dbKnex
+            .select( "nomeEvento",
+                    "antesDepois",
+                    "quantidade",
+                    "unidade",
+                    "acao",
+                    "Titulo"
+                    )
+            .table("Timeline")
+            .innerJoin("eventos", "eventos.id", "Timeline.eventoId")
+            .innerJoin("emails","emails.id", "Timeline.emailId")
+            .where({ eventoId : eventoid })
+            .orderBy("nomeEvento", "asc")
+            .then( data => {
+                resolve(data);
+            })
+            .catch( err => {
+                console.log(err);
+            });
+        });
+    }
 }

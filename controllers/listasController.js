@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const eventosparticipantes = require("../models/EventosParticipantes");
 const Pessoas = require("../models/Pessoas");
-const Grupos = require("../models/Grupos");
 const UtilsEventos = require("../public/js/utilsEventos");
 const utilseventos = new UtilsEventos();
 

@@ -17,10 +17,12 @@
     "date-fns": "^2.16.1",
     "ejs": "^3.1.5",
     "express": "^4.17.1",
+    "jquery": "^3.5.1",
     "jquery.autocomplete": "^1.2.0",
     "knex": "^0.21.12",
     "mysql2": "^2.1.0",
     "nodemon": "^2.0.6",
+    "popper": "^1.0.1",
     "sequelize": "^6.3.5",
     "slugify": "^1.4.6",
     "tinymce": "^5.6.1"

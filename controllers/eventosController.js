@@ -7,6 +7,9 @@ const {format} = require('date-fns');
 const Utils = require("../public/js/utils");
 const utils = new Utils();
 
+const UtilsEventos = require("../public/js/utilsEventos");
+const utilsEventos = new UtilsEventos();
+
 router.get("/eventos", (req, res) => {
     Eventos
     .findAll({
@@ -126,12 +129,19 @@ router.get("/eventos/edit/:id", (req, res) => {
             evento.valorConvidado = utils.convDoubleBR(evento.valorConvidado);
             evento.valorXama      = utils.convDoubleBR(evento.valorXama);
 
-            res.render("eventos/edit", { evento : evento });
+            utilsEventos.getTimeline(evento.id)
+            .then(timeline => {
+                res.render("eventos/edit", { evento, timeline });
+            })
+            .catch(erro => {
+                console.log(erro);
+            });            
         } else {
             res.redirect("/eventos");
         }
     })
     .catch ( erro => {
+        console.log(erro);
         res.redirect("/eventos");
     })
 });

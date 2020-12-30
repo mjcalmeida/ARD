@@ -10,10 +10,6 @@ const Emails = conn.define(
             type:Sequelize.STRING,
             allowNull: false
         },
-        eventoId: {
-            type: Sequelize.INTEGER,
-            allowNull: false
-        },
         slug:{
             type:Sequelize.STRING,
             allowNull: false
@@ -24,9 +20,6 @@ const Emails = conn.define(
         }
     }
 );
-
-Eventos.hasMany(Emails);
-Emails.belongsTo(Eventos);
 
 Emails
     .sync({force: true})
