@@ -1,6 +1,7 @@
 <!DOCTYPE HTML>
 <%- include ('../../partials/header.ejs') %>
 <%- include ('../../partials/navbar.ejs') %>
+<link rel="stylesheet" href="/bootstrap-4.5.2-dist/css/bootstrap.css">
 
 <body>
     <hr>
@@ -9,23 +10,13 @@
             <div class="card-header"><h3>Novo Email</h3></div>
             <div class="card-body">
                 <form method="POST" action="emails/save">
-                    <div class="col-12"><label>Evento</label></div>
-                    <div class="col-12">
-                        <select class="selectpicker form-control" data-style="btn-info" name="eventoSelecao">
-                            <optgroup label="Selecione um Evento">
-                                <option name="g1" value="1">Ayahuasca</option>
-                                <option name="g2" value="2" selected >Roda de Cura</option>
-                                <option name="g3" value="3">Egrégora</option>
-                            </optgroup>
-                        </select>
-                    </div>
                     <div class="col-12"><BR><label>Título do Email</label></div>
                     <div class="col-12">
-                        <input class="form-control" type="text" name="titulo" placeholder="Email">
+                        <input class="form-control" type="text" name="titulo" placeholder="Digite o Título do Email">
                     </div>
                     <div class="col-12"><BR><label>Corpo do Email</label></div>
                     <div class="col-12">
-                        <textarea id="email" class="form-control" placeholder="Escreva o Email aqui" name="body">
+                        <textarea id="article" class="form-control" placeholder="Escreva o Email aqui" name="body">
                         </textarea>
                     </div>
                     <div class="col-12">
@@ -42,7 +33,7 @@
 <script src="/tinymce/tinymce.min.js"></script>
 <script>
     tinymce.init({
-        selector: "#email",
+        selector: "#article",
         language: "pt_BR",
         plugins: [ 'advlist autolink link image list print preview hr searchreplace wordcount fullscreen insertdatetime midia save table paste emoticons']
     })

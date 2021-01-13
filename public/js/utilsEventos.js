@@ -204,26 +204,45 @@ module.exports = class UtilsEventos {
     }
 
     async getTimeline(eventoid){
-        return new Promise(resolve => {
-            dbKnex
-            .select( "nomeEvento",
-                    "antesDepois",
-                    "quantidade",
-                    "unidade",
-                    "acao",
-                    "Titulo"
-                    )
-            .table("Timeline")
-            .innerJoin("eventos", "eventos.id", "Timeline.eventoId")
-            .innerJoin("emails","emails.id", "Timeline.emailId")
-            .where({ eventoId : eventoid })
-            .orderBy("nomeEvento", "asc")
-            .then( data => {
-                resolve(data);
+        return new Promise(resolve => {            
+            dbKnex.raw(
+            `SELECT tl.id, ev.nomeEvento,
+            tl.antesDepois,
+            tl.quantidade,
+            tl.unidade,
+            tl.acao,
+            em.Titulo,
+            if(tl.unidade = "Dias", 
+                if( tl.antesDepois = "-",
+                    date_sub(ev.dataProximoEvento, interval tl.quantidade day),
+                    date_add(ev.dataProximoEvento, interval tl.quantidade day)),
+                    if( tl.unidade = "Meses", 
+                        if( tl.antesDepois = "-",
+                            date_sub(ev.dataProximoEvento, interval tl.quantidade month),
+                            date_add(ev.dataProximoEvento, interval tl.quantidade month)),
+                    if( tl.unidade = "Anos", 
+                if( tl.antesDepois = "-",
+                    date_sub(ev.dataProximoEvento, interval tl.quantidade day),
+                    date_add(ev.dataProximoEvento, interval tl.quantidade day)), 
+                "Erro")
+            )) dataEmissao
+            FROM ard.Timeline tl
+            inner join eventos ev on ev.id = tl.eventoId
+            inner join emails  em on em.id = tl.emailId
+            order by dataEmissao asc`
+            )
+            .then(result => {
+                var Saida = result[0];
+
+                for(var n = 0; n < Saida.length; n++){
+                    Saida[n].dataEmissao = utils.parseDateENG_BR(Saida[n].dataEmissao);
+                };
+                
+                resolve(Saida);
             })
-            .catch( err => {
-                console.log(err);
+            .catch(erro => {
+                console.log(erro);
             });
-        });
+        })
     }
 }

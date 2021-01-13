@@ -1,6 +1,5 @@
 const Sequelize = require('sequelize');
 const conn = require('./database/database');
-const Eventos = require('./Eventos');
 
 console.log("Tabela de Emails em Criação");
 

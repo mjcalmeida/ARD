@@ -1,16 +1,15 @@
 <%- include('../../partials/header.ejs') %>
 <%- include ('../../partials/navbar.ejs') %>
-
+<link rel="stylesheet" href="/bootstrap-4.5.2-dist/css/bootstrap.css">
 <body>
     <div class="container">
         <hr>
         <h2>Lista de Emails</h2>
-        <a href="./formEmails" class="btn btn-primary">Novo Email</a>
+        <a href="/formEmails" class="btn btn-primary">Novo Email</a>
         <hr>
-        <table class="table table-bordered">
+        <table class="table table-bordered" style="width:50%">
             <thead>
                 <tr>
-                    <th>Evento</th>
                     <th>Título do Email</th>
                     <th>Ações</th>
                 </tr>
@@ -18,11 +17,10 @@
             <tbody>
                 <% emails.forEach(email => { %>
                     <tr>                        
-                        <td> <%= email.nomeEvento %> </td>
-                        <td> <%= email.titulo  %> </td>
-                        <td><a href="./emails/edit/<%= email.eventoId %>" class="btn btn-warning">Editar</a>
+                        <td> <%= email.titulo %> </td>
+                        <td style="width:30%"><a href="./emails/edit/<%= email.id %>" class="btn btn-warning">Editar</a>
                             
-                            <form method="POST" action="./emails/delete" 
+                            <form method="POST" action="/emails/delete" 
                                 style="display: inline; padding-left: 5px;"
                                 onsubmit="confirmarDelecao(email, this)">
                                 <input type="hidden" name="id" value="<%= email.id %>">

@@ -2,7 +2,6 @@ const express = require("express");
 const sequelize = require('sequelize');
 const router = express.Router();
 const Eventos = require("../models/Eventos");
-const {format} = require('date-fns');
 
 const Utils = require("../public/js/utils");
 const utils = new Utils();

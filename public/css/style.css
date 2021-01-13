@@ -4007,7 +4007,20 @@ table.table-mail tr td {
   padding: 0;
   text-align: right;
 }
+.ibox-tools1 {
+  display: block;
+  float: none;
+  margin-top: -29px;
+  position: relative;
+  padding: 0;
+  text-align: right;
+}
 .ibox-tools a {
+  cursor: pointer;
+  margin-left: 5px;
+  color: #c4c4c4;
+}
+.ibox-tools1 a {
   cursor: pointer;
   margin-left: 5px;
   color: #c4c4c4;
@@ -4786,7 +4799,7 @@ ul.clear-list:first-child {
   border-left: 1px solid #e7eaec;
   border-top: 1px solid #e7eaec;
   padding-top: 10px;
-  min-height: 100px;
+  min-height: 80px;
 }
 .timeline-item .content:hover {
   background: #f6f6f6;

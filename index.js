@@ -46,17 +46,19 @@ app.get("/", (req, res) => {
 });
 
 // Importando os Controllers
-const eventosController = require("./controllers/eventosController");
-const pessoasController = require("./controllers/pessoasController");
-const adminController   = require("./controllers/adminController");
-const listasController  = require("./controllers/listasController");
-const emailsController  = require("./controllers/emailsController");
+const eventosController  = require("./controllers/eventosController");
+const pessoasController  = require("./controllers/pessoasController");
+const adminController    = require("./controllers/adminController");
+const listasController   = require("./controllers/listasController");
+const emailsController   = require("./controllers/emailsController");
+const timelineController = require("./controllers/timelineController");
 
 app.use(eventosController);
 app.use(pessoasController);
 app.use(adminController);
 app.use(listasController);
 app.use(emailsController);
+app.use(timelineController);
 
 app.listen(8080, () => {
     console.log("O serviço está rodando!");

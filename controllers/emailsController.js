@@ -1,8 +1,6 @@
 const express = require("express");
-const sequelize = require('sequelize');
 const router = express.Router();
 const Emails = require("../models/Emails");
-const Eventos = require("../models/Eventos");
 const slugify = require("slugify");
 
 router.get("/emails", (req, res) => {
@@ -11,18 +9,12 @@ router.get("/emails", (req, res) => {
          attributes: [
             'id',
             'titulo',
-            'eventoId',
-            'evento.nomeEvento',
-            'slug'], 
-            include : [{
-                model: Eventos,
-                required: true
-            }],
+            'slug'],
         raw: true,
         order: [['id', 'ASC']]
     })
     .then(_emails => {
-        res.render("admin/emails/formEmails", {
+        res.render("admin/emails/index", {
             emails : _emails
         });
     })
@@ -31,25 +23,74 @@ router.get("/emails", (req, res) => {
     });
 });
 
+router.get("/formEmails", (req, res) => {
+        res.render("admin/emails/formEmails");
+});
+
+router.get("/emails/edit/:id", (req, res) => {
+    var id = req.params.id;
+
+    if (isNaN(id)){
+        res.redirect("/emails");
+    }
+
+    Emails
+    .findByPk(id, {
+        attributes: [
+            'id',
+            'titulo',
+            'slug',
+            'body'
+        ]
+    })
+    .then ( email => {
+        if( email != undefined ){
+            res.render("admin/emails/edit", { email });            
+        } else {
+            res.redirect("/emails");
+        }
+    })
+    .catch ( erro => {
+        console.log(erro);
+        res.redirect("/emails");
+    })
+});
+
 router.post("/emails/save", (req, res) => {
     var titulo = req.body.titulo;
-    var body   = req.body.body;
-    var eventoId = req.body.eventoSelecao;
+    var body = req.body.body;
+    var slug = slugify(titulo);
 
-    if(titulo != 'undefined'){
-        Emails
-        .create ({
-            titulo   : titulo,
-            eventoId : eventoid,
-            slug     : slugify(titulo),
-            body     : body
-        })
-        .then( () => {
-            res.redirect("/")
-        });
-    }else{
-        res.redirect(admin/emails/formEmails);
-    }
-});
+    Emails
+    .create({
+        titulo : titulo,
+        slug   : slug,
+        body   : body
+    })
+    .then(() => {
+        res.redirect("/admin/emails")
+    })
+})
+
+router.post("/emails/update", (req, res) => {
+    var id = req.body.id;
+    var titulo = req.body.titulo;
+    var body = req.body.body;
+
+    Emails
+    .update({
+        titulo : titulo,
+        body   : body,
+        slug   : slugify(titulo)
+    }, {
+    where: {id : id}})
+    .then (() => {
+        res.redirect("/emails");
+    })
+    .catch ( erro => {
+        console.log(erro);
+        res.redirect("/");
+    })
+})
 
 module.exports = router;

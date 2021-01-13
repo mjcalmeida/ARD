@@ -1,0 +1,170 @@
+<!DOCTYPE HTML>
+<%- include ('../partials/header.ejs') %>
+<%- include ('../partials/navbar.ejs') %>
+
+<link rel="stylesheet" href="/css/plugins/chosen/bootstrap-chosen.css">
+<link rel="stylesheet" href="/css/plugins/bootstrap-tagsinput/bootstrap-tagsinput.css">
+<link rel="stylesheet" href="/bootstrap-4.5.2-dist/css/bootstrap.css">
+
+<body>
+    <div id="wrapper" style="height:100%;">
+        <div class="row wrapper border-bottom white-bg page-heading">
+            <div class="col-lg-10">
+                <h2>Edição de Timeline</h2>
+            </div>
+            <div class="col-lg-2">
+            </div>
+        </div>
+
+        <div class="wrapper wrapper-content1">            
+            <div class="row" style="height:100% !important">
+                <div class="col-sm-7">
+                    <div class="col-sm-12">
+                        <div class="animated fadeInRight">
+                            <div class="ibox float-e-margins">
+                                <div class="ibox-title">
+                                    <h4>Evento: <b><%= evento[0].nomeEvento %> em <%= evento[0].dataProximoEvento %> </b></h4>
+                                    <div class="ibox-tools1">
+                                        <a class="collapse-link">
+                                            <i class="fa fa-chevron-up"></i>
+                                        </a>
+                                        <a class="close-link">
+                                            <i class="fa fa-times"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="ibox-content">
+                                    <div class="row">
+                                        <div class="col-sm-3">Tipo:</div>
+                                        <div class="col-sm-9">
+                                            <input type="hidden" name="id" value="<%= evento[0].id %>">
+                                            <input type="text" placeholder="Digite o Tipo de Emissão 
+                                                name="acao" class="form-control"
+                                                value="<%= evento[0].acao %>">   
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-3">Nome</div>
+                                        <div class="col-sm-9">
+                                            <input type="text" placeholder="Título" 
+                                            name="titulo" class="form-control"
+                                            value="<%= evento[0].titulo %>">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-3">Quando</div>
+                                        <div class="col-sm-9">
+                                            <div class="row">
+                                            <div class="col-sm-2">
+                                                <input type="text" placeholder="Quantidade de Dias, Meses" 
+                                                    name="quantidade" class="form-control int3" style="min-width: 60px;"
+                                                    value="<%= evento[0].quantidade %>">
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <input type="text" placeholder="Dias, Meses" 
+                                                name="unidade" class="form-control" style:"min-width: 88px;"
+                                                value="<%= evento[0].unidade %>">
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <input type="text" placeholder="antes ou depois" 
+                                                name="antesDepois" class="form-control" style:"min-width: 88px;"
+                                                value="<%= evento[0].antesDepois %>">
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label class="font-normal">Grupos</label>
+                            <div>
+                                <select data-placeholder="Escolha um Grupo..." class="chosen-select" multiple style="width:350px;" tabindex="4">
+                                    <option value="">Select</option>
+                                    <option value="1">Convidados</option>
+                                    <option value="2">Xamãs</option>
+                                    <option value="3">Diretoria</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-5">
+                    <div class="col-sm-12">
+                        <div class="animated fadeInRight">
+                            <div class="ibox float-e-margins">
+                                <div class="ibox-title">
+                                    <h4>Email: <b><%= evento[0].titulo %> </b></h4>
+                                    <div class="ibox-tools1">
+                                        <a class="collapse-link">
+                                            <i class="fa fa-chevron-up"></i>
+                                        </a>
+                                        <a class="close-link">
+                                            <i class="fa fa-times"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="ibox-content">
+                                    <textarea id="email" class="form-control" 
+                                    placeholder="Escreva o Email aqui" name="body">
+                                    </textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<div id="content" style="display: none;">
+   <%- evento[0].body %>
+</div>
+
+<%- include ('../partials/footer.ejs') %>
+
+<script src="/jQuery/jquery-3.1.1.min.js"></script>
+<script src="/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+<script src="/jQuery/jquery.mask.js"></script>
+<script src="/jQuery/mascaras.js"></script>
+<script src="/jQuery/popper.min.js"></script>
+
+<!-- Mainly scripts -->
+<script src="/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+<!-- Chosen -->
+<script src="/js/plugins/chosen/chosen.jquery.js"></script>
+
+<!-- Peity -->
+<script src="/js/plugins/peity/jquery.peity.min.js"></script>
+<script src="/js/demo/peity-demo.js"></script>
+<script src="/js/plugins/pace/pace.min.js"></script>    
+
+<script src="/tinymce/tinymce.min.js"></script>
+
+<script>
+    tinymce.init({
+        selector: "#email",
+        language: "pt_BR",
+        menubar: false,
+        toolbar: false,
+        init_instance_callback: () => {
+            tinymce.get("email").setContent($("#content").html());
+        }
+    })
+
+    $('.chosen-select').chosen({width: "100%"});
+
+    function tlEditar(id) {
+        window.location="/getTimeline/"+id;
+    }
+
+    function tlExcluir() {
+              alert("Exclusao");
+    }
+</script>

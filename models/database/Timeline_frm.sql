@@ -1,8 +1,9 @@
-SELECT ev.nomeEvento,
-    tl.antesDepois,
-    tl.quantidade,
-	tl.unidade,
-	tl.acao,
+SELECT tl.id,
+       ev.nomeEvento,
+       tl.antesDepois,
+       tl.quantidade,
+	   tl.unidade,
+	   tl.acao,
     em.Titulo
 FROM ard.Timeline tl
 inner join eventos ev on ev.id = tl.eventoId
