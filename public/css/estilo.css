@@ -3,7 +3,10 @@
   }
   
   body {
-    font: 16px Arial;  
+    font: 16px Arial;
+    padding-left: 0px!important;
+    padding-left: 0px!important;
+    font-size: 0.6em!important;
   }
   
   /*the container must be positioned relative:*/
