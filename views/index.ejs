@@ -1,11 +1,12 @@
 <%- include ('partials/header.ejs') %>
 <link rel="stylesheet" href="/bootstrap-4.5.2-dist/css/bootstrap.css">
+<link rel="stylesheet" href="/css/estilo.css">
     <body>
         <%- include ('partials/navbar.ejs') %>
 
         <div class="container">
             <div class="d-flex mt-5 justify-content-center">
-                <div class= "card card-custom mx-2 mb-1">
+                <div class= "card card-custom mx-2 mb-1" style="width:90%">
                     <div class="card-header">
                         <div style="text-align:center"><h3>Eventos</h3></div>
                     </div>
@@ -16,64 +17,67 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col card-custom mx-2 mb-1" style="text-align: center">
+                            <div class="col-2 card-custom mx-2 mb-1 xpto" style="text-align: center">
                                 Data
                             </div>
-                            <div class="col card-custom mx-5 mb-1" style="text-align: center">
+                            <div class="col-5 card-custom mx-1 mb-1 xpto" style="text-align: center">
                                 Quantidade
                             </div>
-                            <div class="col card-custom mx-5 mb-1" style="text-align: center">
+                            <div class="col card-custom mx-4 mb-1 xpto" style="text-align: center">
                                 Valor
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col card-custom mx-2 mb-1" style="text-align: center">
+                            <div class="col-2 card-custom mx-2 mb-1 xpto" style="text-align: center">
                                 Evento
                             </div>
-                            <div class="col card-custom mx-6 mb-1" style="text-align: center">
+                            <div class="col card-custom mx-1 mb-1 xpto" style="text-align: center">
                                 Xama
                             </div>
-                            <div class="col card-custom mx-6 mb-1" style="text-align: center">
+                            <div class="col card-custom mx0 mb-1 xpto" style="text-align: center">
                                 Convidado
                             </div>
-                            <div class="col card-custom mx-6 mb-1" style="text-align: center">
+                            <div class="col card-custom mx-1 mb-1 xpto" style="text-align: center">
                                 Total
                             </div>
-                            <div class="col card-custom mx-6 mb-1" style="text-align: center">
+                            <div class="col card-custom mx-1 mb-1 xpto" style="text-align: center">
                                 Xama
                             </div>
-                            <div class="col card-custom mx-6 mb-1" style="text-align: center">
+                            <div class="col card-custom mx-1 mb-1 xpto" style="text-align: center">
+                                Convidado
+                            </div>
+                            <div class="col card-custom mx-1 mb-1 xpto mr-2" style="text-align: right">
                                 Total
                             </div>
                         </div>
                         <% for(x of data) { %>   
                             <div class="row">
-                                <div class="col card-custom mx-2 mb-1" style="text-align: center">
+                                <div class="col-2 card-custom mx-2 mb-1 xpto" style="text-align: center">
                                     <a href="./listas/<%= x[5] %>"><%= x[0] %></a>
                                 </div>
-                                <div class="col card-custom mx-6 mb-1" style="text-align: center">
+                                <div class="col card-custom mx-6 mb-1 xpto " style="text-align: center">
                                     <%= x[2] %>
                                 </div>
-                                <div class="col card-custom mx-6 mb-1" style="text-align: center">
+                                <div class="col card-custom mx-6 mb-1 xpto " style="text-align: center">
                                     <%= x[1] %>
                                 </div>
-                                <div class="col card-custom mx-6 mb-1" style="text-align: center">
-                                    <%= x[1]+x[2] %>
+                                <div class="col card-custom mx-6 mb-1 xpto " style="text-align: center">
+                                    <%= (parseInt(x[1]) + parseInt(x[2])) %>
                                 </div>
-                                <div class="col card-custom mx-6 mb-1" style="text-align: center">
-                                    <%= parseInt(x[4]) %>
+                                <div class="col card-custom mx-6 mb-1 mr-2  xpto" style="text-align: right">
+                                    <%= x[4] %>
                                 </div>
-                                <div class="col card-custom mx-6 mb-1" style="text-align: center">
-                                    <%= parseInt(x[3]) %>
+                                <div class="col card-custom mx-6 mb-1 mr-2 xpto" style="text-align: right">
+                                    <%= x[3] %>
                                 </div>
-                                <div class="col card-custom mx-6 mb-1" style="text-align: center">
-                                    <%= parseInt(x[3]) + parseInt(x[4]) %>
-                                </div>
+                                <div class="col card-custom mx-6 mb-1 mr-2 xpto" style="text-align: right">
+                                    <%= x[5] %>
+                                 </div>
                             </div>    
                         <% } %>
                         <br>
                         <div class="row">
-                            <div class="col col-custom mx-3 mb-1" style="text-align: center">
+                            <div class="col col-custom mx-3 mb-1 xpto" style="text-align: center">
                                 Saldos
                             </div>
                         </div>
@@ -102,3 +106,7 @@
     </body>
 
     <%- include ('partials/footer.ejs') %>
+
+    <script src="/jQuery/jquery-3.1.1.min.js"></script>
+    <script src="/jQuery/jquery.mask.js"></script>
+    <script src="/jQuery/mascaras.js"></script>

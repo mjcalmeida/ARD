@@ -4,9 +4,6 @@
   
   body {
     font: 16px Arial;
-    padding-left: 0px!important;
-    padding-left: 0px!important;
-    font-size: 0.6em!important;
   }
   
   /*the container must be positioned relative:*/
@@ -62,3 +59,24 @@
     background-color: DodgerBlue !important; 
     color: #ffffff; 
   }
+
+  @media only screen and (min-width : 1300px)
+  { 
+    .xpto {
+      font: 16px Arial!important;
+      padding-left: 0px!important;
+      padding-right: 0px!important;
+    }
+ }
+  
+  @media only screen and (max-width : 768px)
+  { 
+    .xpto {
+    padding-left: 0px!important;
+    padding-right: 0px!important;
+    font-size: 0.6em!important;
+  }
+}
+
+
+

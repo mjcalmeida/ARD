@@ -25,22 +25,29 @@ module.exports = class UtilsAdmin {
                 data.forEach(dtEvento => {
                     var dt = utils.parseDateENG_BR(dtEvento.dataParticipacao)
                     var dt2 = dtEvento.dataParticipacao;
-                    
+                    var preSaldo = 0;
+
                     if(utils.chkArray(Saida, 0, dt) == false){
-                        Saida[n]=[dt, 0, 0, 0, 0, dt2];
+                        Saida[n]=[dt, 0, 0, 0, 0, 0, dt2];
                         n++;
                     }
 
                     if( dtEvento.grupoId == 1 ){
                         Saida[n-1][1] = dtEvento.quantidade;
-                        Saida[n-1][3] = dtEvento.valor;
+                        Saida[n-1][3] = utils.convDoubleBR(dtEvento.valor);
+                        preSaldo = parseFloat(Saida[n-1][5]) + parseFloat(dtEvento.valor)
+                        Saida[n-1][5] = utils.convDoubleBR(preSaldo);
+                        Saida[n-1][5] = parseFloat(Saida[n-1][5]) + parseFloat(dtEvento.valor);
                     }
                     
                     if( dtEvento.grupoId == 2 ){
                         Saida[n-1][2] = dtEvento.quantidade;
-                        Saida[n-1][4] = dtEvento.valor;                      
+                        Saida[n-1][4] = utils.convDoubleBR(dtEvento.valor);
+                        
+                        preSaldo = parseFloat(Saida[n-1][5]) + parseFloat(dtEvento.valor)
+                        Saida[n-1][5] = utils.convDoubleBR(preSaldo);
                     }               
-                });
+                });1
                 
                 resolve(Saida);
             })

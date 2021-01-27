@@ -4,10 +4,11 @@ const getDate = require('date-fns/getDate');
 
 module.exports = class Utils {
     convDoubleBR (valor){
-        var buf = Buffer.from(valor);
-        if(buf.indexOf(',') == -1 || buf.indexOf('.') == -1) {
-            valor = valor + "00";
-        };
+        valor = parseFloat(valor);  
+        var numero = valor.toFixed(2).split('.');
+        numero[0] = numero[0].split(/(?=(?:...)*$)/).join('.');
+        return numero.join(',');
+    
         return valor;
     }
 
