@@ -1,9 +1,10 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <a class="navbar-brand" href="/">
-        <img border="0" alt="ARD" src="../img/logo.png" width="50" height="50">
+        <img border="0" alt="ARD" src="../../img/logo.png" width="50" height="50">
     </a>
     <button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse" data-target="#collapsibleNavId" 
             aria-controls="collapsibleNavId" aria-expanded="false" aria-label="Toggle navigation">
+            <a href="#"><i id="x9" class="fas fa-angle-double-down" style="color:white;"></i></a>
     </button>
     <div class="collapse navbar-collapse" id="collapsibleNavId">
         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
@@ -16,18 +17,33 @@
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="dropdownId" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Cadastros</a>
                 <div class="dropdown-menu" aria-labelledby="dropdownId">
-                    <a class="dropdown-item" href="../pessoas">Pessoas</a>
-                    <a class="dropdown-item" href="../eventos">Eventos</a>
-                    <a class="dropdown-item" href="../formEmails">Emails</a>
+                    <a class="dropdown-item" href="/pessoas">Pessoas</a>
+                    <a class="dropdown-item" href="/eventos">Eventos</a>
+                    <a class="dropdown-item" href="/emails">Emails</a>
                 </div>
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="dropdownId" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Listas</a>
                 <div class="dropdown-menu" aria-labelledby="dropdownId">
-                    <a class="dropdown-item" href="../listas/0">Roda de Cura</a>
-                    <a class="dropdown-item" href="../listas/0">Ayahuasca</a>
+                    <a class="dropdown-item" href="/listas/0">Roda de Cura</a>
+                    <a class="dropdown-item" href="/listas/0">Ayahuasca</a>
                 </div>
             </li>
         </ul>
     </div>
 </nav>
+
+<script src="/jQuery/jquery-3.1.1.min.js"></script>
+<script>
+    $('a').click(function() {
+        let el = document.getElementById('x9');
+
+        if(el.className === 'fas fa-angle-double-down') {
+            document.getElementById('x9').classList.add('fa-angle-double-up');
+            document.getElementById('x9').classList.remove('fa-angle-double-down');
+        }else{
+            document.getElementById('x9').classList.add('fa-angle-double-up');
+            document.getElementById('x9').classList.remove('fa-angle-double-down');
+        }   
+    });
+</script>

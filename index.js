@@ -1,14 +1,9 @@
-const express = require("express");
-const app = express();
+const express    = require("express");
+const app        = express();
 const bodyParser = require("body-parser");
-const conn = require("./models/database/database");
+const conn       = require("./models/database/database");
 
 // Importando os Models
-const Grupos = require("./models/Grupos");
-const Eventos = require("./models/Eventos");
-//const Pessoas = require("./models/Pessoas");
-//const eventosParticipantes = require("./models/EventosParticipantes")
-
 const UtilsAdmin = require("./public/js/utilsAdmin");
 const utilsadmin = new UtilsAdmin();
 
@@ -16,7 +11,7 @@ const utilsadmin = new UtilsAdmin();
 app.set('view engine', 'ejs');
 
 //Static
-app.use(express.static('/public'));
+app.use(express.static('public'));
 
 //Body-parser
 app.use(bodyParser.urlencoded({extended: false}))
@@ -33,13 +28,39 @@ conn
     });
 
 app.get("/", (req, res) => {
+    res.render("index")
+});
+
+app.get("/goMobile", (req, res) => {
     var admin = [];
     
     utilsadmin.getDados(2)
     .then(data => {
-        res.render("index", {
-            data
-        });
+        utilsadmin.getSaldos()
+        .then( saldos => {
+            res.render("\Principal_Mobile", { data, saldos })
+        })
+        .catch(error => { 
+            console.log(error) 
+        })
+    })
+    .catch(error => {
+        console.log(error);
+    });
+});
+
+app.get("/goDesktop", (req, res) => {
+    var admin = [];
+    
+    utilsadmin.getDados(2)
+    .then(data => {
+        utilsadmin.getSaldos()
+        .then( saldos => {
+            res.render("\Principal_Desktop", { data, saldos })
+        })
+        .catch(error => { 
+            console.log(error) 
+        })
     })
     .catch(error => {
         console.log(error);
@@ -47,15 +68,19 @@ app.get("/", (req, res) => {
 });
 
 // Importando os Controllers
-const eventosController = require("./controllers/eventosController");
-const pessoasController = require("./controllers/pessoasController");
-const adminController   = require("./controllers/adminController");
-const listasController  = require("./controllers/listasController");
+const eventosController  = require("./controllers/eventosController");
+const pessoasController  = require("./controllers/pessoasController");
+const adminController    = require("./controllers/adminController");
+const listasController   = require("./controllers/listasController");
+const emailsController   = require("./controllers/emailsController");
+const timelineController = require("./controllers/timelineController");
 
 app.use(eventosController);
 app.use(pessoasController);
 app.use(adminController);
 app.use(listasController);
+app.use(emailsController);
+app.use(timelineController);
 
 app.listen(8080, () => {
     console.log("O serviço está rodando!");

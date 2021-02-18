@@ -1,0 +1,50 @@
+<!DOCTYPE HTML>
+<%- include ('../../partials/header.ejs') %>
+<%- include ('../../partials/navbar.ejs') %>
+<link rel="stylesheet" href="/bootstrap-4.5.2-dist/css/bootstrap.css">
+<body>
+    <hr>
+    <div class="container">
+        <div class="card">
+            <div class="card-header"><h3>Edição de Emails</h3></div>
+            <div class="card-body">
+                <form method="POST" action="/emails/update">
+                    <div class="col-12">
+                        <BR><label>Título do Email</label>
+                        <input value="<%= email.id %>" type="hidden" name="id">
+                    </div>
+                    <div class="col-12">
+                        <input value="<%= email.titulo %>" class="form-control" type="text" 
+                        name="titulo" placeholder="Email" style="font-size:large; font-weight:750;">
+                    </div>
+                    <div class="col-12"><BR><label>Corpo do Email</label></div>
+                    <div class="col-12">
+                        <textarea id="body" class="form-control" placeholder="Escreva o Email aqui" name="body">
+                        </textarea>
+                    </div>
+                    <div class="col-12">
+                        <BR><button class="btn btn-success">Cadastrar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+<div id="content" style="display: none;">
+    <%- email.body %>
+ </div>
+
+<%- include ('../../partials/footer.ejs') %>
+
+<script src="/tinymce/tinymce.min.js"></script>
+<script>
+    tinymce.init({
+        selector: "#body",
+        language: "pt_BR",
+        plugins: [ 'advlist autolink link image list print preview hr searchreplace wordcount fullscreen insertdatetime midia save table paste emoticons'],
+        init_instance_callback: () => {
+            tinymce.get("body").setContent($("#content").html());
+        }
+    })
+</script>

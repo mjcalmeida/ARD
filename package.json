@@ -3,28 +3,28 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "dependencies": {
+    "date-fns": "^2.17.0",
+    "ejs": "^3.1.6",
+    "express": "^4.17.1",
+    "grep": "^0.1.0",
+    "knex": "^0.21.17",
+    "mysql2": "^2.2.5",
+    "sequelize": "^6.5.0",
+    "slugify": "^1.4.6"
+  },
+  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:mjcalmeida/ARD.git"
+    "url": "git+ssh://git@github.com/mjcalmeida/ARD.git"
   },
-  "author": "Milton",
+  "author": "Milton Almeida",
   "license": "ISC",
-  "dependencies": {
-    "body-parser": "^1.19.0",
-    "date-fns": "^2.16.1",
-    "ejs": "^3.1.5",
-    "express": "^4.17.1",
-    "jquery.autocomplete": "^1.2.0",
-    "knex": "^0.21.12",
-    "mysql2": "^2.1.0",
-    "sequelize": "^6.3.5",
-    "tinymce": "^5.6.1"
+  "bugs": {
+    "url": "https://github.com/mjcalmeida/ARD/issues"
   },
-  "devDependencies": {
-    "nodemon": "^2.0.6",
-    "sucrase": "^3.16.0"
-  }
+  "homepage": "https://github.com/mjcalmeida/ARD#readme"
 }

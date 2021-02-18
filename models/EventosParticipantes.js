@@ -5,7 +5,7 @@ const Eventos = require('./Eventos');
 
 console.log("Tabela de Participantes dos Eventos em Criação");
 
-const EventosParticipantes = conn.define(
+const eventosparticipantes = conn.define(
     'eventosparticipantes', {
         dataParticipacao: {
             type: Sequelize.DATEONLY,
@@ -35,27 +35,16 @@ const EventosParticipantes = conn.define(
     }
 );
 
-class Evento {
-    constructor(dataParticipacao, valorPago, observacao, presenca, pessoaId, eventoId){
-        dataParticipacao: dataParticipacao;
-        valorPago       : valorPago;
-        observacao      : observacao;
-        presenca        : presenca;
-        pessoaId        : pessoaId;
-        eventoId        : eventoId;
-    }
-}
+Pessoas.hasMany(eventosparticipantes);
+eventosparticipantes.belongsTo(Pessoas);
 
-Pessoas.hasMany(EventosParticipantes);
-EventosParticipantes.belongsTo(Pessoas);
+Eventos.hasMany(eventosparticipantes);
+eventosparticipantes.belongsTo(Eventos);
 
-Eventos.hasMany(EventosParticipantes);
-EventosParticipantes.belongsTo(Eventos);
-
-EventosParticipantes
+eventosparticipantes
     .sync({force: false})
     .then(() => {
         console.log("Tabela participação em Eventos criada com sucesso!!!");
     });
 
-module.exports = EventosParticipantes;
+module.exports = eventosparticipantes;

@@ -1,8 +1,10 @@
+const dbKnex = require("../../models/database/db_Knex");
 const sequelize = require('sequelize');
 const op = sequelize.Op;
 const Pessoas = require("../../models/Pessoas");
 const Eventos = require("../../models/Eventos");
-const EventosParticipantes = require("../../models/EventosParticipantes");
+const Timeline = require("../../models/Timeline");
+const eventosparticipantes = require("../../models/EventosParticipantes");
 const Utils = require("./utils");
 const utils = new Utils();
 const format = require('date-fns/format');
@@ -29,7 +31,7 @@ module.exports = class UtilsEventos {
             this.putVips(dataProximoEvento);
         }
 
-        //console.log("+-+-+-+-+-+-          Saida atualizada do Proximo Evento]          +-+-+-+-+-+-");
+        //console.log("+-+-+-+-+-+-          Saida atualizado do Proximo Evento]          +-+-+-+-+-+-");
         var newItem = 
             {   dataProximoEvento: utils.parseDateBR_ENG(dataProximoEvento),
                 nomeEvento : evento.nomeEvento,
@@ -88,47 +90,11 @@ module.exports = class UtilsEventos {
             }, 1000)
         }); 
     }
-
-    contaParticipantes(eventoId, dataProximoEvento){
-        return new Promise(resolve => {
-            setTimeout(() => {
-            //    console.log("+-+-+-+-+-+-            Entrada em contaParticipantes            +-+-+-+-+-+-");
-            //    console.log("Recebido o id do evento: " + eventoId);
-            //    console.log("Recebida data do evento: " + dataProximoEvento);
-
-                var quantidadeParticipantes = 0;
-
-                EventosParticipantes
-                .findAndCountAll({
-                    where: {
-                        eventoId: eventoId,
-                        [op.and]: {
-                            dataParticipacao: dataProximoEvento
-                        }
-                    },
-                    offset: 10,
-                    limit: 2
-                })
-                .then(result => {
-                    if(result != undefined) { 
-        //                console.log("Retornando a quantidade: " + result.count);                       
-        //                console.log("+-+-+-+-+-+-              Saida contaParticipantes              +-+-+-+-+-+-");               
-                        return resolve(result.count);
-                    } else {
-                        return resolve(0);
-                    }
-                })
-                .catch(erro => {
-                    console.log(erro);
-                });
-            }, 1000)
-        });
-    }
-
+    
     calculoProximoEvento(periodicidade, dataProximoEvento) {
-//        console.log("+-+-+-+-+-+-            Entrada em calculoProximoEvento            +-+-+-+-+-+-");
-//        console.log("Recebida data do evento: " + dataProximoEvento);
-//        console.log("Recebida a Periodicidade: " + periodicidade);
+        //        console.log("+-+-+-+-+-+-            Entrada em calculoProximoEvento            +-+-+-+-+-+-");
+        //        console.log("Recebida data do evento: " + dataProximoEvento);
+        //        console.log("Recebida a Periodicidade: " + periodicidade);
         
         if (periodicidade == 'Semanal') {
             while (! utils.TDate(dataProximoEvento)) {
@@ -172,31 +138,111 @@ module.exports = class UtilsEventos {
             console.log("ERRO => " + err.message);
         });
     }
-
+    
+    //   --->    Grava a participação na Roda - Grava ou altera na tabela
     addParticipacaoEvento(eventoId, id, grupoId, dtProximaParticipacao, emailPessoa, presenca, valorEvento, observacao){
         var newItem =
-            {   eventoId        : eventoId, 
-                pessoaId        : id, 
-                dataParticipacao: dtProximaParticipacao,
-                valorPago       : valorEvento,
-                presenca        : presenca,
-                emailPessoa     : emailPessoa,
-                observacao      : observacao
-            };
-
-        var model = EventosParticipantes;
+        {   eventoId        : eventoId, 
+            pessoaId        : id,
+            valorPago       : valorEvento,
+            presenca        : presenca,
+            emailPessoa     : emailPessoa,
+            observacao      : observacao,
+            dataParticipacao : dtProximaParticipacao
+        };
+        
+        var model = eventosparticipantes;
         var where = 
-            {   eventoId        : eventoId, 
-                pessoaId        : id,
-                dataParticipacao: dtProximaParticipacao
-            };
-
+        {   eventoId        : eventoId, 
+            pessoaId        : id,
+            dataParticipacao: dtProximaParticipacao
+        };
+        
         utils.updateOrCreate (model, where, newItem);
     };
     
-    async getValorEvento(eventoId, grupoId){
-        let evento =  await this.getEvento(eventoId);
+    async getValorEvento(eventoid, grupoId){
+        let evento = await this.getEvento(eventoId);
         var valor = grupoId == 1 ? evento.valorConvidado : evento.valorXama;
         return valor;
     };
+    
+    contaParticipantes(eventoId, dataProximoEvento){
+        return new Promise(resolve => {
+            setTimeout(() => {
+            //    console.log("+-+-+-+-+-+-            Entrada em contaParticipantes            +-+-+-+-+-+-");
+            //    console.log("Recebido o id do evento: " + eventoId);
+            //    console.log("Recebida data do evento: " + dataProximoEvento);
+
+                var quantidadeParticipantes = 0;
+
+                eventosparticipantes
+                .findAndCountAll({
+                    where: {
+                        eventoId: eventoId,
+                        [op.and]: {
+                            dataParticipacao: dataProximoEvento
+                        }
+                    },
+                    offset: 10,
+                    limit: 2
+                })
+                .then(result => {
+                    if(result != undefined) { 
+        //                console.log("Retornando a quantidade: " + result.count);                       
+        //                console.log("+-+-+-+-+-+-              Saida contaParticipantes              +-+-+-+-+-+-");               
+                        return resolve(result.count);
+                    } else {
+                        return resolve(0);
+                    }
+                })
+                .catch(erro => {
+                    console.log(erro);
+                });
+            }, 1000)
+        });
+    }
+
+    async getTimeline(eventoid){
+        return new Promise(resolve => {            
+            dbKnex.raw(
+            `SELECT tl.id, ev.nomeEvento,
+            tl.antesDepois,
+            tl.quantidade,
+            tl.unidade,
+            tl.acao,
+            em.Titulo,
+            if(tl.unidade = "Dias", 
+                if( tl.antesDepois = "-",
+                    date_sub(ev.dataProximoEvento, interval tl.quantidade day),
+                    date_add(ev.dataProximoEvento, interval tl.quantidade day)),
+                    if( tl.unidade = "Meses", 
+                        if( tl.antesDepois = "-",
+                            date_sub(ev.dataProximoEvento, interval tl.quantidade month),
+                            date_add(ev.dataProximoEvento, interval tl.quantidade month)),
+                    if( tl.unidade = "Anos", 
+                if( tl.antesDepois = "-",
+                    date_sub(ev.dataProximoEvento, interval tl.quantidade day),
+                    date_add(ev.dataProximoEvento, interval tl.quantidade day)), 
+                "Erro")
+            )) dataEmissao
+            FROM ard.Timeline tl
+            inner join eventos ev on ev.id = tl.eventoId
+            inner join emails  em on em.id = tl.emailId
+            order by dataEmissao asc`
+            )
+            .then(result => {
+                var Saida = result[0];
+
+                for(var n = 0; n < Saida.length; n++){
+                    Saida[n].dataEmissao = utils.parseDateENG_BR(Saida[n].dataEmissao);
+                };
+                
+                resolve(Saida);
+            })
+            .catch(erro => {
+                console.log(erro);
+            });
+        })
+    }
 }

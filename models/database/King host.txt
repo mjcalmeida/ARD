@@ -2,9 +2,15 @@ KingHost  - Editor Nano
 
 Host FTP
 ftp.ard.kinghost.net:21033
+20133
+21005
 
 Usuário FTP
 ard
 
 Password
 Matrix05
+
+
+exibe o erro
+pm2 logs 0

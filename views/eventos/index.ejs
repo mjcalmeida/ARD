@@ -1,6 +1,6 @@
 <%- include('../partials/header.ejs') %>
 <%- include ('../partials/navbar.ejs') %>
-
+<link rel="stylesheet" href="/bootstrap-4.5.2-dist/css/bootstrap.css">
 <body>
     <div class="container">
         <hr>
@@ -30,8 +30,8 @@
                         <td> <%= evento.horaProximoEvento %> </td>
                         <td> <%= evento.numMinimo         %> </td>
                         <td> <%= evento.numMaximo         %> </td>
-                        <td> <%= evento.valorConvidado    %> </td>
-                        <td> <%= evento.valorXama         %> </td>
+                        <td class="money"> <%= evento.valorConvidado    %> </td>
+                        <td class="money"> <%= evento.valorXama         %> </td>
                         <td><a href="./eventos/edit/<%= evento.id %>" class="btn btn-warning">Editar</a>
                             
                             <form method="POST" action="./eventos/delete" 
@@ -49,6 +49,9 @@
 </body>
 
 <%- include ('../partials/footer.ejs') %>
+
+<script src="/jQuery/jquery.mask.js"></script>
+<script src="/jQuery/mascaras.js"></script>
 
 <script>
     function confirmarDelecao(event, form){

@@ -1,43 +1,46 @@
 <%- include ('../partials/header.ejs') %>
 <%- include ('../partials/navbar.ejs') %>
+<link rel="stylesheet" href="/bootstrap-4.5.2-dist/css/bootstrap.css">
+<link rel="stylesheet" href="/css/estilo.css">
 
 <body>
     <hr>
     <div class="container">
         <div class="card">
-            <div class="card-header"><h3>Cadastramento para a Roda de Cura de <%=dataEvento%></h3></div>
+            <div class="card-header xHeader text-center">Cadastramento para a Roda de Cura de <%=dataEvento%></div>
             <div class="card-body">
                 <form method="POST" autocomplete="off" action="/pessoas/saveRoda">
                     <div class="row">
-                        <div class="col"><label>Nome da Pessoa</label></div>
+                        <div class="col xpto"><label>Nome da Pessoa</label></div>
                         <div class="col-10">                          
-                            <input type="text"   id="tags"     name="nmPessoa" placeholder="Digite o seu nome" class="form-control">
-                            <input type="hidden" id="Tags"     name="Tags"     value='<%=availableTags%>'>
-                            <input type="hidden" id="ID"       name="ID">
-                            <input type="hidden" id="presenca" name="presenca" value="1">
-                            <input type="hidden" id="Grupo"    name="Grupo">
-                            <input type="hidden" id="dtEvento" name="dtEventoSelecao" value="<%=dataEventoSelecao%>">
+                            <input type="text"   id="tags"         name="nmPessoa"     placeholder="Digite o seu nome" class="form-control xpto">
+                            <input type="hidden" id="Tags"         name="Tags"         value='<%=availableTags%>'>
+                            <input type="hidden" id="ID"           name="ID">
+                            <input type="hidden" id="presenca"     name="presenca"     value="1">
+                            <input type="hidden" id="Grupo"        name="Grupo">
+                            <input type="hidden" id="idFranqueado" name="idFranqueado" value='0'">
+                            <input type="hidden" id="dtEvento"     name="dtEvento"     value="<%=dataEventoSelecao%>">
                         </div>
                     </div>
                     
                     <div class="row">
-                        <div class="col"><label>Email</label></div>
+                        <div class="col xpto"><label>Email</label></div>
                         <div class="col-10">
-                            <input type="text" placeholder="Digite o seu Email" name="emailPessoa" id="emailPessoa" class="form-control">
+                            <input type="text" placeholder="Digite o seu Email" name="emailPessoa" id="emailPessoa" class="form-control xpto margemValor">
                         </div>
                     </div>
 
                     <div class="row">
-                        <div class="col"><label>Contribuição</label></div>
+                        <div class="col xpto"><label>Contribuição</label></div>
                         <div class="col-10">
-                            <input type="text" placeholder="Valor" name="valorEvento" id="valorEvento" class="form-control">
+                            <input type="text" placeholder="Valor" name="valorEvento" id="valorEvento" class="form-control money xpto">
                         </div>
                     </div>
                     
                     <div class="row">
-                        <div class="col"><label>Observação</label></div>
+                        <div class="col xpto"><label>Observação</label></div>
                         <div class="col-10">
-                            <input type="text" placeholder="Observações" name="observacao" id="observacao" class="form-control">
+                            <input type="text" placeholder="Observações" name="observacao" id="observacao" class="form-control xpto">
                         </div>
                     </div>    
                     <br>
@@ -50,8 +53,9 @@
 
 <%- include ('../partials/footer.ejs') %>
 
-<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="/jQuery/jquery.inputmask.bundle.js"></script>
+<script src="/jQuery/mascaras.js"></script>
+
 <script>
 $( function() {
     var Tags = $("#Tags").val();

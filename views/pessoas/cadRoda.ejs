@@ -1,23 +1,24 @@
 <%- include ('../partials/header.ejs') %>
 <%- include ('../partials/navbarUser.ejs') %>
-
+<link rel="stylesheet" href="/bootstrap-4.5.2-dist/css/bootstrap.css">
 <body>
     <hr>
     <div class="container">
         <div class="card">
-            <div class="card-header"><h3>Cadastramento para a Roda de Cura de <%=dataEvento%></h3></div>
+            <div class="card-header"><h3>Cadastramento para a Roda de Cura de <%=proximaRoda%></h3></div>
             <div class="card-body">
-                <form method="POST" autocomplete="off" action="saveRoda">
+                <form method="POST" autocomplete="off" action="/pessoas/saveRoda">
                     <div class="row">
                         <div class="col"><label>Nome da Pessoa</label></div>
                         <div class="col-10">                          
-                            <input type="text"   id="tags" placeholder="Digite o seu nome" name="nmPessoa" class="form-control">
-                            <input type="hidden" id="Tags" value='<%=availableTags%>' name="Tags">
-                            <input type="hidden" id="ID"   name="ID">
-                            <input type="hidden" id="presenca" name="presenca" value="0">
-                            <input type="hidden" id="valorEvento" name="valorPago" value="0">
-                            <input type="hidden" id="Grupo" name="Grupo">
-                            <input type="hidden" id="dtEvento" name="dtEvento" value="<%=dataProximoEvento%>">
+                            <input type="text"   id="tags"         class="form-control"       name="nmPessoa" placeholder="Digite o seu nome">
+                            <input type="hidden" id="Tags"         value='<%=availableTags%>' name="Tags">
+                            <input type="hidden" id="ID"                                      name="ID">
+                            <input type="hidden" id="presenca"     value="0"                  name="presenca">
+                            <input type="hidden" id="valorEvento"  value="0"                  name="valorPago">
+                            <input type="hidden" id="Grupo"                                   name="Grupo">
+                            <input type="hidden" id="idFranqueado" value='0'                  name="idFranqueado">
+                            <input type="hidden" id="dtEvento"     value="<%=dataEvento%>"    name="dtEvento">
                         </div>
                     </div>
                     
@@ -37,8 +38,6 @@
 
 <%- include ('../partials/footer.ejs') %>
 
-<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script>
 $( function() {
     var Tags = $("#Tags").val();
@@ -49,10 +48,11 @@ $( function() {
 
     aTags.forEach(element => {
         aTagItem[i]=
-            { value : element.split('-')[1].split('|')[0], 
-              label : element.split('-')[0], 
-              email : element.split('|')[1].split('_')[0],
-              grupo : element.split('_')[1]
+            { value        : element.split('-')[1].split('|')[0], 
+              label        : element.split('-')[0], 
+              email        : element.split('|')[1].split('_')[0],
+              idFranqueado : element.split("?")[1],
+              grupo        : element.split('_')[1].split('?')[0]
             }
         
         i++;
@@ -70,6 +70,7 @@ $( function() {
             $( "#ID" ).val( ui.item.value );
             $( "#tags" ).val( ui.item.label );
             $( "#Grupo" ).val( ui.item.grupo );
+            $( "#idFranqueado" ).val( ui.item.idFranqueado );
             return false;
         },
             classes: {

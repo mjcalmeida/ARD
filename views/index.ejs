@@ -1,80 +1,38 @@
 <%- include ('partials/header.ejs') %>
-
+<link rel="stylesheet" href="/bootstrap-4.5.2-dist/css/bootstrap.css">
+<link rel="stylesheet" href="/css/estilo.css">
     <body>
-        <%- include ('partials/navbar.ejs') %>
-
-        <div class="container">
-            <div class="d-flex mt-5 justify-content-center">
-                <div class= "card card-custom mx-2 mb-1" style="width: 50%;">
-                    <div class="card-header">
-                        <div style="text-align:center"><h3>Eventos</h3></div>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col col-custom mx-3 mb-1" style="text-align: center">
-                                Roda de Cura
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col card-custom mx-2 mb-1" style="text-align: center">
-                                Data
-                            </div>
-                            <div class="col card-custom mx-5 mb-1" style="text-align: center">
-                                Quantidade
-                            </div>
-                            <div class="col card-custom mx-5 mb-1" style="text-align: center">
-                                Valor
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col card-custom mx-2 mb-1" style="text-align: center">
-                                Evento
-                            </div>
-                            <div class="col card-custom mx-6 mb-1" style="text-align: center">
-                                Xama
-                            </div>
-                            <div class="col card-custom mx-6 mb-1" style="text-align: center">
-                                Convidado
-                            </div>
-                            <div class="col card-custom mx-6 mb-1" style="text-align: center">
-                                Total
-                            </div>
-                            <div class="col card-custom mx-6 mb-1" style="text-align: center">
-                                Xama
-                            </div>
-                            <div class="col card-custom mx-6 mb-1" style="text-align: center">
-                                Total
-                            </div>
-                        </div>
-                        <% for(x of data) { %>   
-                            <div class="row">
-                                <div class="col card-custom mx-2 mb-1" style="text-align: center">
-                                    <a href="./listas/<%= x[5] %>"><%= x[0] %></a>
-                                </div>
-                                <div class="col card-custom mx-6 mb-1" style="text-align: center">
-                                    <%= x[1] %>
-                                </div>
-                                <div class="col card-custom mx-6 mb-1" style="text-align: center">
-                                    <%= x[2] %>
-                                </div>
-                                <div class="col card-custom mx-6 mb-1" style="text-align: center">
-                                    <%= x[1]+x[2] %>
-                                </div>
-                                <div class="col card-custom mx-6 mb-1" style="text-align: center">
-                                    <%= parseInt(x[3]) %>
-                                </div>
-                                <div class="col card-custom mx-6 mb-1" style="text-align: center">
-                                    <%= parseInt(x[4]) %>
-                                </div>
-                                <div class="col card-custom mx-6 mb-1" style="text-align: center">
-                                    <%= parseInt(x[3]) + parseInt(x[4]) %>
-                                </div>
-                            </div>    
-                        <% } %>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <input type="Text" id="Desktop_Mobile" value="Desktop">
     </body>
 
     <%- include ('partials/footer.ejs') %>
+
+    <script src="/jQuery/jquery-3.1.1.min.js"></script>
+    <script src="/jQuery/jquery.inputmask.bundle.js"></script>
+    <script src="/jQuery/mascaras.js"></script>
+
+    <script>
+    $(document).ready(
+        function() {
+            try {            
+                if ( (window.screen.availHeight < 728) && (window.screen.availWidth < 1366)){
+                    document.getElementById('Desktop_Mobile').value = "Mobile";  
+                }
+                vaimeufilho();
+            }
+            catch { 
+                error => {
+                console.log(error); }
+            }
+        }        
+    );
+
+    function vaimeufilho() {
+        alert(document.getElementById('Desktop_Mobile').value);
+        if(document.getElementById('Desktop_Mobile').value == "Mobile"){
+            window.location = "/goMobile";
+        }else{
+            window.location = "/goDesktop";
+        }
+    }
+    </script>

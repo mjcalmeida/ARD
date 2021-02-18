@@ -4,7 +4,7 @@ const Grupos = require('./Grupos');
 
 console.log("Tabela Pessoas em criação!!!");
 
-const Pessoas = conn.define(
+const pessoas = conn.define(
     'pessoas',{
         nmPessoa:{
             type:Sequelize.TEXT,
@@ -69,6 +69,10 @@ const Pessoas = conn.define(
         grupoId:{
             type:Sequelize.INTEGER,
             allowNull: true
+        },
+        idFranqueado:{
+            type:Sequelize.BOOLEAN,
+            allowNull: false
         }
     });
 
@@ -97,10 +101,10 @@ class Pessoa {
                         
     // Criação da tabela somente em caso de alteração ou se a tabela não existe no banco
 
-Grupos.hasMany(Pessoas);
-Pessoas.belongsTo(Grupos);
+Grupos.hasMany(pessoas);
+pessoas.belongsTo(Grupos);
 
-Pessoas
+pessoas
 .sync({force: false})
 .then(() => {
     console.log("Tabela Pessoas criada com sucesso!!!")
@@ -109,4 +113,4 @@ Pessoas
     console.log("ERRO => " + err.message);
 });
 
-module.exports = Pessoas;
+module.exports = pessoas;

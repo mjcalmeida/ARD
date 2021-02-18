@@ -1,0 +1,19 @@
+Tabela de Grupos em Criação
+Tabela de Eventos em Criação
+Tabela Pessoas em criação!!!
+Tabela de Participantes dos Eventos em Criação
+O serviço está rodando!
+Executing (default): SELECT 1+1 AS result
+Executing (default): CREATE TABLE IF NOT EXISTS `grupos` (`id` INTEGER NOT NULL auto_increment , `nmGrupo` TEXT NOT NULL, `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB;
+Executing (default): CREATE TABLE IF NOT EXISTS `eventos` (`id` INTEGER NOT NULL auto_increment , `nomeEvento` TEXT, `periodicidade` TEXT, `dataProximoEvento` DATE, `horaProximoEvento` TEXT, `numMinimo` INTEGER, `numMaximo` INTEGER, `valorConvidado` DECIMAL, `valorXama` DECIMAL, `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB;
+Executing (default): CREATE TABLE IF NOT EXISTS `pessoas` (`id` INTEGER NOT NULL auto_increment , `nmPessoa` TEXT NOT NULL, `dtNascimento` DATE, `endPessoa` TEXT, `endComplemento` TEXT, `cepPessoa` TEXT, `fonePessoa` TEXT, `Ativo` TINYINT(1) NOT NULL, `receberEmails` TINYINT(1) NOT NULL, `emailPessoa` TEXT NOT NULL, `VIP` TINYINT(1) NOT NULL, `sexoPessoa` TEXT, `cidadePessoa` TEXT, `dtEntrada` DATE NOT NULL, `dtDesligamento` DATE, `dtUltimaParticipacao` DATE, `grupoId` INTEGER, `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, PRIMARY KEY (`id`), FOREIGN KEY (`grupoId`) REFERENCES `grupos` (`id`) ON DELETE SET NULL ON UPDATE CASCADE) ENGINE=InnoDB;
+Executing (default): CREATE TABLE IF NOT EXISTS `eventosparticipantes` (`id` INTEGER NOT NULL auto_increment , `dataParticipacao` DATE, `valorPago` DECIMAL, `observacao` TEXT, `presenca` TINYINT(1), `pessoaId` INTEGER, `eventoId` INTEGER, `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, PRIMARY KEY (`id`), FOREIGN KEY (`pessoaId`) REFERENCES `pessoas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE, FOREIGN KEY (`eventoId`) REFERENCES `eventos` (`id`) ON DELETE CASCADE ON UPDATE CASCADE) ENGINE=InnoDB;
+Executing (default): SHOW INDEX FROM `grupos`
+Executing (default): SHOW INDEX FROM `eventos`
+Executing (default): SHOW INDEX FROM `pessoas`
+Conexão efetuada com sucesso!
+Tabela Grupos criada com sucesso!!!
+Tabela Eventos criada com sucesso!!!
+Tabela Pessoas criada com sucesso!!!
+Executing (default): SHOW INDEX FROM `eventosparticipantes`
+Tabela Participação em Eventos criada com sucesso!!!

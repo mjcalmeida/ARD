@@ -1,160 +1,188 @@
 <%- include ('../partials/header.ejs') %>
 <%- include ('../partials/navbar.ejs') %>
+<link rel="stylesheet" href="/bootstrap-4.5.2-dist/css/bootstrap.css">
+<link rel="stylesheet" href="/css/estilo.css">
+<link rel="stylesheet" href="/css/plugins/chosen/bootstrap-chosen.css">
 
 <body>
     <hr>
     <div class="container">
-        <div class="card">
-            <div class="card-header"><h3>Edição de Pessoas</h3></div>
-            
-            <div class="card-body">
-                <form method="POST" action="update">
-                    <div class="row">
-                        <div class="col"><label>Grupo</label></div>
-                        <div class="col-9">
-                            <input type="hidden" name="id" value="<%= pessoa.id %>">
-                            <input type="text" placeholder="Digite o Grupo da Pessoa" 
-                                    name="grupoId" class="form-control"
-                                    value="<%= pessoa.grupoId %>">
-                        </div>
-                    </div>
+        <div class="d-flex mt-5 justify-content-center">
+            <div class= "card card-custom mx-2 mb-1" style="width:90%">
+                <div class="card-header">
+                    <div style="text-align:center"><h3>Edição de Pessoas</h3></div>
+                </div>        
+                <div class="card-body">
+                    <form method="POST" action="update">
+                        <div class="row">
+                            <div class="col card-custom mx-2 mb-1 xpto">Grupo</div>
+                            <div class="col-9">
 
-                    <div class="row">
-                        <div class="col"><label>Nome da Pessoa</label></div>
-                        <div class="col-9">
-                            <input type="hidden" name="id" value="<%= pessoa.id %>">
-                            <input type="text" placeholder="Digite o nome da Pessoa" 
-                                    name="nmPessoa" class="form-control"
-                                    value="<%= pessoa.nmPessoa %>">
-                        </div>
-                    </div>
+                                <select data-placeholder="Selecione o Grupo da Pessoa ..." 
+                                class="chosen-select">
+                                    <option value="">Selecione</option>
+                                    <option value="1">Visitante</option> 
+                                    <option value="2">Xamã</option>
+                                    <option value="3">Diretoria</option>
+                                </select>
 
-                    <div class="row">
-                        <div class="col"><label>Nascimento</label></div>
-                        <div class="col-9">
-                            <input type="text" placeholder="__/__/____" 
-                                name="dtNascimento" class="form-control date"
-                                value="<%= pessoa.dtNascimento %>">
-                        </div>
-                    </div>
-  
-                    <div class="row">
-                        <div class="col"><label>Endereço</label></div>
-                        <div class="col-9">
-                            <input type="text" placeholder="Digite o endereço da Pessoa" 
-                                name="endPessoa" class="form-control"
-                                value="<%= pessoa.endPessoa %>">
-                        </div>
-                    </div>
-                    
-                    <div class="row">
-                        <div class="col"><label>Complemento</label></div>
-                        <div class="col-9">
-                                <input type="text" placeholder="Apto, Bloco, etc." 
-                                name="endComplemento" class="form-control"
-                                value="<%= pessoa.endComplemento %>">
-                        </div>
-                    </div>
-                    
-                    <div class="row">
-                        <div class="col"><label>CEP</label></div>
-                        <div class="col-9">
-                            <input type="text" placeholder="_____-___" 
-                                name="cepPessoa" class="form-control cep"
-                                value="<%= pessoa.cepPessoa %>">
-                        </div>
-                    </div>
-                                        
-                    <div class="row">
-                        <div class="col"><label>Telefone</label></div>
-                        <div class="col-9">
-                            <input type="text" placeholder="(xx) xxxxx-xxxx" 
-                                name="fonePessoa" class="form-control phone_with_ddd"
-                                value="<%= pessoa.fonePessoa %>">
-                        </div>
-                    </div>
-                    
-                    <div class="row">
-                        <div class="col"><label>Ativo ?</label></div>
-                        <div class="col-9">
-                            <input type="text" placeholder="true" 
-                                name="Ativo" class="form-control"
-                                value="<%= pessoa.Ativo %>">
-                        </div>
-                    </div>
 
-                    <div class="row">
-                        <div class="col"><label>Recebe Emails?</label></div>
-                        <div class="col-9">
+
+                                <input type="hidden" name="ID" value="<%= pessoa.id %>">
+                                <input type="text" placeholder="Digite o Grupo da Pessoa" 
+                                        name="grupoId" class="form-control"
+                                        value="<%= pessoa.grupoId %>">
+
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col"><label>Nome da Pessoa</label></div>
+                            <div class="col-9">
+                                <input type="hidden" name="id" value="<%= pessoa.id %>">
+                                <input type="text" placeholder="Digite o nome da Pessoa" 
+                                        name="nmPessoa" class="form-control"
+                                        value="<%= pessoa.nmPessoa %>">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col"><label>Nascimento</label></div>
+                            <div class="col-9">
+                                <input type="text" placeholder="__/__/____" 
+                                    name="dtNascimento" class="form-control date"
+                                    value="<%= pessoa.dtNascimento %>">
+                            </div>
+                        </div>
+    
+                        <div class="row">
+                            <div class="col"><label>Endereço</label></div>
+                            <div class="col-9">
+                                <input type="text" placeholder="Digite o endereço da Pessoa" 
+                                    name="endPessoa" class="form-control"
+                                    value="<%= pessoa.endPessoa %>">
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col"><label>Complemento</label></div>
+                            <div class="col-9">
+                                    <input type="text" placeholder="Apto, Bloco, etc." 
+                                    name="endComplemento" class="form-control"
+                                    value="<%= pessoa.endComplemento %>">
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col"><label>CEP</label></div>
+                            <div class="col-9">
+                                <input type="text" placeholder="_____-___" 
+                                    name="cepPessoa" class="form-control cep"
+                                    value="<%= pessoa.cepPessoa %>">
+                            </div>
+                        </div>
+                                            
+                        <div class="row">
+                            <div class="col"><label>Telefone</label></div>
+                            <div class="col-9">
+                                <input type="text" placeholder="(xx) xxxxx-xxxx" 
+                                    name="fonePessoa" class="form-control phone_with_ddd"
+                                    value="<%= pessoa.fonePessoa %>">
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col"><label>Ativo ?</label></div>
+                            <div class="col-9">
                                 <input type="text" placeholder="true" 
-                                name="receberEmails" class="form-control"
-                                value="<%= pessoa.receberEmails %>">
+                                    name="Ativo" class="form-control"
+                                    value="<%= pessoa.Ativo %>">
+                            </div>
                         </div>
-                    </div>
-                    
-                    <div class="row">
-                        <div class="col"><label>Email</label></div>
-                        <div class="col-9">
-                            <input type="text" placeholder="Digite o Email" 
-                                name="emailPessoa" class="form-control"
-                                value="<%= pessoa.emailPessoa %>">
-                        </div>
-                    </div>
-                                        
-                    <div class="row">
-                        <div class="col"><label>Sexo</label></div>
-                        <div class="col-9">
-                            <input type="text" placeholder="F/M/It´s not my business" 
-                                name="sexoPessoa" class="form-control"
-                                value="<%= pessoa.sexoPessoa %>">
-                        </div>
-                    </div>
-                    
-                    <div class="row">
-                        <div class="col"><label>Cidade</label></div>
-                        <div class="col-9">
-                            <input type="text" placeholder="Digite a Cidade da Pessoa" 
-                                name="cidadePessoa" class="form-control"
-                                value="<%= pessoa.cidadePessoa %>">
-                        </div>
-                    </div>
 
-                    <div class="row">
-                        <div class="col"><label>Data de Entrada</label></div>
-                        <div class="col-9">
-                            <input type="text" placeholder="__/__/____" 
-                                name="dtEntrada" class="form-control date"
-                                value="<%= pessoa.dtEntrada %>">
+                        <div class="row">
+                            <div class="col"><label>Recebe Emails?</label></div>
+                            <div class="col-9">
+                                    <input type="text" placeholder="true" 
+                                    name="receberEmails" class="form-control"
+                                    value="<%= pessoa.receberEmails %>">
+                            </div>
                         </div>
-                    </div>
+                        
+                        <div class="row">
+                            <div class="col"><label>Email</label></div>
+                            <div class="col-9">
+                                <input type="text" placeholder="Digite o Email" 
+                                    name="emailPessoa" class="form-control"
+                                    value="<%= pessoa.emailPessoa %>">
+                            </div>
+                        </div>
+                                            
+                        <div class="row">
+                            <div class="col"><label>Sexo</label></div>
+                            <div class="col-9">
+                                <input type="text" placeholder="F/M/It´s not my business" 
+                                    name="sexoPessoa" class="form-control"
+                                    value="<%= pessoa.sexoPessoa %>">
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col"><label>Cidade</label></div>
+                            <div class="col-9">
+                                <input type="text" placeholder="Digite a Cidade da Pessoa" 
+                                    name="cidadePessoa" class="form-control"
+                                    value="<%= pessoa.cidadePessoa %>">
+                            </div>
+                        </div>
 
-                    <div class="row">
-                        <div class="col"><label>Data de Saída</label></div>
-                        <div class="col-9">
-                            <input type="text" placeholder="__/__/____" 
-                                name="dtDesligamento" class="form-control date"
-                                value="<%= pessoa.dtDesligamento %>">
+                        <div class="row">
+                            <div class="col"><label>Data de Entrada</label></div>
+                            <div class="col-9">
+                                <input type="text" placeholder="__/__/____" 
+                                    name="dtEntrada" class="form-control date"
+                                    value="<%= pessoa.dtEntrada %>">
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="row">
-                        <div class="col"><label>Última Participação</label></div>
-                        <div class="col-9">
-                            <input type="text" placeholder="__/__/____" 
-                                name="dtUltimaParticipacao" class="form-control date"
-                                value="<%= pessoa.dtUltimaParticipacao %>">
+                        <div class="row">
+                            <div class="col"><label>Data de Saída</label></div>
+                            <div class="col-9">
+                                <input type="text" placeholder="__/__/____" 
+                                    name="dtDesligamento" class="form-control date"
+                                    value="<%= pessoa.dtDesligamento %>">
+                            </div>
                         </div>
-                    </div>
-                    
-                    <div class="row">
-                        <div class="col"><label>Participação Automática</label></div>
-                        <div class="col-9">
-                            <input type="text" placeholder="true or false" name="VIP" value="<%= pessoa.VIP %>" class="form-control">
+
+                        <div class="row">
+                            <div class="col"><label>Última Participação</label></div>
+                            <div class="col-9">
+                                <input type="text" placeholder="__/__/____" 
+                                    name="dtUltimaParticipacao" class="form-control date"
+                                    value="<%= pessoa.dtUltimaParticipacao %>">
+                            </div>
                         </div>
-                    </div>
-                    <br>
-                    <button class="btn btn-success">Salvar</button>
-                </form>
+                        
+                        <div class="row">
+                            <div class="col"><label>Participação Automática</label></div>
+                            <div class="col-9">
+                                <input type="text" placeholder="true or false" name="VIP" 
+                                value="<%= pessoa.VIP %>" class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col"><label>Sem Contribuição</label></div>
+                            <div class="col-9">
+                                <input type="text" placeholder="true or false" 
+                                    name="idFranqueado" value="<%= pessoa.idFranqueado %>"
+                                    class="form-control">
+                            </div>
+                        </div>
+                        <br>
+                        <button class="btn btn-success">Salvar</button>
+                    </form>
+                </div>
             </div>
         </div>  
     </div>
@@ -162,5 +190,9 @@
 
 <%- include ('../partials/footer.ejs') %>
 
-<script src="/jQuery/jquery.mask.js"></script>
+<script src="/jQuery/jquery.inputmask.bundle.js"></script>
 <script src="/jQuery/mascaras.js"></script>
+
+<!-- Chosen -->
+<script src="/js/plugins/chosen/chosen.jquery.js"></script>
+s

@@ -1,0 +1,84 @@
+<%- include ('partials/header.ejs') %>
+<link rel="stylesheet" href="/bootstrap-4.5.2-dist/css/bootstrap.css">
+<link rel="stylesheet" href="/css/estilo.css">
+<body>
+    <div class="container semPadding">
+        <div class="d-flex mt-5 justify-content-center">
+            <div class= "card card-custom mx-2 mb-1 semPadding acertaMargens" >
+                <div class="card-header">
+                    <div style="text-align:center"><h3>Eventos</h3></div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col col-custom mx-3 mb-1 fixStyle" style="text-align: center">
+                            <h4>Rodas de Cura</h4>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-1 card-custom mx-1 mb-1 xpto" style="text-align: center!important;">&nbsp;</div>
+                        <div class="col-2 card-custom mx-1 mb-1 xpto" style="text-align: center!important;">Data</div>
+                        <div class="col-2 card-custom mx-1 mb-1 xpto" style="text-align: right!important;">Xama</div>
+                        <div class="col-2 card-custom mx-1 mb-1 xpto" style="text-align: right!important;">Conv.</div>
+                        <div class="col-2 card-custom mx-1 mb-1 xpto" style="text-align: right!important;">Total</div>
+                    </div>
+                    <% for(x of data) { %>
+                        <div class="row">
+                            <div class="col-1 card-custom mx-1 mb-1 xpto">&nbsp;</div>
+                            <div class="col-2 card-custom mx-1 mb-1 xpto" style="text-align: center"> 
+                                <a href="./listas/<%= x[6] %>"><%= x[7] %></a>
+                            </div>
+                            <div class="col-2 card-custom mx-1 mb-1 xpto" style="text-align: right"><%= x[2] %></div>
+                            <div class="col-2 card-custom mx-1 mb-1 xpto" style="text-align: right"><%= x[1] %></div>
+                            <div class="col-2 card-custom mx-1 mb-1 xpto" style="text-align: right"><%= (parseInt(x[1]) + parseInt(x[2])) %></div>
+                        </div>    
+                    <% } %>
+
+            
+                    <br>
+
+
+
+                    <div class="row">
+                        <div class="col col-4"></div>
+                        <div class="col col-custom mx-6 mb-1 xpto" style="text-align: center; font-weight: bold; font-size:12px!important;">
+                            <b>Saldos</b>
+                        </div>
+                        <div class="col col-3"></div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-3 card-custom mx-2 mb-1 xpto"></div>
+                        <div class="col-4 card-custom mx-6 mb-1 xpto " style="text-align: left; font-weight: bold;">
+                            <b>Nome</b>
+                        </div>
+                        <div class="col-2 card-custom mx-6 mb-1 xpto " style="text-align: right; font-weight: bold;">
+                            <b>Saldo</b>
+                        </div>
+                        <div class="col-3 card-custom mx-2 mb-1 xpto"></div>
+                    </div>
+
+                    <% for(saldo of saldos) { %> 
+                        
+                        <div class="row">
+                            <div class="col-3 card-custom mx-2 mb-1 xpto"></div>
+                            <div class="col-4 card-custom mx-6 mb-1 xpto " style="text-align: left;">
+                                <%= saldo.nmPessoa %>
+                            </div>
+                            <div class="col-2 card-custom mx-6 mb-1 xpto " style="text-align: right">
+                                <%= saldo.Saldo %>
+                            </div>
+                            <div class="col-3 card-custom mx-2 mb-1 xpto"></div>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<%- include ('partials/footer.ejs') %>
+
+<script src="/jQuery/jquery-3.1.1.min.js"></script>
+<script src="/jQuery/jquery.inputmask.bundle.js"></script>
+<script src="/jQuery/mascaras.js"></script>

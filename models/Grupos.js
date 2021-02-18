@@ -8,6 +8,10 @@ const Grupos = conn.define(
         nmGrupo:{
             type:Sequelize.TEXT,
             allowNull: false
+        },
+        Ativo:{
+            type:Sequelize.BOOLEAN,
+            allowNull: false
         }
     }
 );

@@ -9,9 +9,4 @@ router.get("/admin", (req, res) => {
     res.render("admin/index");
 });
 
-router.get("/formEmails", (req, res) => {
-    res.render("admin/formEmails");
-});
-
-
 module.exports = router;

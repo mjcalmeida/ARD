@@ -2,7 +2,12 @@ const express = require("express");
 const sequelize = require('sequelize');
 const router = express.Router();
 const Eventos = require("../models/Eventos");
-const {format} = require('date-fns');
+
+const Utils = require("../public/js/utils");
+const utils = new Utils();
+
+const UtilsEventos = require("../public/js/utilsEventos");
+const utilsEventos = new UtilsEventos();
 
 router.get("/eventos", (req, res) => {
     Eventos
@@ -35,7 +40,6 @@ router.post("/eventos/save", (req,res) => {
     var nomeEvento = req.body.nomeEvento;
     var periodicidade = req.body.periodicidade;
     var dataProximoEvento = utils.parseDateBR_ENG(req.body.dataProximoEvento);
-        dataProximoEvento = format(dataProximoEvento,'yyyy-MM-dd hh:mm:ss');
     var horaProximoEvento = req.body.horaProximoEvento;
     var numMinimo = req.body.numMinimo;
     var numMaximo = req.body.numMaximo;
@@ -67,7 +71,6 @@ router.post("/eventos/edit/update", (req, res) => {
     var nomeEvento = req.body.nomeEvento;
     var periodicidade = req.body.periodicidade;
     var dataProximoEvento = utils.parseDateBR_ENG(req.body.dataProximoEvento);
-        dataProximoEvento = format(dataProximoEvento,'yyyy-MM-dd');
     var horaProximoEvento = horaProximoEvento;
     var numMinimo = req.body.numMinimo;
     var numMaximo = req.body.numMaximo;
@@ -83,8 +86,8 @@ router.post("/eventos/edit/update", (req, res) => {
             horaProximoEvento: horaProximoEvento,
             numMinimo: numMinimo,
             numMaximo: numMaximo,
-            valorConvidado: valorConvidado,
-            valorXama: valorXama
+            valorConvidado: parseFloat(valorConvidado),
+            valorXama: parseFloat(valorXama)
         }, {         
             where: { id: id },
             returning: true, // needed for affectedRows to be populated
@@ -122,12 +125,22 @@ router.get("/eventos/edit/:id", (req, res) => {
     })
     .then ( evento => {
         if( evento != undefined ){
-            res.render("eventos/edit", { evento : evento });
+            evento.valorConvidado = utils.convDoubleBR(evento.valorConvidado);
+            evento.valorXama      = utils.convDoubleBR(evento.valorXama);
+
+            utilsEventos.getTimeline(evento.id)
+            .then(timeline => {
+                res.render("eventos/edit", { evento, timeline });
+            })
+            .catch(erro => {
+                console.log(erro);
+            });            
         } else {
             res.redirect("/eventos");
         }
     })
     .catch ( erro => {
+        console.log(erro);
         res.redirect("/eventos");
     })
 });
