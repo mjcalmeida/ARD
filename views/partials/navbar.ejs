@@ -4,7 +4,7 @@
     </a>
     <button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse" data-target="#collapsibleNavId" 
             aria-controls="collapsibleNavId" aria-expanded="false" aria-label="Toggle navigation">
-            <a href="#"><i id="x9" class="fas fa-angle-double-down" style="color:white;"></i></a>
+            <a href="#"><i id="x9" class="fas fa-angle-double-down" style="margin-top:-15px; color:white;"></i></a>
     </button>
     <div class="collapse navbar-collapse" id="collapsibleNavId">
         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
@@ -33,7 +33,83 @@
     </div>
 </nav>
 
-<script src="/jQuery/jquery-3.1.1.min.js"></script>
+<div style="margin-top: -35; width:100%; position:absolute; ">
+<div class="avisos">
+        <nav class="navbar navbar-static-top" role="navigation" >
+            <ul class="nav navbar-top-links navbar-right" style="height: 0px; margin-top:3px; background: yellow;">                
+                <li class="dropdown">
+                    
+                    <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                        <i class="fa fa-envelope"></i>  
+                        <span class="label lbllss label-warning">16</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-messages">
+                        <li>
+                            <div class="dropdown-messages-box">
+                                <div class="media-body" style="padding-left: 10px;">
+                                    Sem Mensagens no momento. <br>
+                                    <small class="text-muted">[10.06.2014 7:58 pm]</small>
+                                </div>
+                            </div>
+                        </li>
+                            <div class="text-center link-block">
+                                <a href="mailbox.html">
+                                    <i class="fa fa-envelope"></i> <strong>Read All Messages</strong>
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+    
+                <li class="dropdown">
+                    <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                        <i class="fa fa-bell"></i>  
+                        <span class="label lbllss label-primary">8</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-alerts">
+                        <li>
+                            <a href="mailbox.html">
+                                <div>
+                                    <i class="fa fa-envelope fa-fw"></i> You have 16 messages
+                                    <span class="pull-right text-muted small">4 minutes ago</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="profile.html">
+                                <div>
+                                    <i class="fa fa-twitter fa-fw"></i> 3 New Followers
+                                    <span class="pull-right text-muted small">12 minutes ago</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="grid_options.html">
+                                <div>
+                                    <i class="fa fa-upload fa-fw"></i> Server Rebooted
+                                    <span class="pull-right text-muted small">4 minutes ago</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <div class="text-center link-block">
+                                <a href="notifications.html">
+                                    <strong>See All Alerts</strong>
+                                    <i class="fa fa-angle-right"></i>
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </div></div>
+    <!-- Custom and plugin javascript -->
+    <script src="/jQuery/jquery-3.1.1.min.js"></script>
+    
 <script>
     $('a').click(function() {
         let el = document.getElementById('x9');
