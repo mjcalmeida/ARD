@@ -1,9 +1,8 @@
-const dbKnex = require("../../models/database/db_Knex");
 const sequelize = require('sequelize');
 const op = sequelize.Op;
+const dbKnex = require("../../models/database/db_Knex");
 const Pessoas = require("../../models/Pessoas");
 const Eventos = require("../../models/Eventos");
-const Timeline = require("../../models/Timeline");
 const eventosparticipantes = require("../../models/EventosParticipantes");
 const Utils = require("./utils");
 const utils = new Utils();
@@ -91,6 +90,28 @@ module.exports = class UtilsEventos {
         }); 
     }
     
+    getEventos() {
+        return new Promise(resolve => {
+            //console.log("+-+-+-+-+-+-               Entrada em getEventos              +-+-+-+-+-+-");
+
+            dbKnex
+            .table("eventos")
+            .select('*')
+            .where({ "Ativo" : "1" })
+            .then( eventos => {
+                if (eventos != undefined) {         
+                    //console.log("+-+-+-+-+-+-              Saida em getEventos             +-+-+-+-+-+-");
+                    resolve(eventos);             
+                } else {
+                    console.log("sem registros")
+                }
+            })
+            .catch(erro => {
+                console.log(erro);
+            })
+        }); 
+    }
+
     calculoProximoEvento(periodicidade, dataProximoEvento) {
         //        console.log("+-+-+-+-+-+-            Entrada em calculoProximoEvento            +-+-+-+-+-+-");
         //        console.log("Recebida data do evento: " + dataProximoEvento);
@@ -201,48 +222,5 @@ module.exports = class UtilsEventos {
                 });
             }, 1000)
         });
-    }
-
-    async getTimeline(eventoid){
-        return new Promise(resolve => {            
-            dbKnex.raw(
-            `SELECT tl.id, ev.nomeEvento,
-            tl.antesDepois,
-            tl.quantidade,
-            tl.unidade,
-            tl.acao,
-            em.Titulo,
-            if(tl.unidade = "Dias", 
-                if( tl.antesDepois = "-",
-                    date_sub(ev.dataProximoEvento, interval tl.quantidade day),
-                    date_add(ev.dataProximoEvento, interval tl.quantidade day)),
-                    if( tl.unidade = "Meses", 
-                        if( tl.antesDepois = "-",
-                            date_sub(ev.dataProximoEvento, interval tl.quantidade month),
-                            date_add(ev.dataProximoEvento, interval tl.quantidade month)),
-                    if( tl.unidade = "Anos", 
-                if( tl.antesDepois = "-",
-                    date_sub(ev.dataProximoEvento, interval tl.quantidade day),
-                    date_add(ev.dataProximoEvento, interval tl.quantidade day)), 
-                "Erro")
-            )) dataEmissao
-            FROM ard.Timeline tl
-            inner join eventos ev on ev.id = tl.eventoId
-            inner join emails  em on em.id = tl.emailId
-            order by dataEmissao asc`
-            )
-            .then(result => {
-                var Saida = result[0];
-
-                for(var n = 0; n < Saida.length; n++){
-                    Saida[n].dataEmissao = utils.parseDateENG_BR(Saida[n].dataEmissao);
-                };
-                
-                resolve(Saida);
-            })
-            .catch(erro => {
-                console.log(erro);
-            });
-        })
     }
 }

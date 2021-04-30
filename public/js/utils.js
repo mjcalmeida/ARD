@@ -1,8 +1,26 @@
+const dbKnex = require("../../models/database/db_Knex");
 const getYear = require('date-fns/getYear')
 const getMonth = require('date-fns/getMonth')
 const getDate = require('date-fns/getDate');
 
 module.exports = class Utils {
+    gravaMensagem(mensagem){
+
+        dbKnex('Mensageria')
+        .insert({
+            mensagem: mensagem,
+            createdat: new Date(),
+            updatedat: new Date(),
+            Lido : 0
+        })
+        .then( function (result) {
+
+        })
+        .catch(err =>  {
+            console.log(err);
+        })
+    }
+
     convDoubleBR (valor){
         valor = parseFloat(valor);  
         var numero = valor.toFixed(2).split('.');

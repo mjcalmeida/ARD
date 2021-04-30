@@ -77,7 +77,7 @@ h5 {
   display: inline-block;
 }
 .navbar-top-links li:last-child {
-  margin-right: 40px;
+  margin-right: 20px;
 }
 .body-small .navbar-top-links li:last-child {
   margin-right: 0;
@@ -136,17 +136,17 @@ h5 {
 .navbar-top-links .dropdown-messages,
 .navbar-top-links .dropdown-tasks,
 .navbar-top-links .dropdown-alerts {
-  width: 310px;
+  width: 210px;
   min-width: 0;
-}
-.navbar-top-links .dropdown-messages {
-  margin-left: 5px;
 }
 .navbar-top-links .dropdown-tasks {
   margin-left: -59px;
 }
+.navbar-top-links .dropdown-messages {
+  margin-left: -159px!Important;
+}
 .navbar-top-links .dropdown-alerts {
-  margin-left: -123px;
+  margin-left: -160px!Important;
 }
 .navbar-top-links .dropdown-user {
   right: 0;
@@ -225,8 +225,8 @@ ul.nav-second-level {
   line-height: 12px;
   padding: 2px 5px;
   position: absolute;
-  right: 6px;
-  top: 12px;
+  right: 11px;
+  top: -8px;
 }
 .arrow {
   float: right;
@@ -332,7 +332,7 @@ body.mini-navbar .navbar-default .nav > li > .nav-second-level li a {
 }
 .navbar-fixed-top,
 .navbar-static-top {
-  background: #f3f3f4;
+  background: #007bfF;
 }
 .fixed-nav #wrapper {
   margin-top: 0;
@@ -1066,6 +1066,17 @@ button.dim:active:before {
 .btn:focus {
   outline: none !important;
 }
+.lbllss{
+  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  text-shadow: none;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: .25em;
+}
+
 .label {
   background-color: #d1dade;
   color: #5e5e5e;
@@ -8458,6 +8469,12 @@ body.md-skin {
   }
 }
 @media (max-width: 768px) {
+  .navbar-top-links .dropdown-messages {
+    margin-left: -160px!Important;
+  }
+  .navbar-top-links .dropdown-alerts {
+    margin-left: -160px!Important;
+  }
   #page-wrapper {
     position: inherit;
     margin: 0 0 0 0;

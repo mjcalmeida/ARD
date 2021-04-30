@@ -11,6 +11,6 @@ ard
 Password
 Matrix05
 
-
-exibe o erro
-pm2 logs 0
+Domínio:                ard.kinghost.net
+Código de cliente:      338366
+Senha de atendimento:   FONADOR

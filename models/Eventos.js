@@ -36,6 +36,10 @@ const Eventos = conn.define(
         valorXama: {
             type: Sequelize.DECIMAL,
             allowNulls: false
+        }, 
+        Ativo: {
+            type: Sequelize.BOOLEAN,
+            allowNulls: false
         }
     }
 );
